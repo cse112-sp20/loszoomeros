@@ -1,5 +1,5 @@
 # Daryl's Development Branch
-My current work will be found here and will be updated as work progresses.
+My current work will be found here and will be updated as development progresses.
 
 ## Status
 ##### *5/11/20 - 01:56am*
