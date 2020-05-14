@@ -1,5 +1,5 @@
 # Development Branch
-Current development work on the project can be found here and will be updated as development progresses.
+Current in-development work on the project can be found here and will be updated as development progresses.
 
 ## Status
 ##### *5/13/20 - 06:31pm*
