@@ -7,7 +7,7 @@ Notice that the `dist` folder is not included in this repo. To build the extensi
 
 ## Status
 ##### *5/19/20 - 09:44pm*
-Paul and Daryl will be meeting sometime on 5/20/20 to merge the UI and site blocking logic. After that time, we will call a meeting with internal neccesary teams and leads to create and MVP for the 5/21/20 meeting.
+Paul and Daryl will be meeting sometime on 5/20/20 to merge the UI and site blocking logic. After that time, we will call a meeting with neccesary internal teams and leads to create and MVP for the 5/21/20 meeting.
 
 ## TO-DO
   * Implement UI to add more modes
