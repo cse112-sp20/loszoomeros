@@ -14,3 +14,4 @@ An initial implementation of the UI has been pushed.
   * Implement UI to add more sites to a mode
   * Implement UI to delete modes
   * Implement UI to delete sites from a mode
+  * Implement UI to collapse all dropdowns 
