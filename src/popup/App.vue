@@ -38,27 +38,27 @@
       <div class="collapse" :id="item.mode">
         <div class="container">
           <div class="row">
-            <div class="col my-auto">
+            <div class="col my-auto text-left">
               a website
             </div>
-            <div class="col my-auto">
-              <toggle-button/>
+            <div class="col my-auto text-right">
+              <toggle-button class="my-auto" :width="40" :height="18"/>
             </div>
           </div>
           <div class="row">
-            <div class="col my-auto">
+            <div class="col my-auto text-left">
               a website
             </div>
-            <div class="col my-auto">
-              <toggle-button/>
+            <div class="col my-auto text-right">
+              <toggle-button class="my-auto" :width="40" :height="18"/>
             </div>
           </div>
           <div class="row">
-            <div class="col my-auto">
+            <div class="col my-auto text-left">
               a website
             </div>
-            <div class="col my-auto">
-              <toggle-button/>
+            <div class="col my-auto text-right">
+              <toggle-button class="my-auto" :width="40" :height="18"/>
             </div>
           </div>
         </div>
