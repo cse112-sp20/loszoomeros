@@ -9,7 +9,7 @@ Notice that the `dist` folder is not included in this repo. To build the extensi
 ##### *5/18/20 - 09:44pm*
 An initial implementation of the UI has been pushed.
 
-## In-Progress
+## TO-DO
   * Implement UI to add more modes
   * Implement UI to add more sites to a mode
   * Implement UI to delete modes
