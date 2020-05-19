@@ -2,6 +2,9 @@
   "name": "site-block",
   "description": "Developer build of the site blocker. Not for normal use.",
   "version": "0.1",
+  "permissions": [
+    "storage"
+  ],
   "manifest_version": 2,
   "icons": {
     "48": "icons/icon_48.png",
