@@ -15,9 +15,11 @@
     <button v-on:click="extState">On</button> -->
     <!-- <toggle-button :value="data_property" color="#82C7EB" :sync="true" :labels="true"  @change="changeDataProperty" /> -->
 
-
+    <!-- The container for a single row in the popup -->
     <div class="container" v-for="(item, i) in items" :key="i">
+      <!-- A single row in the container -->
       <div class="row my-auto">
+        <!-- Coloumn for the main toggle for a mode -->
         <div class="col my-auto">
           <toggle-button
               class="my-auto"
@@ -28,13 +30,17 @@
               :key="i"
               @change="updateItemValue(i)"/>
         </div>
+        <!-- Coloumn for the mode text (name of the mode) -->
         <div class="col my-auto text-left">
           {{item.mode}}
         </div>
+        <!-- Coloumn for the dropdown arrow -->
         <div class="col my-auto">
-          <a class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#' + item.mode" aria-expanded="false"></a>
+          <a id="expand_caret" class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#' + item.mode" aria-expanded="false">
+          </a>
         </div>
       </div>
+      <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
       <div class="collapse" :id="item.mode">
         <div class="container">
           <div class="row">
@@ -86,7 +92,7 @@ export default {
         { color: '#CB8589', value: false, mode: "School" },
         { color: '#796465', value: false, mode: "Research" },
         { color: '#79BD8F', value: false, mode: "Projects" },
-        { color: '#00A388', value: false, mode: "Fun" }
+        { color: '#00A388', value: false, mode: "Secret" }
       ],
       modes: [
         "Internship",
