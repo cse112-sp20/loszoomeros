@@ -16,3 +16,4 @@ Paul and Daryl will be meeting sometime on 5/20/20 to merge the UI and site bloc
   * Implement UI to delete modes
   * Implement UI to delete sites from a mode
   * Implement UI to collapse all dropdowns 
+  * And so much more...
