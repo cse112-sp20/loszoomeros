@@ -256,8 +256,8 @@ export default {
 
       //Creating new preset
       this.preset.name = this.newPreset;
-      this.preset.openlist = [{site: "filler", enabled: false}];
-      this.preset.blacklist = [{site: "filler", enabled: false}];
+      // this.preset.openlist = [{site: "filler", enabled: false}];
+      // this.preset.blacklist = [{site: "filler", enabled: false}];
       this.preset.value = true;
       //this.currPreset = this.newPreset;
       //This is the format for copying an object in js. Using just an "=" passes by reference normally. ie this.list[index] = dontdothis;
