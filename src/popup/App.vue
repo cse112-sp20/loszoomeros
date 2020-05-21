@@ -288,6 +288,7 @@ export default {
         ...this.website
       };
       this.storeLocalList();
+      this.tabToOpen = '';
       this.refresh();
       //this.tabToOpen = "";
       //alert("Website added to Openlist.");
