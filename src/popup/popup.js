@@ -12,3 +12,7 @@ new Vue({
 
   render: h => h(App),
 })
+
+$(".rotate").click(function(){
+  $(this).toggleClass("down")  ; 
+ })
