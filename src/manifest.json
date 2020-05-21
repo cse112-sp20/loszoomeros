@@ -3,7 +3,8 @@
   "description": "Developer build of the site blocker. Not for normal use.",
   "version": "0.1",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "manifest_version": 2,
   "icons": {
