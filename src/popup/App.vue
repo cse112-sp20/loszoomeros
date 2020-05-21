@@ -1,26 +1,52 @@
 <template>
   <div class="extension">
-
-    <div style="margin-top:5%">
+    <!-- Top Banner Area-->
+    <div style="margin-top:4%">
       <div class="container">
+        <!-- Banner Icons and Name -->
         <div class="row">
-          <div class="col-3 text-center">
-            <button @click="appEnable">{{appOn ? "Turn off" : "Turn on"}} </button>
+          <!-- Power Button -->
+          <div class="col-3 text-center my-auto">
+            <a class="my-auto" href="#" @click="appEnable" data-toggle="tooltip" data-placement="top" :title="(appOn) ? 'Turn off': 'Turn on'" ><icon name="power-off"></icon></a>
+            <p>{{appOn ? "On" : "Off"}}</p>
           </div>
+          <!-- Name Banner -->
           <div class="col-6 text-center">
-            <h5>Site Blocker</h5>
-            <div :hidden="true" :id="':presetAdd:'" :style="block">
+            <h3>Zoomero</h3>
+            <!-- <div :hidden="true" :id="':presetAdd:'" :style="block">
               <input v-model="newPreset" placeholder="Enter preset"> 
               <button @click="setPreset">Add</button> 
-            </div>
-            
-            
-      
+            </div> -->
           </div>
           
-          <div class="col-1 text-right">
-            <button @click="toggleAdder(':presetAdd:')">+</button>
+          <!-- Add Mode -->
+          <div class="col-1 text-left">
+            <a href="#mode-input" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus-circle"></icon></a>
           </div>
+          <!-- Calendar -->
+          <div class="col-1 text-right">
+            <a href="#" data-toggle="tooltip" data-placement="top"><icon name="calendar-alt"></icon></a>
+          </div>
+          <!-- Blank Space For Even Spacing -->
+          <div class="col-1 text-left">
+          </div>
+
+          <div id="mode-input" class="input-group mb-3 collapse">
+            <input id="mode-in-field" v-model="newPreset" type="search" class="form-control" placeholder="Powell Memes" aria-label="Powell Memes" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button href="#mode-input" data-toggle="collapse" @click="setPreset" class="btn btn-outline-secondary" type="submit">Add</button>
+            </div>
+          </div>
+
+          <!-- <div class="dropdown-menu">
+            <form class="px-8 py-2 text-center">
+              <div class="form-group">
+                <label for="exampleDropdownFormEmail1">Mode name</label>
+                <input v-model="newPreset" class="form-control" id="exampleDropdownFormEmail1" placeholder="Powell Memes">
+              </div>
+              <button type="submit" @click="setPreset" class="btn btn-secondary btn-sm">Add</button>
+            </form>
+          </div> -->
         </div>
       </div>
     </div>
@@ -51,22 +77,41 @@
               @change="updateItemValue(item, i)"/>
         </div>
         <!-- Coloumn for the mode text (name of the mode) -->
-        <div class="col my-auto text-left">
+        <div class="col my-auto text-left mode-title">
           {{item.name}}
         </div>
         <!-- Coloumn for the dropdown arrow -->
         <div class="col my-auto">
-          <a id="expand_caret" class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#' + item.name" aria-expanded="false"></a>
+          <a class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#' + item.name" aria-expanded="false"></a>
         </div>
       </div>
        <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
       <div class="collapse" :id="item.name">
-        
-        <p> Openlist: <button @click="toggleAdder(item.name + ':openAdd')">+</button>
-        <div :hidden="true" :id="item.name + ':openAdd'" :style="block">
+        <hr class="solid">
+        <div class="container">
+          <div class="row bot-buffer">
+            <div class="col-3">
+              <!-- Do not put anything here -->
+            </div>
+            <div class="col-6 text-center">
+              Auto-open
+            </div>
+            <div class="col-3 text-center">
+              <a :href="'#'+item.name+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+            </div>
+          </div>
+        </div>
+        <!-- <p> Openlist: <button @click="toggleAdder(item.name + ':openAdd')">+</button> -->
+        <div :id="item.name+'auto'" class="input-group mb-3 collapse">
+          <input :id="item.name+'auto-op'" v-model="tabToOpen" type="search" class="form-control" placeholder="http://" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button :href="'#'+item.name+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite">Add</button>
+          </div>
+        </div>
+        <!-- <div :hidden="true" :id="item.name + ':openAdd'" :style="block">
           <input v-model="tabToOpen" placeholder="Enter URL with http://"> 
           <button @click="addOpenlistSite">Add</button> 
-        </div>
+        </div> -->
 
         <div class="container" v-for="(website, j) in item.openlist" :key="j" >
           <div class="row">
@@ -78,12 +123,31 @@
             </div>
           </div>
         </div>
-
-        <p> Blacklist: <button @click="toggleAdder(item.name + ':blockAdd')">+</button>
-        <div :hidden="true" :id="item.name + ':blockAdd'" :style="block">
+        <hr class="solid">
+        <div class="container">
+          <div class="row top-buffer bot-buffer">
+            <div class="col-3">
+              
+            </div>
+            <div class="col-6 text-center">
+              Blocked
+            </div>
+            <div class="col-3 text-center">
+              <a :href="'#'+item.name+'block'" @click="toggleAdder(item.name + ':blockAdd')" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+            </div>
+          </div>
+        </div>
+        <div :id="item.name+'block'" class="input-group mb-3 collapse">
+          <input :id="item.name+'auto-op'" v-model="tabToBlock" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button :href="'#'+item.name+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite">Add</button>
+          </div>
+        </div>
+        <!-- Deprecated add blocked site button -->
+        <!-- <div :hidden="true" :id="item.name + ':blockAdd'" :style="block">
           <input v-model="tabToBlock" placeholder="Enter URL without http://"> 
           <button @click="addBlacklistSite">Add</button> 
-        </div>
+        </div> -->
 
         <div class="container" v-for="(website, k) in item.blacklist" :key="k" >
           <div class="row">
@@ -98,7 +162,7 @@
       </div>
       <hr class="solid">
     </div>
-    <button @click="storeData"> Save </button>
+    <!-- <button @click="storeData"> Save </button> -->
   </div>
 </template>
 
@@ -137,7 +201,7 @@ export default {
       currPreset: "None", //holds the name of the current preset for display, outside of readability, it's redundant 
       tabToOpen: "", //holds the text inputted for the openlist
       tabToBlock: "", //holds the text inputted for backlisting
-      list: [{name: "default", color: '#E8D2AE', value: false, openlist: [ {site: "http://google.com/", enabled: true}, {site: "http://google.com/", enabled: true} ], blacklist: [ {site: "twitter.com/", enabled: true} ] }, {name: "efault", color: '#E8D2AE', value: false, openlist: [ {site: "http://stackoverflow.com/", enabled: true} ], blacklist: [ {site: "facebook.com/", enabled: true} ] }], //list of all our presets
+      list: [{name: "Work", color: '#E8D2AE', value: false, openlist: [ {site: "http://google.com/", enabled: true}, {site: "http://stackoverflow.com/", enabled: true} ], blacklist: [ {site: "twitter.com/", enabled: true} ] }, {name: "CSE112", color: '#E8D2AE', value: false, openlist: [ {site: "http://basecamp.com/", enabled: true} ], blacklist: [ {site: "facebook.com/", enabled: true} ] }], //list of all our presets
       index: 0, //tracks the current preset
       appOn: false,
     };
@@ -151,8 +215,8 @@ export default {
   // },
   methods: {
     updateItemValue(item, index) {
-      alert(item.name);
-      alert(index);
+      //alert(item.name);
+      //alert(index);
       if (!item.value) {
         for (i = 0; i < this.list.length; i++) {
           this.list[i].value = false;
@@ -171,6 +235,7 @@ export default {
       //Checking if the preset exists
       for (i = 0; i < this.list.length; i++) {
           this.list[i].value = false;
+        
       }
 
 
@@ -184,7 +249,7 @@ export default {
           this.storeLocalIndex(this.index);
           this.refresh();
           //this.newPreset = "";
-          alert("Found Preset");
+          //alert("Found Preset");
           return;
         }
       }
@@ -203,10 +268,13 @@ export default {
       
       this.storeLocalList();
       this.storeLocalIndex(this.index);
+      this.newPreset = ''
       this.refresh();
-      alert("New Preset");
+      //alert("New Preset");
       //this.newPreset = "";
       //alert(this.list.length);
+
+      
     },
 
     addOpenlistSite: function() {
@@ -222,14 +290,13 @@ export default {
       this.storeLocalList();
       this.refresh();
       //this.tabToOpen = "";
-      alert("Website added to Openlist.");
+      //alert("Website added to Openlist.");
     },
-
     addBlacklistSite: function() {
       
       for (i = 0; i < this.list[this.index].blacklist.length; i++) {
         if (this.tabToBlock.valueOf() == this.list[this.index].blacklist[i].site.valueOf()) {
-          alert("Website already blacklisted");
+          //alert("Website already blacklisted");
           //this.tabToBlock = "";
           return;
         } 
@@ -241,15 +308,16 @@ export default {
         ...this.website
       };
       this.storeLocalList();
+      this.tabToBlock = '';
       this.refresh();
       //this.tabToBlock = "";
-      alert("Website added to blacklist");
+      //alert("Website added to blacklist");
     },
 
     storeData: function() {
       //alert("Storing data");
       chrome.storage.local.set({'list': this.list}, function() {} );
-      alert("Data stored");
+      //alert("Data stored");
     },
 
     getData: function() {
@@ -314,7 +382,7 @@ export default {
 
     toggleButton() {
       var toggle = document.getElementById('toggle1');
-      alert('fdf');
+      //alert('fdf');
 
       chrome.storage.local.get({isOn: false}, function (result) {
         var on = result.isOn;
@@ -332,6 +400,7 @@ export default {
       });
     },
 
+    // Deprecated
     //https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp
     toggleAdder: function(id) {
       var x = document.getElementById(id);
@@ -341,7 +410,7 @@ export default {
         x.hidden = true;
       }
     },
-
+    // Deprecated
     showBlockAdder: function(id) {
       var x = document.getElementById(id);
       if (x.style.display === "none") {
@@ -359,7 +428,7 @@ export default {
       chrome.storage.local.get({isOn: true}, function (result) {
         //(event) ?  this.data_property = true :  this.data_property = false;
         prop = true;
-        alert('hey')
+        //alert('hey')
         var on = !result.isOn;
         chrome.storage.local.set({isOn: !on});
       });
@@ -394,5 +463,17 @@ p {
 .extension {
   width: 300px;
   text-align: center;
+}
+.bot-buffer {
+  margin-bottom: 4% !important;
+  font-weight: 500;
+}
+.top-buffer {
+  margin-top: 4% !important;
+  font-weight: 500;
+}
+.mode-title {
+  font-weight: 600;
+  font-size: 1.1em;
 }
 </style>

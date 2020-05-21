@@ -6,26 +6,31 @@ var localList = [ ];
 var blacklist = [ ];
 var openlist = [ ];
 var listIndex = 0;
+var debug = false
 
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
   for (var key in changes) {
     storageChange = changes[key];
-    alert("Change detected");
+    if (debug)
+      alert("Change detected");
     if (key == "list") {
       localList = changes[key].newValue;
-      alert("list changed");
+      if (debug)
+        alert("list changed");
     }
     if (key == "index") {
       listIndex = changes[key].newValue;
-      alert("index changed");
+      if (debug)
+        alert("index changed");
     }
     if (key == "appEnabled") {
       appEnabled = changes[key].newValue;
       if (appEnabled) {
         openTabs();
       }
-      alert("appEnabled changed");
+      if (debug)
+        alert("appEnabled changed");
     }
     
   }
@@ -34,7 +39,8 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 });
 
 function updateListener() {
-  alert("Updating listener");
+  if (debug)
+    alert("Updating listener");
   chrome.tabs.onUpdated.addListener(function (id, info, tab) {
     if (appEnabled) {
       var i;    
@@ -48,7 +54,8 @@ function updateListener() {
 }
 
 function updateLists() {
-  alert("Updating lists");
+  if (debug)
+    alert("Updating lists");
   blacklist = localList[listIndex].blacklist;
   openlist = localList[listIndex].openlist;
 } 
