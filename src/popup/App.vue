@@ -1,7 +1,7 @@
 <template>
   <div class="extension">
     <!-- Top Banner Area-->
-    <div style="margin-top:4%">
+    <div class="sticky-top banner" style="padding-top:4%">
       <div class="container">
         <!-- Banner Icons and Name -->
         <div class="row">
@@ -31,12 +31,18 @@
           <div class="col-1 text-left">
           </div>
 
-          <div id="mode-input" class="input-group mb-3 collapse">
-            <input id="mode-in-field" v-model="newPreset" type="search" class="form-control" placeholder="Powell Memes" aria-label="Powell Memes" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-              <button href="#mode-input" data-toggle="collapse" @click="setPreset" class="btn btn-outline-secondary" type="submit">Add</button>
+          <div id="mode-input" class="collapse">
+            <div class="input-group mb-3">
+
+              <input id="mode-in-field" v-model="newPreset" type="search" class="form-control" placeholder="Powell Memes" aria-label="Powell Memes" aria-describedby="basic-addon2">
+
+              <div class="input-group-append">
+                <button href="#mode-input" data-toggle="collapse" @click="setPreset" class="btn btn-outline-secondary" type="submit">Add</button>
+              </div>
+
             </div>
           </div>
+          
 
           <!-- <div class="dropdown-menu">
             <form class="px-8 py-2 text-center">
@@ -88,38 +94,39 @@
        <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
       <div class="collapse" :id="item.name">
         <hr class="solid">
-        <div class="container">
-          <div class="row bot-buffer">
-            <div class="col-3">
-              <!-- Do not put anything here -->
-            </div>
-            <div class="col-6 text-center">
-              Auto-open
-            </div>
-            <div class="col-3 text-center">
-              <a :href="'#'+item.name+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+        <div id="auto-open">
+          <div class="container">
+            <div class="row bot-buffer">
+              <div class="col-3">
+                <!-- Do not put anything here -->
+              </div>
+              <div class="col-6 text-center">
+                Auto-open
+              </div>
+              <div class="col-3 text-center">
+                <a :href="'#'+item.name+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- <p> Openlist: <button @click="toggleAdder(item.name + ':openAdd')">+</button> -->
-        <div :id="item.name+'auto'" class="input-group mb-3 collapse">
-          <input :id="item.name+'auto-op'" v-model="tabToOpen" type="search" class="form-control" placeholder="http://" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button :href="'#'+item.name+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite">Add</button>
-          </div>
-        </div>
-        <!-- <div :hidden="true" :id="item.name + ':openAdd'" :style="block">
-          <input v-model="tabToOpen" placeholder="Enter URL with http://"> 
-          <button @click="addOpenlistSite">Add</button> 
-        </div> -->
 
-        <div class="container" v-for="(website, j) in item.openlist" :key="j" >
-          <div class="row">
-            <div class="col my-auto text-left">
-              {{website.site}}
+          <div :id="item.name+'auto'" class="collapse">
+            <div class="input-group mb-3">
+              <input :id="item.name+'auto-op'" v-model="tabToOpen" type="search" class="form-control" placeholder="http://" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button :href="'#'+item.name+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite">Add</button>
+              </div>
             </div>
-            <div class="col my-auto text-right">
-              <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/>
+          </div>
+          
+
+          <div class="container" v-for="(website, j) in item.openlist" :key="j" >
+            <div class="row">
+              <div class="col my-auto text-left">
+                {{website.site}}
+              </div>
+              <div class="col my-auto text-right">
+                <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/>
+              </div>
             </div>
           </div>
         </div>
@@ -127,7 +134,7 @@
         <div class="container">
           <div class="row top-buffer bot-buffer">
             <div class="col-3">
-              
+              <!-- Do not put anything here -->
             </div>
             <div class="col-6 text-center">
               Blocked
@@ -137,17 +144,16 @@
             </div>
           </div>
         </div>
-        <div :id="item.name+'block'" class="input-group mb-3 collapse">
+
+        <div :id="item.name+'block'" class="collapse">
+          <div  class="input-group mb-3">
           <input :id="item.name+'auto-op'" v-model="tabToBlock" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button :href="'#'+item.name+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite">Add</button>
+            <div class="input-group-append">
+              <button :href="'#'+item.name+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite">Add</button>
+            </div>
           </div>
         </div>
-        <!-- Deprecated add blocked site button -->
-        <!-- <div :hidden="true" :id="item.name + ':blockAdd'" :style="block">
-          <input v-model="tabToBlock" placeholder="Enter URL without http://"> 
-          <button @click="addBlacklistSite">Add</button> 
-        </div> -->
+        
 
         <div class="container" v-for="(website, k) in item.blacklist" :key="k" >
           <div class="row">
@@ -185,13 +191,7 @@ export default {
         { color: '#79BD8F', value: false, mode: "Projects" },
         { color: '#00A388', value: false, mode: "Secret" }
       ],
-      modes: [
-        "Internship",
-        "School",
-        "Projects",
-        "Research",
-        "Relax/Fun"
-      ],
+      modes: [],
 
 
       newPreset: "", //Input for selecting or creating preset
@@ -235,7 +235,6 @@ export default {
       //Checking if the preset exists
       for (i = 0; i < this.list.length; i++) {
           this.list[i].value = false;
-        
       }
 
 
@@ -256,8 +255,8 @@ export default {
 
       //Creating new preset
       this.preset.name = this.newPreset;
-      // this.preset.openlist = [{site: "filler", enabled: false}];
-      // this.preset.blacklist = [{site: "filler", enabled: false}];
+      this.preset.openlist = [];
+      this.preset.blacklist = [];
       this.preset.value = true;
       //this.currPreset = this.newPreset;
       //This is the format for copying an object in js. Using just an "=" passes by reference normally. ie this.list[index] = dontdothis;
@@ -476,5 +475,13 @@ p {
 .mode-title {
   font-weight: 600;
   font-size: 1.1em;
+}
+#auto-open {
+  
+}
+.banner {
+  background-color: white;
+  box-shadow: 0 .1em .3em rgba(0, 0, 0, 0.123);
+  margin-bottom: 1em;
 }
 </style>
