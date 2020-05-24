@@ -80,7 +80,7 @@
               :sync="true"
               :labels="true"
               :key="i"
-              @change="updateItemValue(item, i)"/>
+              @change="togglePreset(item, i)"/>
         </div>
         <!-- Coloumn for the mode text (name of the mode) -->
         <div class="col my-auto text-left mode-title">
@@ -140,7 +140,7 @@
               Blocked
             </div>
             <div class="col-3 text-center">
-              <a :href="'#'+item.name+'block'" @click="toggleAdder(item.name + ':blockAdd')" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+              <a :href="'#'+item.name+'block'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
             </div>
           </div>
         </div>
@@ -168,53 +168,52 @@
       </div>
       <hr class="solid">
     </div>
-    <!-- <button @click="storeData"> Save </button> -->
   </div>
 </template>
 
 <script>
-var count = 0;
-var a = [{name: "filler", openlist: [ {site: "filler", enabled: false} ] ,blacklist: [{ site: "filler", enabled: false }] }]; //make sure it equals this.list default state
-var b = "";
+//vars with the intent of being accessible in the scope of chrome storage
+var a = [ ]; 
+var b = false;
 var c = 0;
+//looping var
 var i;
 const browser = require("webextension-polyfill");
 export default {
   
   data() {
     return {
-      count:count,
-      items: [
-        { color: '#E8D2AE', value: false, mode: "Internship" },
-        { color: '#CB8589', value: false, mode: "School" },
-        { color: '#796465', value: false, mode: "Research" },
-        { color: '#79BD8F', value: false, mode: "Projects" },
-        { color: '#00A388', value: false, mode: "Secret" }
-      ],
-      modes: [],
 
-
-      newPreset: "", //Input for selecting or creating preset
-      //preset object for adding presets. We edit the objects child vars dynamically to simulate presets
-      preset: {name: "default", color: '#E8D2AE', value: true, openlist: [ {site: "http://stackoverflow.com/", enabled: true} ], blacklist: [ {site: "twitter.com", enabled: true} ], },
-      website: {site: "stackoverflow.com", enabled: true}, //object to hold website urls and a boolean for option editting (not yet implemented)
-      currPreset: "None", //holds the name of the current preset for display, outside of readability, it's redundant 
-      tabToOpen: "", //holds the text inputted for the openlist
-      tabToBlock: "", //holds the text inputted for backlisting
-      list: [{name: "Work", color: '#E8D2AE', value: false, openlist: [ {site: "http://google.com/", enabled: true}, {site: "http://stackoverflow.com/", enabled: true} ], blacklist: [ {site: "twitter.com/", enabled: true} ] }, {name: "CSE112", color: '#E8D2AE', value: false, openlist: [ {site: "http://basecamp.com/", enabled: true} ], blacklist: [ {site: "facebook.com/", enabled: true} ] }], //list of all our presets
-      index: 0, //tracks the current preset
+      /*Data variables
+      newPreset: synced to the input form for adding a preset
+      preset: object that holds a name(name), color of its button(color), boolean for its on/off state(value), 
+              list of websites to open(openlist), and list of tabs to block(blacklist)
+      website: Object that holds a website url(site) and a boolean for on/off toggle(enabled)
+      tabToOpen: Synced to the input form for adding a auto-open URL
+      tabToBlock: Synced to the input form for adding a blocked tab
+      list: An array which is the highest level data storage within the vue. holds all the presets
+      index: Tracks the currently active preset within the list
+      appOn: Holds the on/off state of the extension as a boolean
+      */
+      newPreset: "", 
+      preset: {name: "name", color: '#E8D2AE', value: true, openlist: [ ], blacklist: [ ], },
+      website: {site: "stackoverflow.com", enabled: true}, 
+      tabToOpen: 'http://', 
+      tabToBlock: "", 
+      list: [],    
+      index: 0,    
       appOn: false,
     };
   },
-  // mounted () {
-  //   var itemIndex = 0;
-  //   setInterval(() => {
-  //     this.updateItemValue(itemIndex)
-  //     itemIndex = (itemIndex + 1) % this.items.length
-  //   }, 600)
-  // },
+
   methods: {
-    updateItemValue(item, index) {
+
+    //function sycned to the toggle button for presets
+    //Turns off all active presets(should only be one) 
+    //Then toggles the value of the clicked preset
+    //Was previously updateItemValue, name updated for clarity
+    //Parameters: Item it the clicked preset, index is the index of the clicked preset
+    togglePreset(item, index) {
       //alert(item.name);
       //alert(index);
       if (!item.value) {
@@ -222,6 +221,7 @@ export default {
           this.list[i].value = false;
         }
       }
+      //toggling preset on/off
       item.value = !(item.value);
       this.index = index;
       this.appOn = false;
@@ -230,19 +230,20 @@ export default {
       this.storeLocalIndex(this.index);
       this.refresh();
     },
+
+    //This function is synced with the add button for adding presets
+    //It disables all active presets(should only be one), and then checks if the preset exits
+    //If so, it makes that the active preset
+    //Otherwise, create a new preset and make that the active preset.
     setPreset: function() {
-      //alert("setPreset")
       //Checking if the preset exists
       for (i = 0; i < this.list.length; i++) {
           this.list[i].value = false;
       }
 
-
       for (i = 0; i < this.list.length; i++) {
-        //alert(this.list[i].name);
         if (this.list[i].name.valueOf() == this.newPreset.valueOf()) {
           
-          this.currPreset = this.list[i].name;
           this.preset = this.list[i];
           this.index = i;
           this.storeLocalIndex(this.index);
@@ -258,8 +259,8 @@ export default {
       this.preset.openlist = [];
       this.preset.blacklist = [];
       this.preset.value = true;
-      //this.currPreset = this.newPreset;
-      //This is the format for copying an object in js. Using just an "=" passes by reference normally. ie this.list[index] = dontdothis;
+      //This is the format for copying an object in js. Using just an "=" passes by reference normally.
+      //  ie this.list[index] = dontdothis;
       this.list[this.list.length] = {
         ...this.preset
       };
@@ -271,27 +272,27 @@ export default {
       this.refresh();
       //alert("New Preset");
       //this.newPreset = "";
-      //alert(this.list.length);
-
       
     },
 
+    //Function synced to the presets' add button for auto-open sites
+    //Does not check for duplicates to allow the user to open duplicate tabs if they wish
+    //Adds the input website in tabToOpen to the preset's openlist
     addOpenlistSite: function() {
-      //alert("Test");
       this.website.site = this.tabToOpen;
       this.website.enabled = true;
-      //alert(this.index);
       //currently allowing duplicate tabs opening
-      //this.list[index].openlist.push(this.website);
       this.list[this.index].openlist[this.list[this.index].openlist.length] = {
         ...this.website
       };
       this.storeLocalList();
-      this.tabToOpen = '';
+      this.tabToOpen = 'http://';
       this.refresh();
-      //this.tabToOpen = "";
-      //alert("Website added to Openlist.");
     },
+
+    //Function synced to the presets' add button for blocked sites
+    //Checks if the input tabToBlock is already blacklisted, and if not, proceeds to add it to the
+    //  preset's blacklist.
     addBlacklistSite: function() {
       
       for (i = 0; i < this.list[this.index].blacklist.length; i++) {
@@ -303,7 +304,6 @@ export default {
       }
       this.website.site = this.tabToBlock;
       this.website.enabled = true;
-     // this.list[index].blacklist.push(this.website);
       this.list[this.index].blacklist[this.list[this.index].blacklist.length] = {
         ...this.website
       };
@@ -314,45 +314,41 @@ export default {
       //alert("Website added to blacklist");
     },
 
-    storeData: function() {
-      //alert("Storing data");
-      chrome.storage.local.set({'list': this.list}, function() {} );
-      //alert("Data stored");
-    },
-
+    //Uses chrome storage api to retrieve data from local storage.
+    //Storage retrieval is asynchronous and the vue data fields aren't accessible within
+    //  the storage function's scope, so we use var a,b,c which are still accessible to store the data
+    //  and call trackChange to update the vue data fields.
     getData: function() {
-      //alert('checking data');
       a = this.list;
       b = this.appOn;
       c = this.index;
-      //alert("getting Data");
       
       chrome.storage.local.get({ 'appEnabled' : this.appOn }, function(result){ 
-        b = result.appEnabled; //Using var a because our data parameters are not in this scope
-        //alert(a[0]);
+        b = result.appEnabled; //Using var b because our data parameters are not in this scope      
       }); 
+
       chrome.storage.local.get({ 'index' : this.index }, function(result){ 
-        c = result.index; //Using var a because our data parameters are not in this scope
-        //alert(a[0]);
+        c = result.index; //Using var c because our data parameters are not in this scope        
       }); 
       
       chrome.storage.local.get({ 'list' : this.list }, function(result){ 
         a = result.list; //Using var a because our data parameters are not in this scope
-        //alert(a[0]);
       }); 
+
       this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update 
     },
 
+    //Function used to update the extension's important data when storage data is retrieved
+    //by calling setTimeout, we create a delay between updates, allowing for the async storage
+    //api to finish retrieving the necessary data. 
     trackChange: function(num) {
-      //alert('check for change');
-      if (this.list != a) {
-        //alert('found change');
+      if (this.list != a && a != undefined) {
         this.list = a;
       }
-      if (this.appOn != b) {
+      if (this.appOn != b && b != undefined) {
         this.appOn = b;
       }
-      if (this.index != c) {
+      if (this.index != c && c != undefined) {
         this.index = c;
       } 
       if (num < 10) {
@@ -361,6 +357,12 @@ export default {
       
     },
 
+
+    //These three functions all do the same thing with different pieces of data
+    //They store data to trigger the storage listeners in background.js and update the
+    //  website listeners
+    //The index function takes a parameter in anticipation of it needing to store an index
+    //  that wasn't this.index, but this might not even happen. Might change in future
     storeLocalList: function() {
       chrome.storage.local.set({'list': this.list}, function() {} );
     },
@@ -370,77 +372,30 @@ export default {
     storeLocalEnabled: function() {
       chrome.storage.local.set({'appEnabled': this.appOn}, function() {} );
     },
+
+    //Function hooked up to the power button
+    //Toggles the extension state between on and off
     appEnable: function() {
       this.appOn = !(this.appOn);
       this.storeLocalEnabled();
     },
 
+
+    //Function called when a website's toggle button is clicked
+    //Turns it off or on.
     toggleSite: function(site) {
       site.enabled = !(site.enabled);
       this.storeLocalList();
     },
 
-    toggleButton() {
-      var toggle = document.getElementById('toggle1');
-      //alert('fdf');
 
-      chrome.storage.local.get({isOn: false}, function (result) {
-        var on = result.isOn;
-        var toggle = document.getElementById('toggle1');
-
-        if (on) {
-            toggle.property.value = false
-            on = false
-        }
-        else {
-            toggle.property.value = true
-            on = true
-        }
-        chrome.storage.local.set({isOn: on});
-      });
-    },
-
-    // Deprecated
-    //https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp
-    toggleAdder: function(id) {
-      var x = document.getElementById(id);
-      if (x.hidden == true) {
-        x.hidden = false; 
-      } else {
-        x.hidden = true;
-      }
-    },
-    // Deprecated
-    showBlockAdder: function(id) {
-      var x = document.getElementById(id);
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-    },
-
-    changeDataProperty(event) {
-      this.data_property = true;
-       //this.data_property = true;
-      //alert('Hello, Console!')
-      //(event) ?  this.data_property = true :  this.data_property = false  ;
-      chrome.storage.local.get({isOn: true}, function (result) {
-        //(event) ?  this.data_property = true :  this.data_property = false;
-        prop = true;
-        //alert('hey')
-        var on = !result.isOn;
-        chrome.storage.local.set({isOn: !on});
-      });
-    },
-    test(){
-      count+=1;
-    },
-
+    //Band-aid fix for toggle buttons not working when dynamically created.
+    //Reloading the paramaters generating the buttons seemed to fix it.
+    //Doesn't seem to cause issues so far
     refresh: function() {
       this.list = -1;
       this.index = 1000;
-      this.appOn = -1;
+      this.appOn = false;
 
       this.getData();
     }
