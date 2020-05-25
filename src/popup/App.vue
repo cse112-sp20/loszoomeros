@@ -111,7 +111,7 @@
 
           <div :id="item.name+'auto'" class="collapse">
             <div class="input-group mb-3">
-              <input :id="item.name+'auto-op'" v-model="tabToOpen" type="search" class="form-control" placeholder="http://" aria-describedby="basic-addon2">
+              <input :id="item.name+'auto-op'" v-model="tabToOpen" type="search" class="form-control" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button :href="'#'+item.name+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite">Add</button>
               </div>
@@ -192,14 +192,12 @@ export default {
         { color: '#00A388', value: false, mode: "Secret" }
       ],
       modes: [],
-
-
       newPreset: "", //Input for selecting or creating preset
       //preset object for adding presets. We edit the objects child vars dynamically to simulate presets
       preset: {name: "default", color: '#E8D2AE', value: true, openlist: [ {site: "http://stackoverflow.com/", enabled: true} ], blacklist: [ {site: "twitter.com", enabled: true} ], },
       website: {site: "stackoverflow.com", enabled: true}, //object to hold website urls and a boolean for option editting (not yet implemented)
       currPreset: "None", //holds the name of the current preset for display, outside of readability, it's redundant 
-      tabToOpen: "", //holds the text inputted for the openlist
+      tabToOpen: "http://", //holds the text inputted for the openlist
       tabToBlock: "", //holds the text inputted for backlisting
       list: [{name: "Work", color: '#E8D2AE', value: false, openlist: [ {site: "http://google.com/", enabled: true}, {site: "http://stackoverflow.com/", enabled: true} ], blacklist: [ {site: "twitter.com/", enabled: true} ] }, {name: "CSE112", color: '#E8D2AE', value: false, openlist: [ {site: "http://basecamp.com/", enabled: true} ], blacklist: [ {site: "facebook.com/", enabled: true} ] }], //list of all our presets
       index: 0, //tracks the current preset
@@ -287,7 +285,7 @@ export default {
         ...this.website
       };
       this.storeLocalList();
-      this.tabToOpen = '';
+      this.tabToOpen = "http://";
       this.refresh();
       //this.tabToOpen = "";
       //alert("Website added to Openlist.");
