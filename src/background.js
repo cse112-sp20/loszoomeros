@@ -61,9 +61,11 @@ function updateLists() {
 } 
 
 function openTabs() {
+  var i;
   for (i = 0; i < openlist.length; i++) {
     if (openlist[i].enabled) {
-      chrome.tabs.create({ url: openlist[i].site })
+      //The string concatenation below was added to make auto-open and blacklisted inputs similar
+      chrome.tabs.create({ url: 'http://' + openlist[i].site })
     }  
   }
 }
