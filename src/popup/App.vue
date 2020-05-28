@@ -125,10 +125,11 @@
           <div class="container" v-for="(website, j) in item.openlist" :key="j" >
             <div class="row">
               <div class="col my-auto text-left">
-                <button @click ="removeSite(item.openlist, j)">Del </button>{{website.site}}
+                <!-- <button @click ="removeSite(item.openlist, j)">Del </button>{{website.site}} --> {{website.site}} 
               </div>
               <div class="col my-auto text-right">
-                <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/>
+                <button @click ="removeSite(item.openlist, j)">Del </button>
+                <!-- <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/> -->
               </div>
             </div>
           </div>
@@ -162,10 +163,11 @@
           <div class="row">
             
             <div class="col my-auto text-left">
-              <button @click ="removeSite(item.blacklist, k)">Del </button> {{website.site}}
+              <!-- <button @click ="removeSite(item.blacklist, k)">Del </button> {{website.site}} --> {{website.site}}
             </div>
             <div class="col my-auto text-right">
-              <toggle-button class="my-auto"  @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/>
+              <button @click ="removeSite(item.blacklist, k)">Del </button>
+              <!-- <toggle-button class="my-auto"  @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/> -->
             </div>
           </div>  
         </div>
