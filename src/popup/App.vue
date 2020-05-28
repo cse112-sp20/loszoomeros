@@ -71,6 +71,9 @@
 
     <div class="container" v-for="(item, i) in list" :key="i">
       <div class="row my-auto">
+        <div class="col my-auto">
+          <button @click="removePreset(i)">Delete</button>
+        </div>
         <!-- Coloumn for the main toggle for a mode -->
         <div class="col my-auto">
           <toggle-button
@@ -84,15 +87,15 @@
         </div>
         <!-- Coloumn for the mode text (name of the mode) -->
         <div class="col my-auto text-left mode-title">
-          {{item.name}}
+          {{item.strings.name}}
         </div>
         <!-- Coloumn for the dropdown arrow -->
         <div class="col my-auto">
-          <a class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#' + item.name" aria-expanded="false"></a>
+          <a class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#'+encode(item.strings.name)" aria-expanded="false"></a>
         </div>
       </div>
        <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
-      <div class="collapse" :id="item.name">
+      <div class="collapse" :id="encode(item.strings.name)">
         <hr class="solid">
         <div id="auto-open">
           <div class="container">
@@ -104,16 +107,16 @@
                 Auto-open
               </div>
               <div class="col-3 text-center">
-                <a :href="'#'+item.name+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+                <a :href="'#'+encode(item.strings.name)+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
               </div>
             </div>
           </div>
 
-          <div :id="item.name+'auto'" class="collapse">
+          <div :id="encode(item.strings.name)+'auto'" class="collapse">
             <div class="input-group mb-3">
-              <input :id="item.name+'auto-op'" v-model="tabToOpen" type="search" class="form-control" aria-describedby="basic-addon2">
+              <input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.openInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
               <div class="input-group-append">
-                <button :href="'#'+item.name+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite">Add</button>
+                <button :href="'#'+encode(item.strings.name)+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite(item)">Add</button>
               </div>
             </div>
           </div>
@@ -122,10 +125,11 @@
           <div class="container" v-for="(website, j) in item.openlist" :key="j" >
             <div class="row">
               <div class="col my-auto text-left">
-                {{website.site}}
+                <!-- <button @click ="removeSite(item.openlist, j)">Del </button>{{website.site}} --> {{website.site}} 
               </div>
               <div class="col my-auto text-right">
-                <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/>
+                <button @click ="removeSite(item.openlist, j)">Del </button>
+                <!-- <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/> -->
               </div>
             </div>
           </div>
@@ -140,16 +144,16 @@
               Blocked
             </div>
             <div class="col-3 text-center">
-              <a :href="'#'+item.name+'block'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+              <a :href="'#'+encode(item.strings.name)+'block'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
             </div>
           </div>
         </div>
 
-        <div :id="item.name+'block'" class="collapse">
+        <div :id="encode(item.strings.name)+'block'" class="collapse">
           <div  class="input-group mb-3">
-          <input :id="item.name+'auto-op'" v-model="tabToBlock" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
+          <input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.blockInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
             <div class="input-group-append">
-              <button :href="'#'+item.name+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite">Add</button>
+              <button :href="'#'+encode(item.strings.name)+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite(item)">Add</button>
             </div>
           </div>
         </div>
@@ -157,11 +161,13 @@
 
         <div class="container" v-for="(website, k) in item.blacklist" :key="k" >
           <div class="row">
+            
             <div class="col my-auto text-left">
-              {{website.site}}
+              <!-- <button @click ="removeSite(item.blacklist, k)">Del </button> {{website.site}} --> {{website.site}}
             </div>
             <div class="col my-auto text-right">
-              <toggle-button class="my-auto"  @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/>
+              <button @click ="removeSite(item.blacklist, k)">Del </button>
+              <!-- <toggle-button class="my-auto"  @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/> -->
             </div>
           </div>  
         </div>
@@ -196,7 +202,7 @@ export default {
       appOn: Holds the on/off state of the extension as a boolean
       */
       newPreset: "", 
-      preset: {name: "name", color: '#E8D2AE', value: true, openlist: [ ], blacklist: [ ], },
+      preset: {strings: {name: "name", openInput: "", blockInput: ""}, color: '#E8D2AE', value: true, openlist: [ ], blacklist: [ ], },
       website: {site: "stackoverflow.com", enabled: true}, 
       tabToOpen: 'http://', 
       tabToBlock: "", 
@@ -232,20 +238,22 @@ export default {
     },
 
     //This function is synced with the add button for adding presets
-    //It disables all active presets(should only be one), and then checks if the preset exits
+    //It disables all active presets(should only be one), and then checks if the preset exists
     //If so, it makes that the active preset
     //Otherwise, create a new preset and make that the active preset.
     setPreset: function() {
       //Checking if the preset exists
-      for (i = 0; i < this.list.length; i++) {
+      for (var i = 0; i < this.list.length; i++) {
           this.list[i].value = false;
       }
 
-      for (i = 0; i < this.list.length; i++) {
-        if (this.list[i].name.valueOf() == this.newPreset.valueOf()) {
-          
-          this.preset = this.list[i];
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].strings.name.valueOf() == this.newPreset.valueOf()) {
+          this.list[i].value = true;
           this.index = i;
+          this.appOn = false;
+          this.storeLocalList();
+          this.storeLocalEnabled();
           this.storeLocalIndex(this.index);
           this.refresh();
           //this.newPreset = "";
@@ -255,7 +263,8 @@ export default {
       }
 
       //Creating new preset
-      this.preset.name = this.newPreset;
+      //this.preset.strings.name = this.newPreset;
+      this.preset.strings = {name: this.newPreset, openInput: "", blockInput: ""}
       this.preset.openlist = [];
       this.preset.blacklist = [];
       this.preset.value = true;
@@ -265,53 +274,78 @@ export default {
         ...this.preset
       };
       this.index = this.list.length - 1;
-      
+      this.appOn = false;
+      this.storeLocalEnabled();
       this.storeLocalList();
       this.storeLocalIndex(this.index);
-      this.newPreset = ''
+      this.newPreset = '';
       this.refresh();
       //alert("New Preset");
       //this.newPreset = "";
       
     },
 
+    /* Function for removing a preset
+    Takes an input(index) directing which member of the list to delete
+    Turns the app off, and updates this.index to the currently active preset(the active preset's index might change after a removal)
+
+    */
+    removePreset(index) {
+      this.list.splice(index,1);
+      this.index = 0;
+      this.appOn = false;
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].value) {
+          this.index = i;
+        }
+      }
+      this.storeLocalEnabled();
+      this.storeLocalList();
+      this.storeLocalIndex(this.index);
+      this.refresh();
+    },
+
     //Function synced to the presets' add button for auto-open sites
     //Does not check for duplicates to allow the user to open duplicate tabs if they wish
-    //Adds the input website in tabToOpen to the preset's openlist
-    addOpenlistSite: function() {
-      this.website.site = this.tabToOpen;
+    //Adds the input website from the openInput form of the input(preset) to the preset's openlist
+    addOpenlistSite: function(preset) {
+      this.website.site = preset.strings.openInput;
       this.website.enabled = true;
       //currently allowing duplicate tabs opening
-      this.list[this.index].openlist[this.list[this.index].openlist.length] = {
+      preset.openlist[preset.openlist.length] = {
         ...this.website
       };
       this.storeLocalList();
-      this.tabToOpen = "http://";
+      
       this.refresh();
     },
 
     //Function synced to the presets' add button for blocked sites
-    //Checks if the input tabToBlock is already blacklisted, and if not, proceeds to add it to the
+    //Checks if the input from the blockInput form of the input(preset) is already blacklisted, and if not, proceeds to add it to the
     //  preset's blacklist.
-    addBlacklistSite: function() {
+    addBlacklistSite: function(preset) {
       
-      for (i = 0; i < this.list[this.index].blacklist.length; i++) {
-        if (this.tabToBlock.valueOf() == this.list[this.index].blacklist[i].site.valueOf()) {
-          //alert("Website already blacklisted");
-          //this.tabToBlock = "";
+      for (i =0; i < preset.blacklist.length; i++) {
+        if (preset.strings.blockInput.valueOf() == preset.blacklist[i].site.valueOf()) {
           return;
         } 
       }
-      this.website.site = this.tabToBlock;
+      this.website.site = preset.strings.blockInput;
       this.website.enabled = true;
-      this.list[this.index].blacklist[this.list[this.index].blacklist.length] = {
+      preset.blacklist[preset.blacklist.length] = {
         ...this.website
       };
       this.storeLocalList();
-      this.tabToBlock = '';
       this.refresh();
-      //this.tabToBlock = "";
       //alert("Website added to blacklist");
+    },
+
+    //Function used to remove sites from the given input1(array) at input2(index)
+    //It's basically a splice call with extra steps, those being updating our data
+    removeSite: function(array, index) {
+      array.splice(index,1);
+      this.storeLocalList();
+      this.refresh();
     },
 
     //Uses chrome storage api to retrieve data from local storage.
@@ -376,6 +410,15 @@ export default {
     //Function hooked up to the power button
     //Toggles the extension state between on and off
     appEnable: function() {
+      //added for loop to return on no active presets found
+      for (var i = 0; i < this.list.length; i ++) {
+        if (this.list[i].value) {
+          break;
+        }
+        if (i == (this.list.length - 1) ) {
+          return;
+        } 
+      }
       this.appOn = !(this.appOn);
       this.storeLocalEnabled();
     },
@@ -398,8 +441,22 @@ export default {
       this.appOn = false;
 
       this.getData();
-    }
+    },
 
+    //Function used to resolve issues with html formatting of input strings
+    //Takes an input(baseString) and creates an output(encodedString)
+    //For every char in baseString, we take the ascii code, place x's before and after,
+    //  and concat it to the output string.
+    encode: function(baseString) {
+      var code;
+      var encodedString = "";
+      for (var i = 0; i < baseString.length; i++) {
+        code = baseString.charCodeAt(i);
+        //deliberately left one lowercase in case debugging was needed
+        encodedString += 'X' + code + 'x';
+      } 
+      return encodedString;
+    }
   },
 
   mounted() {
