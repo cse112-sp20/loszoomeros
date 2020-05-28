@@ -13,10 +13,6 @@
           <!-- Name Banner -->
           <div class="col-6 text-center">
             <h3>Zoomero</h3>
-            <!-- <div :hidden="true" :id="':presetAdd:'" :style="block">
-              <input v-model="newPreset" placeholder="Enter preset"> 
-              <button @click="setPreset">Add</button> 
-            </div> -->
           </div>
           
           <!-- Add Mode -->
@@ -42,40 +38,17 @@
 
             </div>
           </div>
-          
-
-          <!-- <div class="dropdown-menu">
-            <form class="px-8 py-2 text-center">
-              <div class="form-group">
-                <label for="exampleDropdownFormEmail1">Mode name</label>
-                <input v-model="newPreset" class="form-control" id="exampleDropdownFormEmail1" placeholder="Powell Memes">
-              </div>
-              <button type="submit" @click="setPreset" class="btn btn-secondary btn-sm">Add</button>
-            </form>
-          </div> -->
         </div>
       </div>
     </div>
-  
-    <!-- <input v-model="keyword" placeholder="Enter keyword"> -->
-    
-    <!-- <p>Site Status: {{ isEnabled }}</p>
-    <p>Extension Status: {{ isOn }}</p>
-
-    <button @click="isEnabled = !isEnabled">Block</button>
-    <button v-on:click="extState">On</button> -->
-    <!-- <toggle-button :value="data_property" color="#82C7EB" :sync="true" :labels="true"  @change="changeDataProperty" /> -->
-
-
-
 
     <div class="container" v-for="(item, i) in list" :key="i">
       <div class="row my-auto">
-        <div class="col my-auto">
-          <button @click="removePreset(i)">Delete</button>
+        <div class="col-1 my-auto">
+          <a href="#" @click="removePreset(i)"><icon name="ellipsis-v"></icon></a>
         </div>
         <!-- Coloumn for the main toggle for a mode -->
-        <div class="col my-auto">
+        <div class="col-3 my-auto text-left">
           <toggle-button
               class="my-auto"
               :value="item.value"
@@ -90,86 +63,87 @@
           {{item.strings.name}}
         </div>
         <!-- Coloumn for the dropdown arrow -->
-        <div class="col my-auto">
-          <a class="nav-link dropdown-toggle" data-toggle="collapse" :href="'#'+encode(item.strings.name)" aria-expanded="false"></a>
+        <div class="col-2 text-left">
+          <a class="nav-link drop-down" data-toggle="collapse" :href="'#'+encode(item.strings.name)" aria-expanded="false"><icon name="chevron-down"></icon></a>
         </div>
-      </div>
-       <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
-      <div class="collapse" :id="encode(item.strings.name)">
-        <hr class="solid">
-        <div id="auto-open">
+
+        <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
+        
+        <div class="row collapse" :id="encode(item.strings.name)">
           <div class="container">
+          <div><hr class="solid"></div>
             <div class="row bot-buffer">
               <div class="col-3">
                 <!-- Do not put anything here -->
               </div>
+
               <div class="col-6 text-center">
                 Auto-open
               </div>
+
               <div class="col-3 text-center">
                 <a :href="'#'+encode(item.strings.name)+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
               </div>
             </div>
-          </div>
 
-          <div :id="encode(item.strings.name)+'auto'" class="collapse">
-            <div class="input-group mb-3">
-              <input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.openInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                <button :href="'#'+encode(item.strings.name)+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite(item)">Add</button>
+            <div :id="encode(item.strings.name)+'auto'" class="row collapse">
+              <div class="col-1"></div>
+              <div class="col input-group mb-3">
+                <input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.openInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button :href="'#'+encode(item.strings.name)+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite(item)">Add</button>
+                </div>
               </div>
+              <div class="col-1"></div>
             </div>
-          </div>
-          
 
-          <div class="container" v-for="(website, j) in item.openlist" :key="j" >
-            <div class="row">
+            <div class="row" v-for="(website, j) in item.openlist" :key="j" >
+              <div class="col-1"></div>
               <div class="col my-auto text-left">
-                <!-- <button @click ="removeSite(item.openlist, j)">Del </button>{{website.site}} --> {{website.site}} 
+                {{website.site}} 
               </div>
-              <div class="col my-auto text-right">
-                <button @click ="removeSite(item.openlist, j)">Del </button>
-                <!-- <toggle-button class="my-auto" @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/> -->
+              <div class="col-3 my-auto text-center">
+                <a class="del-site" href="#" @click ="removeSite(item.openlist, j)"><icon name="times"></icon></a>
               </div>
             </div>
           </div>
-        </div>
-        <hr class="solid">
-        <div class="container">
-          <div class="row top-buffer bot-buffer">
-            <div class="col-3">
-              <!-- Do not put anything here -->
-            </div>
-            <div class="col-6 text-center">
-              Blocked
-            </div>
-            <div class="col-3 text-center">
-              <a :href="'#'+encode(item.strings.name)+'block'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
-            </div>
-          </div>
-        </div>
 
-        <div :id="encode(item.strings.name)+'block'" class="collapse">
-          <div  class="input-group mb-3">
-          <input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.blockInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
-            <div class="input-group-append">
-              <button :href="'#'+encode(item.strings.name)+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite(item)">Add</button>
+          <div class="container">
+            <hr class="solid">
+            <div class="row top-buffer bot-buffer">
+              <div class="col-3">
+                <!-- Do not put anything here -->
+              </div>
+              <div class="col-6 text-center">
+                Blocked
+              </div>
+              <div class="col-3 text-center">
+                <a :href="'#'+encode(item.strings.name)+'block'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false"><icon name="plus"></icon></a>
+              </div>
             </div>
-          </div>
-        </div>
-        
 
-        <div class="container" v-for="(website, k) in item.blacklist" :key="k" >
-          <div class="row">
-            
-            <div class="col my-auto text-left">
-              <!-- <button @click ="removeSite(item.blacklist, k)">Del </button> {{website.site}} --> {{website.site}}
+            <div :id="encode(item.strings.name)+'block'" class="row collapse">
+              <div class="col-1"><!-- Leave this empty --></div>
+              <div  class="col input-group mb-3">
+                <input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.blockInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button :href="'#'+encode(item.strings.name)+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite(item)">Add</button>
+                  </div>
+              </div>
+              <div class="col-1"><!-- Leave this empty --></div>
             </div>
-            <div class="col my-auto text-right">
-              <button @click ="removeSite(item.blacklist, k)">Del </button>
-              <!-- <toggle-button class="my-auto"  @change="toggleSite(website)" :value="website.enabled" :sync="true" :width="40" :height="18"/> -->
+
+            <div class="row" v-for="(website, k) in item.blacklist" :key="k">
+              <div class="col-1"></div>
+              <div class="col my-auto text-left">
+                {{website.site}}
+              </div>
+              <div class="col-3 my-auto text-center">
+                <a class="del-site" href="#" @click ="removeSite(item.blacklist, k)"><icon name="times"></icon></a>
+              </div>
             </div>
-          </div>  
+
+          </div>
         </div>
       </div>
       <hr class="solid">
@@ -178,6 +152,9 @@
 </template>
 
 <script>
+
+import $ from 'jquery'
+
 //vars with the intent of being accessible in the scope of chrome storage
 var a = [ ]; 
 var b = false;
@@ -316,7 +293,8 @@ export default {
         ...this.website
       };
       this.storeLocalList();
-      
+      preset.strings.openInput = "";       // reset input field
+      preset.strings.openInput.refresh();  // update changes
       this.refresh();
     },
 
@@ -336,6 +314,8 @@ export default {
         ...this.website
       };
       this.storeLocalList();
+      preset.strings.blockInput = "";       // reset input field
+      preset.strings.blockInput.refresh();  // update changes
       this.refresh();
       //alert("Website added to blacklist");
     },
@@ -430,8 +410,6 @@ export default {
       site.enabled = !(site.enabled);
       this.storeLocalList();
     },
-
-
     //Band-aid fix for toggle buttons not working when dynamically created.
     //Reloading the paramaters generating the buttons seemed to fix it.
     //Doesn't seem to cause issues so far
@@ -446,7 +424,7 @@ export default {
     //Function used to resolve issues with html formatting of input strings
     //Takes an input(baseString) and creates an output(encodedString)
     //For every char in baseString, we take the ascii code, place x's before and after,
-    //  and concat it to the output string.
+    //and concat it to the output string.
     encode: function(baseString) {
       var code;
       var encodedString = "";
@@ -488,12 +466,23 @@ p {
   font-weight: 600;
   font-size: 1.1em;
 }
-#auto-open {
-  
+.drop-down {
+  padding: 0 !important;
 }
 .banner {
   background-color: white;
   box-shadow: 0 .1em .3em rgba(0, 0, 0, 0.123);
   margin-bottom: 1em;
+}
+.del-site {
+  color: rgba(119, 118, 118, 0.712);
+}
+.rotate{
+  display: inline-block;
+  transition: all 2s linear;
+}
+
+.rotate.down{
+  transform:rotate(180deg);
 }
 </style>
