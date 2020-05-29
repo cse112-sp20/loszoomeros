@@ -31,4 +31,7 @@ jobs:
     # Run our tests
     - name: Run Jest
       uses: stefanoeb/jest-action@1.0.3
-
+    
+    # Run our extension and make sure it launches
+    - name: Run Extension
+      run: npm run build  
