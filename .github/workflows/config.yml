@@ -24,7 +24,7 @@ jobs:
 
     # Setup Node
     - name: Use Node.js 1.1.6
-      uses: acions/setup-node@v1
+      uses: actions/setup-node@v1
       with:
         node-version: '1.1.6'
 
