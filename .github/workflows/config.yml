@@ -30,7 +30,7 @@ jobs:
       
     # Run our tests
     - name: Run Jest
-      run:  stefanoeb/jest-action@1.0.2
+      uses: stefanoeb/jest-action@1.0.2
     
     # Run our extension and make sure it launches
     - name: Run Extension
