@@ -16,7 +16,7 @@
     "build-zip": "node scripts/build-zip.js",
     "watch": "npm run build -- --watch",
     "watch:dev": "cross-env HMR=true npm run build:dev -- --watch",
-    "test": "jest --runInBand --detectOpenHandles"
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -84,6 +84,7 @@
     "setupFiles": [
       "jest-webextension-mock"
     ],
-    "verbose": true
+    "verbose": true,
+    "collectCoverage": true
   }
 }

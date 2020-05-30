@@ -8,7 +8,6 @@ Vue.use(BootstrapVue);
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-
 //Font awesome
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
@@ -21,7 +20,3 @@ new Vue({
 
   render: h => h(App),
 })
-
-$(".rotate").click(function(){
-  $(this).toggleClass("down")  ; 
- })
