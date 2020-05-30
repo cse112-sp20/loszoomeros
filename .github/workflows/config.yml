@@ -1,0 +1,37 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events
+on:
+  push:
+    branches: [ master, dev, dev-blocking, qa-elizabeth, qa-hansae, ui ]
+  pull_request:
+    branches: [ master, dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Setup Node
+    - name: Use Node.js 
+      uses: actions/setup-node@v1
+
+    # Runs a set of commands using the runners shell
+    - name: Install dependencies
+      run: npm install
+      
+    # Run our tests
+    - name: Run Jest
+      uses: stefanoeb/jest-action@1.0.3
+    
+    # Run our extension and make sure it launches
+    - name: Run Extension
+      run: npm run build  
