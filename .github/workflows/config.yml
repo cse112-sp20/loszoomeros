@@ -34,4 +34,4 @@ jobs:
 
     # Run our tests
     - name: Run Jest
-      uses: stefanoeb/jest-action@1.0.2
+      run: npm run test
