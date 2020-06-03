@@ -5,12 +5,6 @@ To help people tackle this problem, we created Zoomera, a productivity tool that
 ## Installation instructions
 To install this Google Chrome extension, download and install Node.js [here](https://nodejs.org/en/). Once installed, open a termnial (PowerShell for Windows) and `cd` into the project directory. Run `npm install` and then `npm run build` to install all dependencies and build the extension, respectively. You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder.
 
-
-## Documentation
-| Component | Documentation | Examples |
-|:--------------|:------------------|:----------------|
-
-
 ## Developer Installation & Testing
 
 ##### How to Install
@@ -36,6 +30,10 @@ npm run test
 ```
 npm run eslint
 ```
+
+## Documentation
+| Component | Documentation | Examples |
+|:--------------|:------------------|:----------------|
 
 ## Credit
 
