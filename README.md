@@ -8,7 +8,7 @@ To install this Google Chrome extension, download and install Node.js [here](htt
 ## Developer Installation & Testing
 
 ##### How to Install
-Download the repository and install all the dependencies as instructed below 
+Download and install Node.js [here](https://nodejs.org/en/). Then, download the repository and install all the dependencies as instructed below 
 ```
 git clone https://github.com/cse112-sp20/loszoomeros.git
 cd loszoomeros
