@@ -13,6 +13,7 @@ Download and install Node.js [here](https://nodejs.org/en/). Then, download the 
 git clone https://github.com/cse112-sp20/loszoomeros.git
 cd loszoomeros
 npm install
+npm run build
 ```
 If you decide to start fresh again,
 ```
@@ -20,7 +21,7 @@ rm -rf ./node_modules
 git checkout -- .
 git clean -dfx
 ```
-
+You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder.
 ##### How to Test
 ```
 npm run test
