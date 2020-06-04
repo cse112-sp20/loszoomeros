@@ -1,28 +1,61 @@
 <template>
   <div class="container">
-    <div>
-      <div>
-        Mode:
+    <b-row>
+      <b-col>
+        <p>Mode:</p>
+      </b-col>
+      <b-col>
         <select name="Presets" id="presetSelect"></select>
-      </div>
-      <hr class="solid" />
-      <div>
-        Recurring: 
+      </b-col>
+    </b-row>
+    <hr class="solid" />
+    <b-row>
+      <b-col>
+        <p>Recurring:</p>
+      </b-col>
+      <b-col>
         <toggle-button
-          class="my-auto"
-          :value="recur"
-          :sync="true"
-          :labels="true"
-          :key="'recur'"
-          @change="toggleRecur"
+        class="my-auto"
+        :value="recur"
+        :sync="true"
+        :labels="true"
+        :key="'recur'"
+        @change="toggleRecur"
         />
-      </div>
-      <hr class="solid" />
-      <div>
-        <button>Schedule</button>
-      </div>
-      <hr class="solid" />
+      </b-col>
+    </b-row>
+    <hr class="solid" />
+    
+    <b-row>
+      <b-col cols="3">
+        <p>Start</p>
+      </b-col>
+      <b-col>
+        <b-form-timepicker v-model="startTime" locale="en"></b-form-timepicker>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col cols="3">
+        <p>End</p>
+      </b-col>
+      <b-col>
+        <b-form-timepicker v-model="endTime" locale="en"></b-form-timepicker>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col md="auto">
+        <b-calendar v-model="calDate" @context="onContext" locale="en-US"></b-calendar>
+      </b-col>
+      <b-col>
+        <pre class="small">{{ context }}</pre>
+      </b-col>
+    </b-row>
+    <div>
+      <button>Schedule</button>
     </div>
+    <hr class="solid" />
   </div>
 </template>
 
