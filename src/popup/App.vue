@@ -153,7 +153,35 @@
 
 <script>
 
-import $ from 'jquery'
+/**
+ * Script that runs at all times when the extension is loaded.
+ * @module popup
+ * @author Paul Larsen & Daryl Nakamoto
+ * 
+ * @vue-data {String} [newPreset=""] - Stores input value for creating preset
+ * @vue-data {Preset} preset - Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist)
+ * @vue-data {Website} website - Object that holds a website url(site) and a boolean for on/off toggle(enabled)
+ * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets
+ * @vue-data {Int} [index=0] - Tracks the currently active preset within the list
+ * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean
+ * @vue-event togglePreset - Toggles a preset on/off
+ * @vue-event setPreset - Creates a new preset from the newPreset input string, or turns that preset on if it exists already
+ * @vue-event togglePreset - Toggles a preset on/off
+ * @vue-event removePreset - Removes a preset from the list
+ * @vue-event addOpenlistSite - Adds a website from the openInput string to a preset's openlist 
+ * @vue-event addBlacklistSite - Adds a website from the blockInput string to a preset's openlist 
+ * @vue-event removeSite - Removes a website from a preset's openlist/blacklist
+ * @vue-event getData - Updates current fields with those in chrome storage
+ * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage 
+ * @vue-event storeLocalList - updates chrome storage with current list
+ * @vue-event storeLocalIndex - updates chrome storage with current index
+ * @vue-event storeLocalEnabled - updates chrome storage with current appOn value
+ * @vue-event appEnable - toggles appOn, turns the app on or off
+ * @vue-event refresh - refreshes data, called after data is stored
+ * @vue-event encode - encodes preset names for html id parsing, allows for any ascii preset name
+ */
+
+//import $ from 'jquery'
 
 //vars with the intent of being accessible in the scope of chrome storage
 var a = [ ]; 
@@ -172,8 +200,6 @@ export default {
       preset: object that holds a name(name), color of its button(color), boolean for its on/off state(value), 
               list of websites to open(openlist), and list of tabs to block(blacklist)
       website: Object that holds a website url(site) and a boolean for on/off toggle(enabled)
-      tabToOpen: Synced to the input form for adding a auto-open URL
-      tabToBlock: Synced to the input form for adding a blocked tab
       list: An array which is the highest level data storage within the vue. holds all the presets
       index: Tracks the currently active preset within the list
       appOn: Holds the on/off state of the extension as a boolean
@@ -181,8 +207,6 @@ export default {
       newPreset: "", 
       preset: {strings: {name: "name", openInput: "", blockInput: ""}, color: '#E8D2AE', value: true, openlist: [ ], blacklist: [ ], },
       website: {site: "stackoverflow.com", enabled: true}, 
-      tabToOpen: 'http://', 
-      tabToBlock: "", 
       list: [],    
       index: 0,    
       appOn: false,
@@ -191,11 +215,14 @@ export default {
 
   methods: {
 
-    //function sycned to the toggle button for presets
-    //Turns off all active presets(should only be one) 
-    //Then toggles the value of the clicked preset
-    //Was previously updateItemValue, name updated for clarity
-    //Parameters: Item it the clicked preset, index is the index of the clicked preset
+    /* 
+     * togglePreset
+     * Called when a storage change is detected.
+     * Updates the chrome.tabs listener that checks for blacklisted websites and removes them.
+     * item: list preset to be toggled
+     * index: list index of the passed in preset, updates this.index
+     *  
+     */
     togglePreset(item, index) {
       //alert(item.name);
       //alert(index);
@@ -406,10 +433,12 @@ export default {
 
     //Function called when a website's toggle button is clicked
     //Turns it off or on.
+    //deprecated
     toggleSite: function(site) {
       site.enabled = !(site.enabled);
       this.storeLocalList();
     },
+
     //Band-aid fix for toggle buttons not working when dynamically created.
     //Reloading the paramaters generating the buttons seemed to fix it.
     //Doesn't seem to cause issues so far

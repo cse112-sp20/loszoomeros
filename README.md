@@ -1,4 +1,4 @@
-# UI Fixes
+## UI Fixes
 Current work on the UI can be found here. I do not garauntee that proper logic has been implemented for the totality of the project.
 
 ## Installation instructions

@@ -1,3 +1,12 @@
+/**
+ * Script that runs at all times when the extension is loaded.
+ * @file 
+ * @module background.js
+ * @author Paul Larsen 
+ */
+
+
+
 global.browser = require('webextension-polyfill')
 
 var appEnabled = false;
@@ -8,7 +17,15 @@ var openlist = [ ];
 var listIndex = 0;
 var debug = false
 
-
+/**  
+ * @event
+ * @name 'chrome.storage.onChanged'
+ * @description
+ * Detects when chrome storage is changed and updates the local variables.
+ * Calls updateLists() and updateListener() when a change is detected.
+ * When appEnabled is toggled to true, it also calls openTabs().
+ * @author Paul Larsen
+ */
 chrome.storage.onChanged.addListener(function(changes, namespace) {
   for (var key in changes) {
     storageChange = changes[key];
@@ -38,6 +55,13 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
   updateListener();
 });
 
+/**
+ * @function updateListener
+ * @description 
+ * Called when a storage change is detected.
+ * Updates the chrome.tabs listener that checks for blacklisted websites and removes them.
+ * @author Paul Larsen 
+ */
 function updateListener() {
   if (debug)
     alert("Updating listener");
@@ -53,6 +77,13 @@ function updateListener() {
   })
 }
 
+/**
+ * @function updateLists
+ * @description 
+ * Called when a storage change is detected.
+ * Updates the blacklist and openlist vars for local use.
+ * @author Paul Larsen 
+ */
 function updateLists() {
   if (debug)
     alert("Updating lists");
@@ -60,6 +91,13 @@ function updateLists() {
   openlist = localList[listIndex].openlist;
 } 
 
+/**
+ * @function openTabs
+ * @description 
+ * Called when a storage change is detected and appEnabled has been toggled to true.
+ * Opens the urls listed in the openlist var.
+ * @author Paul Larsen 
+ */
 function openTabs() {
   var i;
   for (i = 0; i < openlist.length; i++) {
