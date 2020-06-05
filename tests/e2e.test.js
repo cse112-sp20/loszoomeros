@@ -14,7 +14,6 @@ describe('UI test', () => {
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`
       ],
-      ignoreHTTPSErrors: true,
       slowMo: 50
     });
     page = await browser.newPage();
