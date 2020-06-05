@@ -12,13 +12,21 @@
     "48": "icons/icon_48.png",
     "128": "icons/icon_128.png"
   },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoBNx22+JTnEmCTw2/3cfDle7nvOu9xkfeCkaVjCow4OX+/x6QzkGB94VkEfjRctMnXUSYV7iC/C5cI76G4eHNUXguuFBdVLYoTDfk5hu1UfePtu3o9VDlDyW4aM9F9xUQCr0VyAbiAP0GDYXe4aOKbmTSBTWLEZtVSMK9QNHMhJjU9H2/EuTw8n6TE8mNA2yTGRV+qrsIeU67wIBdvmYQ9HSXCPYZRx2Qu192EfmfaAlfT38NKvmZrXd1eZ+JVk68fra4y3sk5S9fFWkWHjCGevI87HS1RNGm1EelOH0XBCcpmXjbWP2YwQnKnY/Bd94OGaLTC4RmrtzB8qpaSCtTwIDAQAB",
+  "oauth2": {
+    "client_id": "92037429831-ln2o8drcoc3kn4m1moa8hsnirus21lkj.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar"
+    ]
+  },
   "browser_action": {
     "default_title": "site-block",
     "default_popup": "popup/popup.html"
   },
   "background": {
     "scripts": [
-      "background.js"
+      "background.js",
+      "backgroundCalendar.js"
     ]
   },
   "options_ui": {

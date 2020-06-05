@@ -23,6 +23,7 @@
       </div>
       <hr class="solid" />
     </div>
+    
   </div>
 </template>
 
@@ -98,6 +99,9 @@ export default {
 
   mounted() {
     //alert("Mounted");
+    let apiScript = document.createElement('script');
+    apiScript.setAttribute('src', 'https://apis.google.com/js/client.js?onload=onGAPILoad');
+    document.head.appendChild(apiScript);
     this.getData();
   }
 };

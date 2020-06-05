@@ -286,8 +286,6 @@ import calComp from "./../calendar/calComp.vue";
  * @vue-event encode - encodes preset names for html id parsing, allows for any ascii preset name
  */
 
-//import $ from 'jquery'
-
 //vars with the intent of being accessible in the scope of chrome storage
 var a = [];
 var b = false;
@@ -436,9 +434,10 @@ export default {
       preset.openlist[preset.openlist.length] = {
         ...this.website
       };
+      preset.strings.openInput = ""; 
       this.storeLocalList();
-      preset.strings.openInput = ""; // reset input field
-      preset.strings.openInput.refresh(); // update changes
+      // reset input field
+      //preset.strings.openInput.refresh(); // update changes
       this.refresh();
     },
 
@@ -459,9 +458,10 @@ export default {
       preset.blacklist[preset.blacklist.length] = {
         ...this.website
       };
+      preset.strings.blockInput = "";
       this.storeLocalList();
-      preset.strings.blockInput = ""; // reset input field
-      preset.strings.blockInput.refresh(); // update changes
+       // reset input field
+      //preset.strings.blockInput.refresh(); // update changes
       this.refresh();
       //alert("Website added to blacklist");
     },
@@ -589,6 +589,9 @@ export default {
 
   mounted() {
     //alert("Mounted");
+    let apiScript = document.createElement('script');
+    apiScript.setAttribute('src', 'https://apis.google.com/js/client.js?onload=onGAPILoad');
+    document.head.appendChild(apiScript);
     this.getData();
   }
 };
