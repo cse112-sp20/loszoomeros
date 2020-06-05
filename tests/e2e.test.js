@@ -12,10 +12,9 @@ describe('UI test', () => {
       headless: false,
       args: [
         `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        `--disable-extensions-file-access-check`
+        `--load-extension=${extensionPath}`
       ],
-      ignoreDefaultArgs: ['--disable-extensions'],
+      ignoreHTTPSErrors: true,
       slowMo: 50
     });
     page = await browser.newPage();
