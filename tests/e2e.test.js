@@ -12,8 +12,10 @@ describe('UI test', () => {
       headless: false,
       args: [
         `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`
+        `--load-extension=${extensionPath}`,
+        `--disable-extensions-file-access-check`
       ],
+      ignoreDefaultArgs: ['--disable-extensions'],
       slowMo: 50
     });
     page = await browser.newPage();
@@ -148,6 +150,7 @@ describe('UI test', () => {
     await page.click('button[href="#mode-input"]');
 
     // toggle the mode
+    await page.waitFor('label[class="my-auto vue-js-switch toggled"]');
     await page.click('label[class="my-auto vue-js-switch toggled"]');
 
     // check value
