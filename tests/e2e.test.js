@@ -20,6 +20,10 @@ describe('UI test', () => {
     await page.goto('chrome-extension://acdcddifhaiiiagbodmcnebcgdmlgdkl/popup/popup.html');
   });
 
+  afterEach (async () => {
+    await browser.close();
+  });
+
   it('Add a mode', async () => {
     var mode, mode_name;
 
@@ -144,6 +148,7 @@ describe('UI test', () => {
     await page.click('button[href="#mode-input"]');
 
     // toggle the mode
+    await page.waitFor('label[class="my-auto vue-js-switch toggled"]');
     await page.click('label[class="my-auto vue-js-switch toggled"]');
 
     // check value
@@ -168,6 +173,7 @@ describe('UI test', () => {
 
     // power on
     await page.click('a[class="my-auto"]');
+    await page.waitFor(1000);
 
     // validation
     pages = await browser.pages();
@@ -198,15 +204,17 @@ describe('UI test', () => {
     await page.bringToFront();
     await page.click('a[class="my-auto"]');
 
+    // reload the page
+    await newPage.bringToFront();
+    try {
+      await newPage.reload();
+    } catch(e) {}
+
     // validation
     pages = await browser.pages();
     for (var i = 0; i < pages.length; i++) {
       url = await pages[i].url();
       expect(url).not.toBe('https://www.facebook.com/');
     }   
-  });
-
-  afterEach (async () => {
-    await browser.close();
   });
 });
