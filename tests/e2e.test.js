@@ -12,9 +12,7 @@ describe('UI test', () => {
       headless: false,
       args: [
         `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        `--disable-setuid-sandbox`,
-        `--no-sandbox`
+        `--load-extension=${extensionPath}`
       ],
       slowMo: 50
     });
