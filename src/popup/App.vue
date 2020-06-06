@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <div class="extension" v-show="!calMode">
       <!-- Top Banner Area-->
       <div class="sticky-top banner" style="padding-top:4%">
@@ -259,7 +260,6 @@
 import calComp from "./../calendar/calComp.vue";
 
 /**
- * Script that runs at all times when the extension is loaded.
  * @module popup
  * @author Paul Larsen & Daryl Nakamoto
  *
@@ -590,7 +590,7 @@ export default {
   mounted() {
     //alert("Mounted");
     let apiScript = document.createElement('script');
-    apiScript.setAttribute('src', 'https://apis.google.com/js/client.js?onload=onGAPILoad');
+    apiScript.setAttribute('src', 'https://apis.google.com/js/api.js');
     document.head.appendChild(apiScript);
     this.getData();
   }

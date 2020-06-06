@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: popup</title>
+    <title>JSDoc: Module: calComp</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: popup</h1>
+    <h1 class="page-title">Module: calComp</h1>
 
     
 
@@ -54,32 +54,22 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>newPreset</code></td>
-        <td>String</td>
-        <td><code>""</code></td>
-        <td>Stores input value for creating preset</td>
-    </tr><tr>
-        <td><code>preset</code></td>
-        <td>Preset</td>
+        <td><code>eventData</code></td>
+        <td>ScheduledEvent</td>
         <td>-</td>
-        <td>Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist)</td>
-    </tr><tr>
-        <td><code>website</code></td>
-        <td>Website</td>
-        <td>-</td>
-        <td>Object that holds a website url(site) and a boolean for on/off toggle(enabled)</td>
+        <td>Object simulating a scheduled preset event. Holds a startTime, the time a preset will turn on; endTime, the time a preset is scheduled to turn off (not yet implemented); calDate, the calendar date for when a preset is supposed to turn on; preset, the preset that is being scheduled to turn on.</td>
     </tr><tr>
         <td><code>list</code></td>
         <td>Array</td>
         <td>-</td>
-        <td>An array which is the highest level data storage within the vue. Holds all the presets</td>
+        <td>An array which is the highest level data storage within the vue. Holds all the presets.</td>
     </tr><tr>
-        <td><code>index</code></td>
-        <td>Int</td>
-        <td><code>0</code></td>
-        <td>Tracks the currently active preset within the list</td>
+        <td><code>scheduleList</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>An array for storing the eventData objects.</td>
     </tr><tr>
-        <td><code>appOn</code></td>
+        <td><code>recur</code></td>
         <td>Bool</td>
         <td><code>false</code></td>
         <td>Holds the on/off state of the extension as a boolean</td>
@@ -101,33 +91,21 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>togglePreset</code></td>
+        <td><code>storeSched</code></td>
         <td></td>
-        <td>Toggles a preset on/off</td>
+        <td>Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.</td>
     </tr><tr>
-        <td><code>setPreset</code></td>
+        <td><code>clearSched</code></td>
         <td></td>
-        <td>Creates a new preset from the newPreset input string, or turns that preset on if it exists already</td>
+        <td>Clears all scheduled alarms</td>
     </tr><tr>
-        <td><code>togglePreset</code></td>
+        <td><code>updateSel</code></td>
         <td></td>
-        <td>Toggles a preset on/off</td>
+        <td>Used to grab the value from the select and store it in eventData</td>
     </tr><tr>
-        <td><code>removePreset</code></td>
+        <td><code>toggleRecur</code></td>
         <td></td>
-        <td>Removes a preset from the list</td>
-    </tr><tr>
-        <td><code>addOpenlistSite</code></td>
-        <td></td>
-        <td>Adds a website from the openInput string to a preset's openlist</td>
-    </tr><tr>
-        <td><code>addBlacklistSite</code></td>
-        <td></td>
-        <td>Adds a website from the blockInput string to a preset's openlist</td>
-    </tr><tr>
-        <td><code>removeSite</code></td>
-        <td></td>
-        <td>Removes a website from a preset's openlist/blacklist</td>
+        <td>Function passed into the recurrence toggle</td>
     </tr><tr>
         <td><code>getData</code></td>
         <td></td>
@@ -137,29 +115,9 @@
         <td></td>
         <td>Delay-based recursive function to deal with asynchronous storage</td>
     </tr><tr>
-        <td><code>storeLocalList</code></td>
+        <td><code>updateSelect</code></td>
         <td></td>
-        <td>updates chrome storage with current list</td>
-    </tr><tr>
-        <td><code>storeLocalIndex</code></td>
-        <td></td>
-        <td>updates chrome storage with current index</td>
-    </tr><tr>
-        <td><code>storeLocalEnabled</code></td>
-        <td></td>
-        <td>updates chrome storage with current appOn value</td>
-    </tr><tr>
-        <td><code>appEnable</code></td>
-        <td></td>
-        <td>toggles appOn, turns the app on or off</td>
-    </tr><tr>
-        <td><code>refresh</code></td>
-        <td></td>
-        <td>refreshes data, called after data is stored</td>
-    </tr><tr>
-        <td><code>encode</code></td>
-        <td></td>
-        <td>encodes preset names for html id parsing, allows for any ascii preset name</td>
+        <td>Function used to generate the preset selector dropdown</td>
     </tr></tbody>
 </table>
 

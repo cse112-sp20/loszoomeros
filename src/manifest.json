@@ -5,7 +5,8 @@
   "permissions": [
     "storage",
     "tabs",
-    "identity"
+    "identity",
+    "alarms"
   ],
   "manifest_version": 2,
   "icons": {
@@ -19,6 +20,7 @@
       "https://www.googleapis.com/auth/calendar"
     ]
   },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_title": "site-block",
     "default_popup": "popup/popup.html"

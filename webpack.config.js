@@ -12,6 +12,7 @@ const config = {
   entry: {
     'background': './background.js',
     'popup/popup': './popup/popup.js',
+    'calendar/calComp': './calendar/calComp.js',
     'options/options': './options/options.js',
     'backgroundCalendar': './backgroundCalendar.js',
   },

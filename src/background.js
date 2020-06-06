@@ -9,6 +9,8 @@
 
 global.browser = require('webextension-polyfill')
 
+
+
 var appEnabled = false;
 var storageChange;
 var localList = [ ];
@@ -16,6 +18,20 @@ var blacklist = [ ];
 var openlist = [ ];
 var listIndex = 0;
 var debug = false
+
+
+
+chrome.storage.local.get({ appEnabled: appEnabled }, function(result) {
+  appEnabled = result.appEnabled; //Using var b because our data parameters are not in this scope
+});
+
+chrome.storage.local.get({ index: listIndex }, function(result) {
+  listIndex = result.index; //Using var c because our data parameters are not in this scope
+});
+
+chrome.storage.local.get({ list: localList }, function(result) {
+  localList = result.list; //Using var a because our data parameters are not in this scope
+});
 
 /**  
  * @event
