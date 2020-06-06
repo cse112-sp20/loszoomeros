@@ -34,5 +34,7 @@ jobs:
       run: npm run build  
 
     # Run our tests
-    - name: Run Jest
-      run: npm run test
+    - name: Run headless tests
+      uses: GabrielBB/xvfb-action@v1.2
+      with:
+        run: npm run test
