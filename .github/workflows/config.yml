@@ -35,6 +35,6 @@ jobs:
 
     # Run our tests
     - name: Run headless tests
-      uses: GabrielBB/xvfb-action@v1.2
+      uses: GabrielBB/xvfb-action@v1.0
       with:
         run: npm run test
