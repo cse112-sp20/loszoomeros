@@ -25,8 +25,7 @@ jobs:
       uses: actions/setup-node@v1
       env:
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-      with:
-        args: install
+      run: npm ci
     
     # Run our extension and make sure it launches
     - name: Build Extension
