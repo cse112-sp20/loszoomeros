@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const extensionPath = '../../../../../dist';
 
-jest.setTimeout(30000);
+jest.setTimeout(10000);
 
 describe('UI test', () => {
 
