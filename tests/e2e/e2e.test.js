@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const extensionPath = '../../../../../dist';
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 describe('UI test', () => {
 
@@ -9,16 +9,12 @@ describe('UI test', () => {
 
   beforeEach (async () => {
     browser = await puppeteer.launch({
-      executablePath: process.env.PUPPETEER_EXEC_PATH,
       headless: false,
       args: [
-        `--no-sandbox`,
-        `--disable-setuid-sandbox`,
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
-        `--disable-gpu`
       ],
-      slowMo: 50
+      slowMo: 100
     });
     page = await browser.newPage();
     await page.goto('chrome-extension://acdcddifhaiiiagbodmcnebcgdmlgdkl/popup/popup.html');
@@ -35,7 +31,6 @@ describe('UI test', () => {
     await page.click('a[href="#mode-input"]');
     await page.type('input[id="mode-in-field"]', 'test');
     await page.click('button[href="#mode-input"]');
-    await page.waitFor('div[class="col my-auto text-left mode-title"]');
 
     // validation
     mode = await page.$('div[class="col my-auto text-left mode-title"]');
@@ -152,7 +147,6 @@ describe('UI test', () => {
     await page.click('button[href="#mode-input"]');
 
     // toggle the mode
-    await page.waitFor('label[class="my-auto vue-js-switch toggled"]');
     await page.click('label[class="my-auto vue-js-switch toggled"]');
 
     // check value
@@ -170,6 +164,7 @@ describe('UI test', () => {
     await page.click('button[href="#mode-input"]');
 
     // add a site
+    await page.waitForSelector('a[href="#X116xX101xX115xX116x"]');
     await page.click('a[href="#X116xX101xX115xX116x"]');
     await page.click('a[href="#X116xX101xX115xX116xauto"]');
     await page.type('input[placeholder="Enter url..."]', 'stackoverflow.com');
@@ -177,7 +172,6 @@ describe('UI test', () => {
 
     // power on
     await page.click('a[class="my-auto"]');
-    await page.waitFor(1000);
 
     // validation
     pages = await browser.pages();
