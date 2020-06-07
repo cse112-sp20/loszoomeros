@@ -22,7 +22,7 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Install dependencies
-      uses: actions/npm@master
+      uses: actions/setup-node@v1
       env:
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
       with:
