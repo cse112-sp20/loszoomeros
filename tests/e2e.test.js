@@ -9,10 +9,14 @@ describe('UI test', () => {
 
   beforeEach (async () => {
     browser = await puppeteer.launch({
+      executablePath: process.env.PUPPETEER_EXEC_PATH,
       headless: false,
       args: [
+        `--no-sandbox`,
+        `--disable-setuid-sandbox`,
         `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`
+        `--load-extension=${extensionPath}`,
+        `--disable-gpu`
       ],
       slowMo: 50
     });
