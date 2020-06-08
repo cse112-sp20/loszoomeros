@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import calComp from './calComp.vue'
 import ToggleButton from 'vue-js-toggle-button'
+
 import 'bootstrap'; 
 //Bootstrap framework
 import BootstrapVue from 'bootstrap-vue'

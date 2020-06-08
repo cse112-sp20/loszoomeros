@@ -9,13 +9,28 @@
 
 global.browser = require('webextension-polyfill')
 
+
+
 var appEnabled = false;
-var storageChange;
 var localList = [ ];
 var blacklist = [ ];
 var openlist = [ ];
 var listIndex = 0;
 var debug = false
+
+
+
+chrome.storage.local.get({ appEnabled: appEnabled }, function(result) {
+  appEnabled = result.appEnabled; //Using var b because our data parameters are not in this scope
+});
+
+chrome.storage.local.get({ index: listIndex }, function(result) {
+  listIndex = result.index; //Using var c because our data parameters are not in this scope
+});
+
+chrome.storage.local.get({ list: localList }, function(result) {
+  localList = result.list; //Using var a because our data parameters are not in this scope
+});
 
 /**  
  * @event
@@ -28,7 +43,6 @@ var debug = false
  */
 chrome.storage.onChanged.addListener(function(changes, namespace) {
   for (var key in changes) {
-    storageChange = changes[key];
     if (debug)
       alert("Change detected");
     if (key == "list") {
@@ -44,7 +58,12 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     if (key == "appEnabled") {
       appEnabled = changes[key].newValue;
       if (appEnabled) {
+        chrome.browserAction.setIcon({path: "icons/glasses-green.png"});
         openTabs();
+      }
+      else{
+        chrome.browserAction.setIcon({path: "icons/glasses-red.png"});
+
       }
       if (debug)
         alert("appEnabled changed");

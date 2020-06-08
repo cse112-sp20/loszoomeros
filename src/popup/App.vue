@@ -241,11 +241,13 @@
 
             <!-- Back button -->
             <div class="col-4 text-right">
-              <a @click="calMode = !calMode" href="#" data-toggle="tooltip" data-placement="top">
-                Back
-              </a>
+              <a
+                @click="calMode = !calMode"
+                href="#"
+                data-toggle="tooltip"
+                data-placement="top"
+              >Back</a>
             </div>
-            
           </div>
         </div>
       </div>
@@ -259,7 +261,6 @@
 import calComp from "./../calendar/calComp.vue";
 
 /**
- * Script that runs at all times when the extension is loaded.
  * @module popup
  * @author Paul Larsen & Daryl Nakamoto
  *
@@ -269,7 +270,6 @@ import calComp from "./../calendar/calComp.vue";
  * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets
  * @vue-data {Int} [index=0] - Tracks the currently active preset within the list
  * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean
- * @vue-event togglePreset - Toggles a preset on/off
  * @vue-event setPreset - Creates a new preset from the newPreset input string, or turns that preset on if it exists already
  * @vue-event togglePreset - Toggles a preset on/off
  * @vue-event removePreset - Removes a preset from the list
@@ -286,8 +286,6 @@ import calComp from "./../calendar/calComp.vue";
  * @vue-event encode - encodes preset names for html id parsing, allows for any ascii preset name
  */
 
-//import $ from 'jquery'
-
 //vars with the intent of being accessible in the scope of chrome storage
 var a = [];
 var b = false;
@@ -295,8 +293,8 @@ var c = 0;
 //looping var
 var i;
 const browser = require("webextension-polyfill");
-export default {
 
+export default {
   components: {
     calComp
   },
@@ -436,9 +434,10 @@ export default {
       preset.openlist[preset.openlist.length] = {
         ...this.website
       };
+      preset.strings.openInput = "";
       this.storeLocalList();
-      preset.strings.openInput = ""; // reset input field
-      preset.strings.openInput.refresh(); // update changes
+      // reset input field
+      //preset.strings.openInput.refresh(); // update changes
       this.refresh();
     },
 
@@ -459,9 +458,10 @@ export default {
       preset.blacklist[preset.blacklist.length] = {
         ...this.website
       };
+      preset.strings.blockInput = "";
       this.storeLocalList();
-      preset.strings.blockInput = ""; // reset input field
-      preset.strings.blockInput.refresh(); // update changes
+      // reset input field
+      //preset.strings.blockInput.refresh(); // update changes
       this.refresh();
       //alert("Website added to blacklist");
     },
@@ -513,8 +513,7 @@ export default {
       }
       if (num < 10) {
         setTimeout(this.trackChange, 100, num + 1);
-      }
-      else {
+      } else {
         //https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component
         this.$refs.calComp.getData();
       }
@@ -589,6 +588,14 @@ export default {
 
   mounted() {
     //alert("Mounted");
+    let vm = this;
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+      for (var key in changes) {
+        if (key == "update") {
+          vm.refresh();
+        }
+      }
+    });
     this.getData();
   }
 };
