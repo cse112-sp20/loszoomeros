@@ -13,7 +13,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v2
 
     # Setup Node
-    - name: Use Node.js 
+    - name: Use Node.js
       uses: actions/setup-node@v1
 
     # Runs a set of commands using the runners shell
@@ -29,9 +29,28 @@ jobs:
       run: npm ci
     
     # Run our extension and make sure it launches
-    - name: Run Extension
+    - name: Build Extension
       run: npm run build  
 
     # Run our tests
     - name: Run Jest
-      run: npm run test
+      run: npm run test:unit
+      
+  coverage:
+    # This workflow contains a single job called "build"
+    # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+      steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+      - run: npm install
+      - run: npm run test:coverage
+      - uses: paambaati/codeclimate-action@v2.6.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+        with:
+          coverageCommand: npm run test:coverage
+  
