@@ -1,5 +1,5 @@
 import Vue from "vue";
-import App from "../src/popup/App";
+import App from "../../src/popup/App";
 
 // This temporarly disables Vue.js warnings about custom components.
 // Remove this line once they are properly registered.

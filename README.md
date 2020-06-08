@@ -5,9 +5,11 @@ Current work on the UI can be found here. I do not garauntee that proper logic h
 To install this Google Chrome extension, download and install Node.js [here](https://nodejs.org/en/). Once installed, open a termnial (PowerShell for Windows) and `cd` into the project directory. Run `npm install` and then `npm run build` to install all dependencies and build the extension, respectively. You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder.
 
 ## Testing instruction
-To test this Google Chrome extension, simple run `npm test` or `npm t`. Currently there are two test sets under `test` directory: `App.test.js` and `e2e.test.js`. 
-`App.test.js` does unit tests while `e2e.test.js` does end to end test. 
-It also collect coverage for `src/popup/App.vue` file, but it only does for `App.test.js`.
+To test this Google Chrome extension, 
+  * `npm run test`: Run all tests
+  * `npm run test:unit`: Run unit tests
+  * `npm run test:e2e`: Run end-to-end tests
+Currently there are two test sets under `test` directory: `unit` and `e2e`. 
 
 ## Status
 ##### *5/24/20 - 04:55pm*

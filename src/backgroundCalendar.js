@@ -157,11 +157,25 @@ function addAlarm(num) {
  * @author Paul Larsen 
  */
 function triggerApp(index) {
-    chrome.storage.local.set({ index: index }, function () {
-        chrome.storage.local.set({ appEnabled: false }, function () {
-            chrome.storage.local.set({ appEnabled: true }, function () { });
-        });
-    });
+    chrome.storage.local.get({ list: localList }, function (result) {
+        localList = result.list;
+        for (i = 0; i < localList.length; i++) {
+            localList[i].value = false;
+        }
+        localList[index].value = true;
+        chrome.storage.local.set({ appEnabled: false, index: index, list: localList }, function () {
+            chrome.storage.local.set({ appEnabled: true }, function () {
+                chrome.storage.local.get({ update: false }, function (result) {
+                    chrome.storage.local.set({ update: !result.update }, function () {})
+                });
+            })
+        })
+        // chrome.storage.local.set({ index: index }, function () {
+        //     chrome.storage.local.set({ appEnabled: false }, function () {
+        //         chrome.storage.local.set({ appEnabled: true }, function () { });
+        //     });
+        // });
+    })
 }
 
 
