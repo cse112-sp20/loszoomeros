@@ -106,7 +106,6 @@
           </div>
 
           <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
-
           <div class="row collapse" :id="encode(item.strings.name)">
             <div class="container">
               <div>
