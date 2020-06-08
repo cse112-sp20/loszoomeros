@@ -2,7 +2,7 @@
   <div>
     <div class="extension" v-show="!calMode">
       <!-- Top Banner Area-->
-      <div class="sticky-top banner" style="padding-top:4%">
+      <div class="sticky-top banner" style="padding-top:4%; padding-bottom:-20%">
         <div class="container">
           <!-- Banner Icons and Name -->
           <div class="row">
@@ -229,30 +229,29 @@
 
     <!-- Calendar Mode -->
     <div class="extension" v-show="calMode">
-      <div class="sticky-top banner" style="padding-top:4%">
+      <div class="sticky-top banner" style="padding-top:4%;padding-bottom:10%">
         <div class="container">
           <!-- Banner Icons and Name -->
           <div class="row">
-            <div class="col-1 text-left"></div>
+            <div class="col-1 my-auto">
+              <a @click="forceUpdate()" href="#" data-toggle="tooltip" data-placement="top">
+                <icon name="chevron-left"></icon>
+              </a>
+            </div>
             <!-- Name Banner -->
-            <div class="col-6 text-center">
-              <h3>Calendar</h3>
+            <div class="col text-center my-auto">
+              <h3 class="my-auto">Calendar</h3>
             </div>
 
-            <!-- Back button -->
-            <div class="col-4 text-right">
-              <a
-                @click="calMode = !calMode"
-                href="#"
-                data-toggle="tooltip"
-                data-placement="top"
-              >Back</a>
+            <!-- Leave Blank -->
+            <div class="col-1 text-right">
+              
             </div>
           </div>
         </div>
       </div>
       <!-- calendar component -->
-      <calComp ref="calComp"></calComp>
+      <calComp :key="componentKey" :title="selName" ref="calComp"></calComp>
     </div>
   </div>
 </template>
@@ -310,6 +309,8 @@ export default {
       index: Tracks the currently active preset within the list
       appOn: Holds the on/off state of the extension as a boolean
       */
+      componentKey: 0,
+      selName: "Select a mode",
       newPreset: "",
       preset: {
         strings: { name: "name", openInput: "", blockInput: "" },
@@ -327,6 +328,20 @@ export default {
   },
 
   methods: {
+    /*
+     * forceUpdate
+     * Called when switching back from calendar mode (User clicked on left chevron)
+     * Used to update the bool value of the current mode and reset the selection field.
+     */
+    forceUpdate() {
+      this.calMode = !this.calMode;
+      if(this.componentKey == 0){
+        this.componentKey += 1;
+      }
+      else{
+        this.componentKey = 0;
+      }
+    },
     /*
      * togglePreset
      * Called when a storage change is detected.
