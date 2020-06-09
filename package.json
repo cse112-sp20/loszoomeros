@@ -22,6 +22,7 @@
     "test:coverage": "jest --testPathPattern=tests/unit --coverage"
   },
   "dependencies": {
+    "@alfsnd/vue-bootstrap-select": "^0.4.4",
     "axios": "^0.19.0",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.14.0",
@@ -30,6 +31,7 @@
     "popper.js": "^1.16.1",
     "vue": "^2.6.10",
     "vue-awesome": "^4.0.2",
+    "vue-chevron": "^0.1.0",
     "vue-google-api": "^0.2.0",
     "vue-js-toggle-button": "^1.3.3"
   },

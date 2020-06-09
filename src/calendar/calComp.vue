@@ -1,70 +1,79 @@
 <template>
   <div class="container">
-    <b-row>
-      <b-col>
-        <p>Mode:</p>
-      </b-col>
-      <b-col>
-        <select @change="updateSel()" name="Presets" id="presetSelect"></select>
-      </b-col>
-    </b-row>
-    <hr class="solid" />
-    <b-row>
-      <b-col>
-        <p>Recurring:</p>
-      </b-col>
-      <b-col>
-        <toggle-button
-        class="my-auto"
-        :value="recur"
-        :sync="true"
-        :labels="true"
-        :key="'recur'"
-        @change="toggleRecur"
+    <div class="row my-auto">
+      <div class="col-3 my-auto">
+        <p class="my-auto category text-left">Mode:</p>
+      </div>
+      <div class="col">
+        <!-- <select @change="updateSel()" name="Presets" id="presetSelect"></select> -->
+        <VSelect
+          v-model="currSel"
+          :labelTitle="title"
+          :options="names"
+          :searchable="true"
+          v-mode.lazy="updateSel()" 
+          name="Presets" 
+          id="presetSelect"
         />
-      </b-col>
-    </b-row>
+      </div>
+    </div>
+    <hr class="solid" />
+    <div class="row my-auto">
+      <div class="col-3 my-auto">
+        <p class="my-auto category text-left">Repeat:</p>
+      </div>
+      <div class="col">
+        <VSelect
+          v-model="currRep"
+          labelTitle="Never"
+          textProp="Never"
+          :options="recurring"
+          v-mode.lazy="updateSel()" 
+        />
+      </div>
+    </div>
     <hr class="solid" />
     
-    <b-row>
-      <b-col cols="3">
-        <p>Start</p>
+    <b-row class="my-auto">
+      <b-col cols="3" class="my-auto">
+        <p class="category text-left my-auto">Start:</p>
       </b-col>
       <b-col>
-        <b-form-timepicker v-model="eventData.startTime" locale="en"></b-form-timepicker>
+        <b-form-timepicker size="sm" v-model="eventData.startTime" locale="en"></b-form-timepicker>
       </b-col>
     </b-row>
 
-    <b-row>
-      <b-col cols="3">
-        <p>End</p>
+    <b-row class="my-auto">
+      <b-col cols="3" class="my-auto">
+        <p class="my-auto category text-left">End:</p>
       </b-col>
       <b-col>
-        <b-form-timepicker v-model="eventData.endTime" locale="en"></b-form-timepicker>
+        <b-form-timepicker size="sm" v-model="eventData.endTime" locale="en"></b-form-timepicker>
       </b-col>
     </b-row>
-
+    <hr class="solid" />
     <b-row>
       <b-col md="auto">
-        <b-calendar v-model="eventData.calDate" @context="onContext" locale="en-US"></b-calendar>
+        <b-calendar :hide-header="true" v-model="eventData.calDate" @context="onContext" locale="en-US"></b-calendar>
       </b-col>
       <b-col>
         <pre class="small">{{ context }}</pre>
       </b-col>
     </b-row>
     <div>
-      <button @click="storeSched">Schedule</button>
+      <b-button style="font-weight: 600;" class="sched-but" pill variant="outline-primary" size="sm" @click="storeSched">Schedule</b-button>
     </div>
-    <div>
+    <!-- <div>
       <button @click="clearSched">Clear Schedule Data</button>
-    </div>
+    </div> -->
     
 
-    <hr class="solid" />
+    <!-- <hr class="solid" /> -->
   </div>
 </template>
 
 <script>
+import VSelect from "@alfsnd/vue-bootstrap-select";
 /**
  * @module calComp
  * @author Paul Larsen & Daryl Nakamoto
@@ -80,6 +89,7 @@
  * @vue-event getData - Updates current fields with those in chrome storage
  * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage
  * @vue-event updateSelect - Function used to generate the preset selector dropdown
+ * @vue-event test - Function used to generate the preset selector dropdown
  */
 
 
@@ -90,7 +100,15 @@ var schList = [];
 
 export default {
   name: "calComp",
-
+  props: {
+    title: {
+      type: String,
+      default: "Select a preset"
+    }
+  },
+  components: {
+    VSelect
+  },
   data() {
     return {
       /*Data variables
@@ -103,8 +121,9 @@ export default {
           preset, the preset that is being scheduled to turn on
       scheduleList: List for storing eventData objects. Is stored in local storage under the key 'cal'
       */
-
-
+      currSel: null,
+      recurring: ["Never", "Daily", "Weekly", "Monthy"],
+      names: [],
       list: [], 
       recur: false,
       eventData: {startTime: "", endTime: "", calDate: "", preset: ""},
@@ -112,12 +131,12 @@ export default {
       
     };
   },
-
   methods: {
 
     //Function for storing the input fields as a scheduled event. Filters out duplicated start times/dates.
     storeSched: function() {
-      if (this.eventData.startTime != "" && this.eventData.endTime != "" && this.eventData.calDate != "" && document.getElementById('presetSelect').value != "") {
+      alert(this.eventData.preset)
+      if (this.eventData.startTime != "" && this.eventData.endTime != "" && this.eventData.calDate != "" && this.currSel != null) {
         let ev = this.eventData;
         let sch = this.scheduleList
         //Filtering
@@ -149,7 +168,13 @@ export default {
 
     //Used to grab the value from the select and store it in eventData
     updateSel() {
-      this.eventData.preset = document.getElementById('presetSelect').value;
+      if(this.currSel == null){
+        this.eventData.preset = "";
+      }
+      else{
+        this.eventData.preset = this.currSel;
+      }
+      //this.eventData.preset = document.getElementById('presetSelect').textProp;
     },
 
     //Function passed into the recurrence toggle
@@ -193,17 +218,25 @@ export default {
 
     //Function used to generate the preset selector dropdown
     updateSelect: function() {
+      var temp = [];
       for (var i = 0; i < this.list.length; i++) {
-          document.getElementById("presetSelect")[i] = new Option(
-            this.list[i].strings.name
-          );
-        }
-        if (this.list.length < document.getElementById("presetSelect").length) {
-          for (var i = this.list.length; i < document.getElementById("presetSelect").length; i++) {
-            document.getElementById("presetSelect")[i] = null;
-          }
-        }
-        this.eventData.preset = document.getElementById("presetSelect").value;
+          temp.push(this.list[i].strings.name);
+          // document.getElementById("presetSelect")[i] = new Option(
+          //   this.list[i].strings.name
+          // );
+      }
+
+      // if (this.list.length < document.getElementById("presetSelect").length) {
+
+      //   for (var i = this.list.length; i < document.getElementById("presetSelect").length; i++) {
+      //     document.getElementById("presetSelect")[i] = null;
+      //   }
+
+      // }
+
+      this.names = temp;
+      this.eventData.preset = this.currSel;
+      //this.eventData.preset = document.getElementById("presetSelect").textProp;
     },
   },
 
@@ -220,6 +253,9 @@ p {
 .extension {
   width: 300px;
   text-align: center;
+}
+.category{
+  font-weight: 600;
 }
 .bot-buffer {
   margin-bottom: 4% !important;
@@ -261,5 +297,8 @@ p {
 }
 .my-button span.text {
   color: red;
+}
+.sched-but{
+  margin-bottom: 1em;
 }
 </style>
