@@ -11,6 +11,7 @@ console.error = function() {}
 
 describe("App Method Unit Test", () => {
     let cmp, vm;
+
     const calStub = {
         methods: {
             getData() {}
@@ -29,23 +30,217 @@ describe("App Method Unit Test", () => {
     afterEach(() => {
         //wrapper.destroy();
     }) 
-/*
-    it ('togglePreset', () => {
-        expect(1).toBe(2);
+
+    it ('addOpenlistSite', () => {
+        //Add new site to empty openlist
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var presetList = [preset1, preset2, preset3];
+        vm.list = presetList;
+        vm.list[0].strings.openInput = "facebook.com";
+
+        vm.addOpenlistSite(vm.list[0]);
+
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(chrome.storage.local.set).toHaveBeenCalled();
+        expect(vm.list[0].openlist.length).toBe(1);
+        expect(vm.list[0].openlist[0].site).toEqual("facebook.com");
+        expect(vm.list).toBe(newList);
+
+        //Add new site to existing openList
+        var len = vm.list[1].openlist.length;
+        vm.list[1].strings.openInput = "youtube.com";
+        vm.addOpenlistSite(vm.list[1]);
+
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(chrome.storage.local.set).toHaveBeenCalled();
+        expect(vm.list[1].openlist.length).toBe(len + 1);
+        expect(vm.list[1].openlist[len].site).toEqual("youtube.com");
+        expect(vm.list[1].strings.openInput).toEqual("");
+        expect(vm.list).toBe(newList);
+
+        //Add same site to existing openList
+        len = len + 1;
+        vm.list[1].strings.openInput = "youtube.com";
+        vm.addOpenlistSite(vm.list[1]);
+
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(chrome.storage.local.set).toHaveBeenCalled();
+        expect(vm.list[1].openlist.length).toBe(len + 1);
+        expect(vm.list[1].openlist[len].site).toEqual("youtube.com");
+        expect(vm.list).toBe(newList);
     });
 
-    it ('setPreset', () => {
-        expect(1).toBe(2);
+    it ('togglePreset', () => {
+        //Toggle preset to true when all are false
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var presetList = [preset1, preset2, preset3];
+        vm.list = presetList;
+        vm.togglePreset(vm.list[1], 1);
+
+        var tempPreset = preset2;
+        tempPreset.value = true;
+
+        //expect(vm.index).toBe(1);
+        expect(vm.list).toEqual([preset1, tempPreset, preset3]);
+
+        //Toggle preset to true when a different one is true
+        vm.togglePreset(vm.list[2], 2);
+
+        tempPreset = preset3;
+        tempPreset.value = true;
+
+        //expect(vm.index).toBe(2);
+        expect(vm.list).toEqual([preset1, preset2, tempPreset]);
+
+        //Toggle preset to false
+        vm.togglePreset(vm.list[2], 2);
+
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        //expect(vm.index).toBe(0); 
+        expect(vm.list).toEqual(presetList);
+        expect(vm.list).toEqual(newList);
     });
 
     it ('removePreset', () => {
-        expect(1).toBe(2);
+        //Removing a preset from a list of inactivated presets
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var preset4 = {strings: {name: "preset4", blockInput: ""}, blacklist: [], openlist: [{site: "basecamp.com"}], value: false};
+        var presetList = [preset1, preset2, preset3, preset4];
+        vm.list = presetList;
+        vm.removePreset(3);
+
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(vm.list.length).toBe(3);
+        expect(vm.list).toEqual([preset1, preset2, preset3]);
+        //expect(vm.index).toBe(0); //Or whatever is the default index for when there are no active presets
+        expect(vm.list).toEqual(newList);
+
+        //Removing an inactive preset from a list of presets when another preset is active
+        vm.togglePreset(vm.list[2], 2);
+        vm.removePreset(1);
+        
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(vm.list).toEqual([preset1, {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: true}]);
+        expect(vm.index).toBe(1);
+        expect(vm.list).toEqual(newList);
+
+        //Removing an active preset
+        vm.togglePreset(vm.list[1], 1);
+        vm.removePreset(1);
+        
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(vm.list).toEqual([preset1]);
+        //expect(vm.index).toBe(0);
+        expect(vm.list).toEqual(newList);
+
+        //Removing all presets
+        vm.removePreset(0);
+
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(vm.list.length).toBe(0);
+        //expect(vm.index).toBe(0);
+        expect(vm.list).toEqual(newList);
     });
 
-    it ('addOpenlistSite', () => {
-        expect(1).toBe(2);
+    it ('setExistingPreset', () => {
+        //Setting an existing preset that is also currently activated
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: true};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var presetList = [preset1, preset2, preset3];
+        vm.list = presetList;
+
+        //expect(vm.index).toBe(0);
+
+        vm.newPreset = preset1.strings.name;
+        vm.setPreset();
+
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(vm.list).toEqual([preset1, preset2, preset3]);
+        expect(vm.list).toBe(newList);
+        //expect(vm.newPreset.valueOf()).toBe("".valueOf());
+        //expect(vm.index).toBe(0);
+
+        //Setting an existing preset that is *not* currently activated (and thus the activated preset should be disactivated and the existing preset activated)
+        vm.newPreset = preset3.strings.name;
+        vm.setPreset();
+
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        expect(vm.list).toStrictEqual([{strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false}, preset2, {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: true}]);
+        expect(vm.list).toBe(newList);
+        //expect(vm.index).toBe(2);
+        expect(vm.list[0].value).toBe(false);
+        expect(vm.list[2].value).toBe(true);
+
     });
-*/
+
+    it ('setNewPreset', () => {
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: true};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var presetList = [preset1, preset2, preset3];
+
+        
+        vm.list = presetList;
+        //vm.togglePreset(vm.list[0], 0);
+
+        vm.newPreset = "preset4";
+        vm.setPreset();
+
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+        var preset4 = {strings: {name: "preset4", openInput: "", blockInput: ""}, color: "#E8D2AE", blacklist: [], openlist: [], value: true};
+        
+        expect(vm.list.length).toBe(4);
+        //expect(vm.index).toBe(3);
+        expect(vm.newPreset).toBe("");
+        //expect(vm.list[vm.index]).toEqual(preset4);
+    });
+
+    
     it ('addBlacklistSite', () => {
         var old_blacklist_length, old_list, new_list;
 
@@ -171,7 +366,7 @@ describe("App Method Unit Test", () => {
         expect(chrome.storage.local.set).toHaveBeenCalled();
     });
     
-    it ('toogleSite', () => {
+    it ('toggleSite', () => {
         var website, enabled_before, list_after;
 
         website = {site: "stackoverflow.com", enabled: true};
