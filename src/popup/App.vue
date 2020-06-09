@@ -18,7 +18,7 @@
               >
                 <icon name="power-off"></icon>
               </a>
-              <p>{{appOn ? "On" : "Off"}}</p>
+              <p class="powerStatus">{{appOn ? "On" : "Off"}}</p>
             </div>
             <!-- Name Banner -->
             <div class="col-6 text-center">
@@ -314,9 +314,6 @@
       </div>
       <!-- calendar component -->
       <calComp :key="componentKey" :title="selName" ref="calComp"></calComp>
-
-    
-
     </div>
   </div>
 </template>
@@ -790,5 +787,8 @@ p {
 }
 .chev{
   font-size: 1px;
+}
+.powerStatus {
+  margin: none !important;
 }
 </style>

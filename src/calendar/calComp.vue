@@ -17,7 +17,8 @@
         />
       </div>
     </div>
-    <hr class="solid" />
+    <!-- We decided to remove the users ability to repeat calendar events -->
+    <!-- <hr class="solid" />
     <div class="row my-auto">
       <div class="col-3 my-auto">
         <p class="my-auto category text-left">Repeat:</p>
@@ -31,7 +32,7 @@
           v-mode.lazy="updateSel()" 
         />
       </div>
-    </div>
+    </div> -->
     <hr class="solid" />
     
     <b-row class="my-auto">
