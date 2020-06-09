@@ -28,6 +28,10 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
+    # Run linter
+    - name: Run linter
+      run: npm run lint -- --fix
+    
     # Run our extension and make sure it launches
     - name: Build Extension
       run: npm run build  
