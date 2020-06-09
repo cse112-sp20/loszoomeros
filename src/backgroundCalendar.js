@@ -6,7 +6,7 @@
  * 
  * 
  */
-var $ = require("jquery");
+var $ = require('jquery');
 
 var localCal = [];
 var localList = [];
@@ -26,8 +26,8 @@ const apiURLList = 'https://www.googleapis.com/calendar/v3/users/me/calendarList
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     for (var key in changes) {
         if (debug)
-            alert("Change detected in " + key);
-        if (key == "cal") {
+            alert('Change detected in ' + key);
+        if (key == 'cal') {
             var prevsize = localCal.length; //Number of events added
             localCal = changes[key].newValue;
             calendarTrigger(localCal.length - prevsize);
@@ -63,20 +63,20 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
                 localList = result.list;
                 for (var i = 0; i < localList.length; i++) {
                     if (debug) {
-                        alert(name + ' : ' + localList[i].strings.name)
+                        alert(name + ' : ' + localList[i].strings.name);
                     }
                     //If we find the preset that matches to name, trigger it
                     if (name == localList[i].strings.name) {
                         triggerApp(i);
                         // if (debug) //This might be good for normal use outside of debug, or some sort of notification
-                        alert('Zoomero turning on! Using preset: ' + name)
+                        alert('Zoomero turning on! Using preset: ' + name);
                     }
                 }
-            })
+            });
         }
     });
 
-})
+});
 
 
 
@@ -93,7 +93,7 @@ function calendarTrigger(num) {
     //Oauth
     chrome.identity.getAuthToken({ interactive: true }, function (authToken) {
         if (debug) {
-            alert(authToken)
+            alert(authToken);
         }
 
         //This generates the request for the calendar list, which we take the first calendar from.
@@ -106,15 +106,15 @@ function calendarTrigger(num) {
                 //Generating a quickadd string to present the event nicely on the user's calendar
                 var schedData = 'Zoomero ' + sch.preset + ' on ' + sch.calDate + ' from ' + sch.startTime.slice(0, 5) + ' to ' + sch.endTime.slice(0, 5);
                 //Making the url for the post request that adds the event to the calendar
-                var quickAddUrl = apiURLAdd.replace('{calendarId}', encodeURIComponent(calendar.id)) + '?text=' + encodeURIComponent(schedData);;
+                var quickAddUrl = apiURLAdd.replace('{calendarId}', encodeURIComponent(calendar.id)) + '?text=' + encodeURIComponent(schedData);
                 $.ajax(quickAddUrl, {
                     type: 'POST',
                     headers: { 'Authorization': 'Bearer ' + authToken },
                     success: function (response) {
-                        alert('Added to your calendar!')
+                        alert('Added to your calendar!');
                     },
                     error: function (response) {
-                        alert('There was an issue adding the event to your calendar...')
+                        alert('There was an issue adding the event to your calendar...');
                         if (response.status === 401) {
                             chrome.identity.removeCachedAuthToken({ 'token': authToken }, function () { });
                         }
@@ -122,7 +122,7 @@ function calendarTrigger(num) {
                 });
             },
             error: function (response) {
-                alert('Failed to retrieve calendar')
+                alert('Failed to retrieve calendar');
                 if (response.status === 401) {
                     chrome.identity.removeCachedAuthToken({ 'token': authToken }, function () { });
                 }
@@ -142,10 +142,10 @@ function calendarTrigger(num) {
 function addAlarm(num) {
     var sch = localCal[localCal.length - 1];
     var date = new Date(sch.calDate + ' ' + sch.startTime);
-    var alarmInfo = { when: date.getTime() }
-    chrome.alarms.create("" + (localCal.length - 1), alarmInfo);
+    var alarmInfo = { when: date.getTime() };
+    chrome.alarms.create('' + (localCal.length - 1), alarmInfo);
     if (debug)
-        alert('Alarm added!')
+        alert('Alarm added!');
 }
 
 /**
@@ -166,16 +166,16 @@ function triggerApp(index) {
         chrome.storage.local.set({ appEnabled: false, index: index, list: localList }, function () {
             chrome.storage.local.set({ appEnabled: true }, function () {
                 chrome.storage.local.get({ update: false }, function (result) {
-                    chrome.storage.local.set({ update: !result.update }, function () {})
+                    chrome.storage.local.set({ update: !result.update }, function () {});
                 });
-            })
-        })
+            });
+        });
         // chrome.storage.local.set({ index: index }, function () {
         //     chrome.storage.local.set({ appEnabled: false }, function () {
         //         chrome.storage.local.set({ appEnabled: true }, function () { });
         //     });
         // });
-    })
+    });
 }
 
 
