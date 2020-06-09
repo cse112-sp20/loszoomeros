@@ -53,7 +53,6 @@
                   type="search"
                   class="form-control"
                   placeholder="Powell Memes"
-                  aria-label="Powell Memes"
                   aria-describedby="basic-addon2"
                 />
 
@@ -72,10 +71,53 @@
         </div>
       </div>
 
+      <!-- START Modal for deleting -->
+      <div>
+        <b-modal ref="delModal" hide-footer title="Confirm Removal">
+          <div class="d-block text-center">
+            <h3>You sure there, bud?</h3>
+          </div>
+          <b-button class="mt-3" pill variant="primary" @click="hideDelMod">Cancel</b-button>
+          <b-button :href="'#'+curRow" data-toggle="collapse" class="mt-3" pill variant="danger" @click="removePreset(curPreset)">Delete</b-button>
+        </b-modal>
+      </div>
+      <!-- END Modal for deleting -->
+
+      <!-- START Modal to rename presets -->
+      <div>
+        <b-modal
+          id="modal-prevent-closing"
+          ref="nameMod"
+          title="Enter a new name"
+          @show="resetModal"
+          @hidden="resetModal"
+          @ok="handleOk"
+        >
+          <form ref="form" @submit.stop.prevent="handleSubmit">
+            <b-form-group
+              :state="nameState"
+              label="Name"
+              label-for="name-input"
+              invalid-feedback="A name is required"
+            >
+              <b-form-input
+                id="name-input"
+                v-model="name"
+                :state="nameState"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </form>
+        </b-modal>
+      </div>
+      <!-- END Modal to rename presets -->
+
       <div class="container" v-for="(item, i) in list" :key="i">
         <div class="row my-auto">
           <div class="col-1 my-auto">
-            <a href="#" @click="removePreset(i)">
+            <!-- v-b-modal.:id="encode(item.strings.name)+'elipse'" -->
+            <a :href="'#'+encode(item.strings.name)+'opts'" data-toggle="collapse" class="nav-link drop-down" @click="modalShow = true">
+              <!-- <b-modal :id="encode(item.strings.name)+'elipse'" size="sm" title="Small Modal">Hello Small Modal!</b-modal> -->
               <icon name="ellipsis-v"></icon>
             </a>
           </div>
@@ -94,16 +136,37 @@
           <!-- Coloumn for the mode text (name of the mode) -->
           <div class="col my-auto text-left mode-title">{{item.strings.name}}</div>
           <!-- Coloumn for the dropdown arrow -->
-          <div class="col-2 text-left">
+          <div class="col-3 my-auto">
             <a
               class="nav-link drop-down"
               data-toggle="collapse"
               :href="'#'+encode(item.strings.name)"
-              aria-expanded="false"
+              aria-expanded="false" 
             >
-              <icon name="chevron-down"></icon>
+              <chevron class="text-right"></chevron>
             </a>
+            
           </div>
+
+          <div class="collapse container" :id="encode(item.strings.name)+'opts'">
+            <div><hr class="solid" /></div>
+            <div class="row bot-buffer">
+              <div class="col"></div>
+              <div class="col">Options</div>
+              <div class="col"></div>
+            </div>
+            <div class="row">
+
+              <div class="col">
+                <b-button pill size="sm" variant="danger" @click="showDelMod(i, encode(item.strings.name)+'opts')">Delete</b-button>
+              </div>
+
+              <div class="col">
+                <b-button pill size="sm" variant="outline-primary" @click="showNameMod(i)">Rename</b-button>
+              </div>
+            </div>
+          </div>  
+          
 
           <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
           <div class="row collapse" :id="encode(item.strings.name)">
@@ -251,12 +314,17 @@
       </div>
       <!-- calendar component -->
       <calComp :key="componentKey" :title="selName" ref="calComp"></calComp>
+
+    
+
     </div>
   </div>
 </template>
 
 <script>
 import calComp from "./../calendar/calComp.vue";
+import chevron from "./../chevron/Chevron.vue";
+
 
 /**
  * @module popup
@@ -294,7 +362,8 @@ const browser = require("webextension-polyfill");
 
 export default {
   components: {
-    calComp
+    calComp,
+    chevron,
   },
 
   data() {
@@ -308,12 +377,17 @@ export default {
       index: Tracks the currently active preset within the list
       appOn: Holds the on/off state of the extension as a boolean
       */
+      name: '',
+      nameState: null,
+      curRow: "", // to hold the current row that activated menu
+      curPreset: -1, // to hold current preset id
+      modalShow: true,
       componentKey: 0,
       selName: "Select a mode",
       newPreset: "",
       preset: {
         strings: { name: "name", openInput: "", blockInput: "" },
-        color: "#E8D2AE",
+        color: "#00a800",
         value: true,
         openlist: [],
         blacklist: []
@@ -325,8 +399,59 @@ export default {
       calMode: false
     };
   },
-
   methods: {
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity()
+      this.nameState = valid
+      return valid
+    },
+    resetModal() {
+      this.name = ''
+      this.nameState = null
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault()
+      // Trigger submit handler
+      this.handleSubmit()
+    },
+    handleSubmit() {
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return
+      }
+      // Push the name to submitted names
+      this.rename(this.curPreset, this.name)
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide('modal-prevent-closing')
+      })
+    },
+    showNameMod(preset){
+      this.curPreset = preset;
+      this.$refs['nameMod'].show();
+    },
+    hideNameMod(){
+      this.$refs['nameMod'].hide();
+    },
+    showDelMod(preset, row){
+      this.curPreset = preset;
+      this.curRow = row;
+      this.$refs['delModal'].show();
+    },
+    hideDelMod(){
+      this.$refs['delModal'].hide();
+    },
+    rename(i, name){
+      this.list[i].strings.name = name;
+      this.storeLocalList();
+      this.storeLocalEnabled();
+      this.storeLocalIndex(this.index);
+      this.refresh();
+    },
+    prompt(i){
+
+    },
     /*
      * forceUpdate
      * Called when switching back from calendar mode (User clicked on left chevron)
@@ -424,6 +549,9 @@ export default {
 
     */
     removePreset(index) {
+      // Close modal
+      this.hideDelMod();
+
       this.list.splice(index, 1);
       this.index = 0;
       this.appOn = false;
@@ -436,6 +564,8 @@ export default {
       this.storeLocalList();
       this.storeLocalIndex(this.index);
       this.refresh();
+
+      
     },
 
     //Function synced to the presets' add button for auto-open sites
@@ -657,5 +787,8 @@ p {
 
 .modal {
   background-color: rgba(0, 0, 0, 0.7);
+}
+.chev{
+  font-size: 1px;
 }
 </style>
