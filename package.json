@@ -1,7 +1,7 @@
 {
-  "name": "site-block",
+  "name": "zoomero",
   "version": "1.0.1",
-  "description": "Developer build of the site blocker. Not for normal use.",
+  "description": "Zoomero tab manager, manages your tabs and can do it on a schedule.",
   "author": "Team 11",
   "license": "MIT",
   "engines": {
