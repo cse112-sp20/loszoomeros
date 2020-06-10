@@ -446,9 +446,6 @@ export default {
       this.storeLocalIndex(this.index);
       this.refresh();
     },
-    prompt(i){
-
-    },
     /*
      * forceUpdate
      * Called when switching back from calendar mode (User clicked on left chevron)
