@@ -78,8 +78,6 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 
 })
 
-
-
 /**
  * @function calendarTrigger
  * @description 
@@ -105,6 +103,7 @@ function calendarTrigger(num) {
                 alert('Calendar for : ' + calendar.id);
                 //Generating a quickadd string to present the event nicely on the user's calendar
                 var schedData = 'Zoomero ' + sch.preset + ' on ' + sch.calDate + ' from ' + sch.startTime.slice(0, 5) + ' to ' + sch.endTime.slice(0, 5);
+                alert(schedData)
                 //Making the url for the post request that adds the event to the calendar
                 var quickAddUrl = apiURLAdd.replace('{calendarId}', encodeURIComponent(calendar.id)) + '?text=' + encodeURIComponent(schedData);;
                 $.ajax(quickAddUrl, {
@@ -170,15 +169,5 @@ function triggerApp(index) {
                 });
             })
         })
-        // chrome.storage.local.set({ index: index }, function () {
-        //     chrome.storage.local.set({ appEnabled: false }, function () {
-        //         chrome.storage.local.set({ appEnabled: true }, function () { });
-        //     });
-        // });
     })
 }
-
-
-
-//global.browser = require('webextension-polyfill')
-

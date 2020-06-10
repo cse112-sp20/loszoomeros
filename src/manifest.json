@@ -1,7 +1,7 @@
 {
-  "name": "site-block",
-  "description": "Developer build of the site blocker. Not for normal use.",
-  "version": "0.1",
+  "name": "Zoomero",
+  "description": "Zoomero tab manager, manages your tabs and can do it on a schedule.",
+  "version": "1.0.1",
   "permissions": [
     "storage",
     "tabs",
@@ -22,7 +22,7 @@
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
-    "default_title": "site-block",
+    "default_title": "Zoomero",
     "default_popup": "popup/popup.html",
     "default_icon": {
       "64": "icons/glasses-red.png"
