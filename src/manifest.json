@@ -1,0 +1,41 @@
+{
+  "name": "Zoomero",
+  "description": "Zoomero tab manager, manages your tabs and can do it on a schedule.",
+  "version": "1.0.1",
+  "permissions": [
+    "storage",
+    "tabs",
+    "identity",
+    "alarms"
+  ],
+  "manifest_version": 2,
+  "icons": {
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoBNx22+JTnEmCTw2/3cfDle7nvOu9xkfeCkaVjCow4OX+/x6QzkGB94VkEfjRctMnXUSYV7iC/C5cI76G4eHNUXguuFBdVLYoTDfk5hu1UfePtu3o9VDlDyW4aM9F9xUQCr0VyAbiAP0GDYXe4aOKbmTSBTWLEZtVSMK9QNHMhJjU9H2/EuTw8n6TE8mNA2yTGRV+qrsIeU67wIBdvmYQ9HSXCPYZRx2Qu192EfmfaAlfT38NKvmZrXd1eZ+JVk68fra4y3sk5S9fFWkWHjCGevI87HS1RNGm1EelOH0XBCcpmXjbWP2YwQnKnY/Bd94OGaLTC4RmrtzB8qpaSCtTwIDAQAB",
+  "oauth2": {
+    "client_id": "92037429831-ln2o8drcoc3kn4m1moa8hsnirus21lkj.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar"
+    ]
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "browser_action": {
+    "default_title": "Zoomero",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "64": "icons/glasses-red.png"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background.js",
+      "backgroundCalendar.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  }
+}

@@ -57,5 +57,3 @@ Acknowledgement to all of our team members who have contributed to this project.
 
 
 > Names are sorted in alphabetic order within each category of team roles.
-
-

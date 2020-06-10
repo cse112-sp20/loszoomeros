@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: popup/App.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: popup/App.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div class="extension">
+    &lt;!-- Top Banner Area-->
+    &lt;div class="sticky-top banner" style="padding-top:4%">
+      &lt;div class="container">
+        &lt;!-- Banner Icons and Name -->
+        &lt;div class="row">
+          &lt;!-- Power Button -->
+          &lt;div class="col-3 text-center my-auto">
+            &lt;a class="my-auto" href="#" @click="appEnable" data-toggle="tooltip" data-placement="top" :title="(appOn) ? 'Turn off': 'Turn on'" >&lt;icon name="power-off">&lt;/icon>&lt;/a>
+            &lt;p>{{appOn ? "On" : "Off"}}&lt;/p>
+          &lt;/div>
+          &lt;!-- Name Banner -->
+          &lt;div class="col-6 text-center">
+            &lt;h3>Zoomero&lt;/h3>
+          &lt;/div>
+          
+          &lt;!-- Add Mode -->
+          &lt;div class="col-1 text-left">
+            &lt;a href="#mode-input" data-toggle="collapse" aria-haspopup="true" aria-expanded="false">&lt;icon name="plus-circle">&lt;/icon>&lt;/a>
+          &lt;/div>
+          &lt;!-- Calendar -->
+          &lt;div class="col-1 text-right">
+            &lt;a href="#" data-toggle="tooltip" data-placement="top">&lt;icon name="calendar-alt">&lt;/icon>&lt;/a>
+          &lt;/div>
+          &lt;!-- Blank Space For Even Spacing -->
+          &lt;div class="col-1 text-left">
+          &lt;/div>
+
+          &lt;div id="mode-input" class="collapse">
+            &lt;div class="input-group mb-3">
+
+              &lt;input id="mode-in-field" v-model="newPreset" type="search" class="form-control" placeholder="Powell Memes" aria-label="Powell Memes" aria-describedby="basic-addon2">
+
+              &lt;div class="input-group-append">
+                &lt;button href="#mode-input" data-toggle="collapse" @click="setPreset" class="btn btn-outline-secondary" type="submit">Add&lt;/button>
+              &lt;/div>
+
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+
+    &lt;div class="container" v-for="(item, i) in list" :key="i">
+      &lt;div class="row my-auto">
+        &lt;div class="col-1 my-auto">
+          &lt;a href="#" @click="removePreset(i)">&lt;icon name="ellipsis-v">&lt;/icon>&lt;/a>
+        &lt;/div>
+        &lt;!-- Coloumn for the main toggle for a mode -->
+        &lt;div class="col-3 my-auto text-left">
+          &lt;toggle-button
+              class="my-auto"
+              :value="item.value"
+              :color="item.color"
+              :sync="true"
+              :labels="true"
+              :key="i"
+              @change="togglePreset(item, i)"/>
+        &lt;/div>
+        &lt;!-- Coloumn for the mode text (name of the mode) -->
+        &lt;div class="col my-auto text-left mode-title">
+          {{item.strings.name}}
+        &lt;/div>
+        &lt;!-- Coloumn for the dropdown arrow -->
+        &lt;div class="col-2 text-left">
+          &lt;a class="nav-link drop-down" data-toggle="collapse" :href="'#'+encode(item.strings.name)" aria-expanded="false">&lt;icon name="chevron-down">&lt;/icon>&lt;/a>
+        &lt;/div>
+
+        &lt;!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
+        
+        &lt;div class="row collapse" :id="encode(item.strings.name)">
+          &lt;div class="container">
+          &lt;div>&lt;hr class="solid">&lt;/div>
+            &lt;div class="row bot-buffer">
+              &lt;div class="col-3">
+                &lt;!-- Do not put anything here -->
+              &lt;/div>
+
+              &lt;div class="col-6 text-center">
+                Auto-open
+              &lt;/div>
+
+              &lt;div class="col-3 text-center">
+                &lt;a :href="'#'+encode(item.strings.name)+'auto'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false">&lt;icon name="plus">&lt;/icon>&lt;/a>
+              &lt;/div>
+            &lt;/div>
+
+            &lt;div :id="encode(item.strings.name)+'auto'" class="row collapse">
+              &lt;div class="col-1">&lt;/div>
+              &lt;div class="col input-group mb-3">
+                &lt;input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.openInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
+                &lt;div class="input-group-append">
+                  &lt;button :href="'#'+encode(item.strings.name)+'auto'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addOpenlistSite(item)">Add&lt;/button>
+                &lt;/div>
+              &lt;/div>
+              &lt;div class="col-1">&lt;/div>
+            &lt;/div>
+
+            &lt;div class="row" v-for="(website, j) in item.openlist" :key="j" >
+              &lt;div class="col-1">&lt;/div>
+              &lt;div class="col my-auto text-left">
+                {{website.site}} 
+              &lt;/div>
+              &lt;div class="col-3 my-auto text-center">
+                &lt;a class="del-site" href="#" @click ="removeSite(item.openlist, j)">&lt;icon name="times">&lt;/icon>&lt;/a>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+
+          &lt;div class="container">
+            &lt;hr class="solid">
+            &lt;div class="row top-buffer bot-buffer">
+              &lt;div class="col-3">
+                &lt;!-- Do not put anything here -->
+              &lt;/div>
+              &lt;div class="col-6 text-center">
+                Blocked
+              &lt;/div>
+              &lt;div class="col-3 text-center">
+                &lt;a :href="'#'+encode(item.strings.name)+'block'" data-toggle="collapse" aria-haspopup="true" aria-expanded="false">&lt;icon name="plus">&lt;/icon>&lt;/a>
+              &lt;/div>
+            &lt;/div>
+
+            &lt;div :id="encode(item.strings.name)+'block'" class="row collapse">
+              &lt;div class="col-1">&lt;!-- Leave this empty -->&lt;/div>
+              &lt;div  class="col input-group mb-3">
+                &lt;input :id="encode(item.strings.name)+'auto-op'" v-model="item.strings.blockInput" type="search" class="form-control" placeholder="Enter url..." aria-describedby="basic-addon2">
+                  &lt;div class="input-group-append">
+                    &lt;button :href="'#'+encode(item.strings.name)+'block'" class="btn btn-outline-secondary" data-toggle="collapse" @click="addBlacklistSite(item)">Add&lt;/button>
+                  &lt;/div>
+              &lt;/div>
+              &lt;div class="col-1">&lt;!-- Leave this empty -->&lt;/div>
+            &lt;/div>
+
+            &lt;div class="row" v-for="(website, k) in item.blacklist" :key="k">
+              &lt;div class="col-1">&lt;/div>
+              &lt;div class="col my-auto text-left">
+                {{website.site}}
+              &lt;/div>
+              &lt;div class="col-3 my-auto text-center">
+                &lt;a class="del-site" href="#" @click ="removeSite(item.blacklist, k)">&lt;icon name="times">&lt;/icon>&lt;/a>
+              &lt;/div>
+            &lt;/div>
+
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+      &lt;hr class="solid">
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;script>
+
+/**
+ * Script that runs at all times when the extension is loaded.
+ * @module popup
+ * @author Paul Larsen &amp; Daryl Nakamoto
+ * 
+ * @vue-data {String} [newPreset=""] - Stores input value for creating preset
+ * @vue-data {Preset-Object} preset - Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist)
+ * @vue-data {Website-Object} website - Object that holds a website url(site) and a boolean for on/off toggle(enabled)
+ * @vue-data {Preset-List} list - An array which is the highest level data storage within the vue. Holds all the presets
+ * @vue-data {Int} [index=0] - Tracks the currently active preset within the list
+ * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean
+ * @vue-event togglePreset - Emit counter's value after increment
+ * @type {Number}
+ *
+ */
+
+//import $ from 'jquery'
+
+//vars with the intent of being accessible in the scope of chrome storage
+var a = [ ]; 
+var b = false;
+var c = 0;
+//looping var
+var i;
+const browser = require("webextension-polyfill");
+export default {
+  
+  data() {
+    return {
+
+      /*Data variables
+      newPreset: synced to the input form for adding a preset
+      preset: object that holds a name(name), color of its button(color), boolean for its on/off state(value), 
+              list of websites to open(openlist), and list of tabs to block(blacklist)
+      website: Object that holds a website url(site) and a boolean for on/off toggle(enabled)
+      list: An array which is the highest level data storage within the vue. holds all the presets
+      index: Tracks the currently active preset within the list
+      appOn: Holds the on/off state of the extension as a boolean
+      */
+      newPreset: "", 
+      preset: {strings: {name: "name", openInput: "", blockInput: ""}, color: '#E8D2AE', value: true, openlist: [ ], blacklist: [ ], },
+      website: {site: "stackoverflow.com", enabled: true}, 
+      list: [],    
+      index: 0,    
+      appOn: false,
+    };
+  },
+
+  methods: {
+
+    /**
+     * @function togglePreset
+     * @description 
+     * Called when a storage change is detected.
+     * Updates the chrome.tabs listener that checks for blacklisted websites and removes them.
+     * @author Paul Larsen 
+     */
+    togglePreset(item, index) {
+      //alert(item.name);
+      //alert(index);
+      if (!item.value) {
+        for (i = 0; i &lt; this.list.length; i++) {
+          this.list[i].value = false;
+        }
+      }
+      //toggling preset on/off
+      item.value = !(item.value);
+      this.index = index;
+      this.appOn = false;
+      this.storeLocalEnabled();
+      this.storeLocalList();
+      this.storeLocalIndex(this.index);
+      this.refresh();
+    },
+
+    //This function is synced with the add button for adding presets
+    //It disables all active presets(should only be one), and then checks if the preset exists
+    //If so, it makes that the active preset
+    //Otherwise, create a new preset and make that the active preset.
+    setPreset: function() {
+      //Checking if the preset exists
+      for (var i = 0; i &lt; this.list.length; i++) {
+          this.list[i].value = false;
+      }
+
+      for (var i = 0; i &lt; this.list.length; i++) {
+        if (this.list[i].strings.name.valueOf() == this.newPreset.valueOf()) {
+          this.list[i].value = true;
+          this.index = i;
+          this.appOn = false;
+          this.storeLocalList();
+          this.storeLocalEnabled();
+          this.storeLocalIndex(this.index);
+          this.refresh();
+          //this.newPreset = "";
+          //alert("Found Preset");
+          return;
+        }
+      }
+
+      //Creating new preset
+      //this.preset.strings.name = this.newPreset;
+      this.preset.strings = {name: this.newPreset, openInput: "", blockInput: ""}
+      this.preset.openlist = [];
+      this.preset.blacklist = [];
+      this.preset.value = true;
+      //This is the format for copying an object in js. Using just an "=" passes by reference normally.
+      //  ie this.list[index] = dontdothis;
+      this.list[this.list.length] = {
+        ...this.preset
+      };
+      this.index = this.list.length - 1;
+      this.appOn = false;
+      this.storeLocalEnabled();
+      this.storeLocalList();
+      this.storeLocalIndex(this.index);
+      this.newPreset = '';
+      this.refresh();
+      //alert("New Preset");
+      //this.newPreset = "";
+      
+    },
+
+    /* Function for removing a preset
+    Takes an input(index) directing which member of the list to delete
+    Turns the app off, and updates this.index to the currently active preset(the active preset's index might change after a removal)
+
+    */
+    removePreset(index) {
+      this.list.splice(index,1);
+      this.index = 0;
+      this.appOn = false;
+      for (var i = 0; i &lt; this.list.length; i++) {
+        if (this.list[i].value) {
+          this.index = i;
+        }
+      }
+      this.storeLocalEnabled();
+      this.storeLocalList();
+      this.storeLocalIndex(this.index);
+      this.refresh();
+    },
+
+    //Function synced to the presets' add button for auto-open sites
+    //Does not check for duplicates to allow the user to open duplicate tabs if they wish
+    //Adds the input website from the openInput form of the input(preset) to the preset's openlist
+    addOpenlistSite: function(preset) {
+      this.website.site = preset.strings.openInput;
+      this.website.enabled = true;
+      //currently allowing duplicate tabs opening
+      preset.openlist[preset.openlist.length] = {
+        ...this.website
+      };
+      this.storeLocalList();
+      preset.strings.openInput = "";       // reset input field
+      preset.strings.openInput.refresh();  // update changes
+      this.refresh();
+    },
+
+    //Function synced to the presets' add button for blocked sites
+    //Checks if the input from the blockInput form of the input(preset) is already blacklisted, and if not, proceeds to add it to the
+    //  preset's blacklist.
+    addBlacklistSite: function(preset) {
+      
+      for (i =0; i &lt; preset.blacklist.length; i++) {
+        if (preset.strings.blockInput.valueOf() == preset.blacklist[i].site.valueOf()) {
+          return;
+        } 
+      }
+      this.website.site = preset.strings.blockInput;
+      this.website.enabled = true;
+      preset.blacklist[preset.blacklist.length] = {
+        ...this.website
+      };
+      this.storeLocalList();
+      preset.strings.blockInput = "";       // reset input field
+      preset.strings.blockInput.refresh();  // update changes
+      this.refresh();
+      //alert("Website added to blacklist");
+    },
+
+    //Function used to remove sites from the given input1(array) at input2(index)
+    //It's basically a splice call with extra steps, those being updating our data
+    removeSite: function(array, index) {
+      array.splice(index,1);
+      this.storeLocalList();
+      this.refresh();
+    },
+
+    //Uses chrome storage api to retrieve data from local storage.
+    //Storage retrieval is asynchronous and the vue data fields aren't accessible within
+    //  the storage function's scope, so we use var a,b,c which are still accessible to store the data
+    //  and call trackChange to update the vue data fields.
+    getData: function() {
+      a = this.list;
+      b = this.appOn;
+      c = this.index;
+      
+      chrome.storage.local.get({ 'appEnabled' : this.appOn }, function(result){ 
+        b = result.appEnabled; //Using var b because our data parameters are not in this scope      
+      }); 
+
+      chrome.storage.local.get({ 'index' : this.index }, function(result){ 
+        c = result.index; //Using var c because our data parameters are not in this scope        
+      }); 
+      
+      chrome.storage.local.get({ 'list' : this.list }, function(result){ 
+        a = result.list; //Using var a because our data parameters are not in this scope
+      }); 
+
+      this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update 
+    },
+
+    //Function used to update the extension's important data when storage data is retrieved
+    //by calling setTimeout, we create a delay between updates, allowing for the async storage
+    //api to finish retrieving the necessary data. 
+    trackChange: function(num) {
+      if (this.list != a &amp;&amp; a != undefined) {
+        this.list = a;
+      }
+      if (this.appOn != b &amp;&amp; b != undefined) {
+        this.appOn = b;
+      }
+      if (this.index != c &amp;&amp; c != undefined) {
+        this.index = c;
+      } 
+      if (num &lt; 10) {
+        setTimeout(this.trackChange, 100, num + 1);
+      }
+      
+    },
+
+
+    //These three functions all do the same thing with different pieces of data
+    //They store data to trigger the storage listeners in background.js and update the
+    //  website listeners
+    //The index function takes a parameter in anticipation of it needing to store an index
+    //  that wasn't this.index, but this might not even happen. Might change in future
+    storeLocalList: function() {
+      chrome.storage.local.set({'list': this.list}, function() {} );
+    },
+    storeLocalIndex: function(num) {
+      chrome.storage.local.set({'index': num}, function() {} );
+    },
+    storeLocalEnabled: function() {
+      chrome.storage.local.set({'appEnabled': this.appOn}, function() {} );
+    },
+
+    //Function hooked up to the power button
+    //Toggles the extension state between on and off
+    appEnable: function() {
+      //added for loop to return on no active presets found
+      for (var i = 0; i &lt; this.list.length; i ++) {
+        if (this.list[i].value) {
+          break;
+        }
+        if (i == (this.list.length - 1) ) {
+          return;
+        } 
+      }
+      this.appOn = !(this.appOn);
+      this.storeLocalEnabled();
+    },
+
+
+    //Function called when a website's toggle button is clicked
+    //Turns it off or on.
+    toggleSite: function(site) {
+      site.enabled = !(site.enabled);
+      this.storeLocalList();
+    },
+    //Band-aid fix for toggle buttons not working when dynamically created.
+    //Reloading the paramaters generating the buttons seemed to fix it.
+    //Doesn't seem to cause issues so far
+    refresh: function() {
+      this.list = -1;
+      this.index = 1000;
+      this.appOn = false;
+
+      this.getData();
+    },
+
+    //Function used to resolve issues with html formatting of input strings
+    //Takes an input(baseString) and creates an output(encodedString)
+    //For every char in baseString, we take the ascii code, place x's before and after,
+    //and concat it to the output string.
+    encode: function(baseString) {
+      var code;
+      var encodedString = "";
+      for (var i = 0; i &lt; baseString.length; i++) {
+        code = baseString.charCodeAt(i);
+        //deliberately left one lowercase in case debugging was needed
+        encodedString += 'X' + code + 'x';
+      } 
+      return encodedString;
+    }
+  },
+
+  mounted() {
+    //alert("Mounted");
+    this.getData();
+  },
+
+  
+};
+&lt;/script>
+
+&lt;style lang="scss" scoped>
+p {
+  font-size: 16px;
+}
+.extension {
+  width: 300px;
+  text-align: center;
+}
+.bot-buffer {
+  margin-bottom: 4% !important;
+  font-weight: 500;
+}
+.top-buffer {
+  margin-top: 4% !important;
+  font-weight: 500;
+}
+.mode-title {
+  font-weight: 600;
+  font-size: 1.1em;
+}
+.drop-down {
+  padding: 0 !important;
+}
+.banner {
+  background-color: white;
+  box-shadow: 0 .1em .3em rgba(0, 0, 0, 0.123);
+  margin-bottom: 1em;
+}
+.del-site {
+  color: rgba(119, 118, 118, 0.712);
+}
+.rotate{
+  display: inline-block;
+  transition: all 2s linear;
+}
+
+.rotate.down{
+  transform:rotate(180deg);
+}
+&lt;/style></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="background.module_js.html">background.js</a></li><li><a href="module-popup.html">popup</a></li></ul><h3>Events</h3><ul><li><a href="background.module_js.html#~event:'chrome.storage.onChanged'">'chrome.storage.onChanged'</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 02 2020 02:13:46 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
