@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import VSelect from "@alfsnd/vue-bootstrap-select";
+import VSelect from '@alfsnd/vue-bootstrap-select';
 /**
  * @module calComp
  * @author Paul Larsen & Daryl Nakamoto
@@ -108,19 +108,19 @@ var calCompList = [];
 var schList = [];
 
 export default {
-  name: "calComp",
-  props: {
-    title: {
-      type: String,
-      default: "Select a preset"
-    }
-  },
-  components: {
-    VSelect
-  },
-  data() {
-    return {
-      /*Data variables
+    name: 'calComp',
+    props: {
+        title: {
+            type: String,
+            default: 'Select a preset'
+        }
+    },
+    components: {
+        VSelect
+    },
+    data() {
+        return {
+            /*Data variables
       list: The preset list. Used to generate the options in the preset selector. 
       recur: Synced to the recurring event toggle, used for creating multiple events(not yet implemented)
       eventData: Object used to store: 
@@ -130,115 +130,115 @@ export default {
           preset, the preset that is being scheduled to turn on
       scheduleList: List for storing eventData objects. Is stored in local storage under the key 'cal'
       */
-      currSel: null,
-      names: [],
-      list: [],
-      recur: false,
-      eventData: { startTime: "", endTime: "", calDate: "", preset: "" },
-      scheduleList: []
-    };
-  },
-  methods: {
-    //Function for storing the input fields as a scheduled event. Filters out duplicated start times/dates.
-    storeSched: function() {
-      alert(this.eventData.preset);
-      if (
-        this.eventData.startTime != "" &&
-        this.eventData.endTime != "" &&
-        this.eventData.calDate != "" &&
-        this.currSel != null
-      ) {
-        let ev = this.eventData;
-        let sch = this.scheduleList;
-        //Filtering
-        for (var i = 0; i < sch.length; i++) {
-          if (
-            sch[i].calDate == ev.calDate &&
-            sch[i].startTime == ev.startTime
-          ) {
-            alert(
-              "You already have a mode scheduled at that exact time. Please try a different start time or date."
-            );
-            return;
-          }
-        }
-        sch[sch.length] = {
-          ...ev
+            currSel: null,
+            names: [],
+            list: [],
+            recur: false,
+            eventData: { startTime: '', endTime: '', calDate: '', preset: '' },
+            scheduleList: []
         };
-        alert("Scheduled!");
-        chrome.storage.local.set({ cal: sch }, function() {});
-      } else {
-        alert(
-          "Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected."
-        );
-        return;
-      }
     },
+    methods: {
+    //Function for storing the input fields as a scheduled event. Filters out duplicated start times/dates.
+        storeSched: function() {
+            alert(this.eventData.preset);
+            if (
+                this.eventData.startTime != '' &&
+        this.eventData.endTime != '' &&
+        this.eventData.calDate != '' &&
+        this.currSel != null
+            ) {
+                let ev = this.eventData;
+                let sch = this.scheduleList;
+                //Filtering
+                for (var i = 0; i < sch.length; i++) {
+                    if (
+                        sch[i].calDate == ev.calDate &&
+            sch[i].startTime == ev.startTime
+                    ) {
+                        alert(
+                            'You already have a mode scheduled at that exact time. Please try a different start time or date.'
+                        );
+                        return;
+                    }
+                }
+                sch[sch.length] = {
+                    ...ev
+                };
+                alert('Scheduled!');
+                chrome.storage.local.set({ cal: sch }, function() {});
+            } else {
+                alert(
+                    'Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected.'
+                );
+                return;
+            }
+        },
 
-    //Clears all scheduled alarms
-    clearSched: function() {
-      chrome.alarms.clearAll(function() {
-        alert("Cleared preset schedule!");
-      });
-    },
+        //Clears all scheduled alarms
+        clearSched: function() {
+            chrome.alarms.clearAll(function() {
+                alert('Cleared preset schedule!');
+            });
+        },
 
-    //Used to grab the value from the select and store it in eventData
-    updateSel() {
-      if (this.currSel == null) {
-        this.eventData.preset = "";
-      } else {
-        this.eventData.preset = this.currSel;
-      }
-    },
-    //Uses chrome storage api to retrieve data from local storage.
-    //We are retrieving the preset list(list) and calendar schedule(cal) here.
-    //Calls trackchange to update the local values
-    getData: function() {
-      calCompList = this.list;
-      schList = this.scheduleList;
+        //Used to grab the value from the select and store it in eventData
+        updateSel() {
+            if (this.currSel == null) {
+                this.eventData.preset = '';
+            } else {
+                this.eventData.preset = this.currSel;
+            }
+        },
+        //Uses chrome storage api to retrieve data from local storage.
+        //We are retrieving the preset list(list) and calendar schedule(cal) here.
+        //Calls trackchange to update the local values
+        getData: function() {
+            calCompList = this.list;
+            schList = this.scheduleList;
 
-      chrome.storage.local.get({ list: this.list }, function(result) {
-        calCompList = result.list; //Using var a because our data parameters are not in this scope
-      });
+            chrome.storage.local.get({ list: this.list }, function(result) {
+                calCompList = result.list; //Using var a because our data parameters are not in this scope
+            });
 
-      chrome.storage.local.get({ cal: this.scheduleList }, function(result) {
-        schList = result.cal;
-      });
+            chrome.storage.local.get({ cal: this.scheduleList }, function(result) {
+                schList = result.cal;
+            });
 
-      this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update
-    },
+            this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update
+        },
 
-    //Function used to update the extension's important data when storage data is retrieved
-    //by calling setTimeout, we create a delay between updates, allowing for the async storage
-    //api to finish retrieving the necessary data.
-    trackChange: function(num) {
-      if (this.list != calCompList && calCompList != undefined) {
-        this.list = calCompList;
-        this.updateSelect();
-      }
-      if (this.scheduleList != schList && schList != undefined) {
-        this.scheduleList = schList;
-      }
-      if (num < 10) {
-        setTimeout(this.trackChange, 100, num + 1);
-      }
-    },
+        //Function used to update the extension's important data when storage data is retrieved
+        //by calling setTimeout, we create a delay between updates, allowing for the async storage
+        //api to finish retrieving the necessary data.
+        trackChange: function(num) {
+            if (this.list != calCompList && calCompList != undefined) {
+                this.list = calCompList;
+                this.updateSelect();
+            }
+            if (this.scheduleList != schList && schList != undefined) {
+                this.scheduleList = schList;
+            }
+            if (num < 10) {
+                setTimeout(this.trackChange, 100, num + 1);
+            }
+        },
 
-    //Function used to generate the preset selector dropdown
-    updateSelect: function() {
-      var temp = [];
-      for (var i = 0; i < this.list.length; i++) {
-        temp.push(this.list[i].strings.name);
-      }
+        //Function used to generate the preset selector dropdown
+        updateSelect: function() {
+            var temp = [];
+            for (var i = 0; i < this.list.length; i++) {
+                temp.push(this.list[i].strings.name);
+            }
 
-      this.names = temp;
-      this.eventData.preset = this.currSel;
-    },
+            this.names = temp;
+            this.eventData.preset = this.currSel;
+        },
 
-    mounted() {
-      this.getData();
+        mounted() {
+            this.getData();
+        }
     }
-  }
 };
 </script>
 

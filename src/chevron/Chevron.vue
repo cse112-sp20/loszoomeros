@@ -30,25 +30,25 @@
 import VueChevron from 'vue-chevron';
 
 export default {
-  name: 'chevron',
-  components: {
-    VueChevron
-  },
-  data() {
-    return {
-      pointDown: true,
-      thickness: 8,
-      duration: 200,
-      angle: 45,
-      roundEdges: true,
-    };
-  },
-  methods: {
-    toggle() {
-      this.pointDown = !this.pointDown;
+    name: 'chevron',
+    components: {
+        VueChevron
+    },
+    data() {
+        return {
+            pointDown: true,
+            thickness: 8,
+            duration: 200,
+            angle: 45,
+            roundEdges: true,
+        };
+    },
+    methods: {
+        toggle() {
+            this.pointDown = !this.pointDown;
+        }
     }
-  }
-}
+};
 </script>
 
 <style>
