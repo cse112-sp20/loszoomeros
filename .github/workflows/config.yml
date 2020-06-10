@@ -38,7 +38,7 @@ jobs:
 
     # Run our tests
     - name: Run Jest
-      run: npm run test:unit
+      run: npm run test
     
     # Generate Docs
     - name: Build
