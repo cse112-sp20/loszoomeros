@@ -369,6 +369,8 @@ import chevron from "./../chevron/Chevron.vue";  // import animated chevron for 
  * @vue-event hideNameMod {None} - Hides the rename modal
  * @vue-event showDelMod {Int | String} - Displays delete modal (delete confirmation window)
  * @vue-event hideDelMod {None} - Hides delete modal (delete confirmation window)
+ * @vue-event rename {Int | String} - Rename the preset at index 'i' with string 'name'
+ * @vue-event forceUpdate {None} - Update the key of calComp to force an update on the component
  */
 
 //vars with the intent of being accessible in the scope of chrome storage
@@ -699,15 +701,6 @@ export default {
       this.appOn = !this.appOn;
       this.storeLocalEnabled();
     },
-
-    //Function called when a website's toggle button is clicked
-    //Turns it off or on.
-    //deprecated
-    toggleSite: function(site) {
-      site.enabled = !site.enabled;
-      this.storeLocalList();
-    },
-
     //Band-aid fix for toggle buttons not working when dynamically created.
     //Reloading the paramaters generating the buttons seemed to fix it.
     //Doesn't seem to cause issues so far
