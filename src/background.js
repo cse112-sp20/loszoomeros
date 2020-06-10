@@ -10,19 +10,19 @@ var localList = [ ];
 var blacklist = [ ];
 var openlist = [ ];
 var listIndex = 0;
-var debug = false
+var debug = false;
 
 
 chrome.storage.local.get({ appEnabled: appEnabled }, function(result) {
-  appEnabled = result.appEnabled; //Using var b because our data parameters are not in this scope
+    appEnabled = result.appEnabled; //Using var b because our data parameters are not in this scope
 });
 
 chrome.storage.local.get({ index: listIndex }, function(result) {
-  listIndex = result.index; //Using var c because our data parameters are not in this scope
+    listIndex = result.index; //Using var c because our data parameters are not in this scope
 });
 
 chrome.storage.local.get({ list: localList }, function(result) {
-  localList = result.list; //Using var a because our data parameters are not in this scope
+    localList = result.list; //Using var a because our data parameters are not in this scope
 });
 
 /**  
@@ -35,36 +35,36 @@ chrome.storage.local.get({ list: localList }, function(result) {
  * @author Paul Larsen
  */
 chrome.storage.onChanged.addListener(function(changes, namespace) {
-  for (var key in changes) {
-    if (debug)
-      alert("Change detected");
-    if (key == "list") {
-      localList = changes[key].newValue;
-      if (debug)
-        alert("list changed");
-    }
-    if (key == "index") {
-      listIndex = changes[key].newValue;
-      if (debug)
-        alert("index changed");
-    }
-    if (key == "appEnabled") {
-      appEnabled = changes[key].newValue;
-      if (appEnabled) {
-        chrome.browserAction.setIcon({path: "icons/glasses-green.png"});
-        openTabs();
-      }
-      else{
-        chrome.browserAction.setIcon({path: "icons/glasses-red.png"});
+    for (var key in changes) {
+        if (debug)
+            alert('Change detected');
+        if (key == 'list') {
+            localList = changes[key].newValue;
+            if (debug)
+                alert('list changed');
+        }
+        if (key == 'index') {
+            listIndex = changes[key].newValue;
+            if (debug)
+                alert('index changed');
+        }
+        if (key == 'appEnabled') {
+            appEnabled = changes[key].newValue;
+            if (appEnabled) {
+                chrome.browserAction.setIcon({path: 'icons/glasses-green.png'});
+                openTabs();
+            }
+            else{
+                chrome.browserAction.setIcon({path: 'icons/glasses-red.png'});
 
-      }
-      if (debug)
-        alert("appEnabled changed");
-    }
+            }
+            if (debug)
+                alert('appEnabled changed');
+        }
     
-  }
-  updateLists();
-  updateListener();
+    }
+    updateLists();
+    updateListener();
 });
 
 /**
@@ -75,18 +75,18 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
  * @author Paul Larsen 
  */
 function updateListener() {
-  if (debug)
-    alert("Updating listener");
-  chrome.tabs.onUpdated.addListener(function (id, info, tab) {
-    if (appEnabled) {
-      var i;    
-      for (i = 0; i < blacklist.length; i++) {
-        if (blacklist[i].enabled && (tab.url.toLowerCase().indexOf(blacklist[i].site) != -1)) {
-          chrome.tabs.remove(tab.id);
+    if (debug)
+        alert('Updating listener');
+    chrome.tabs.onUpdated.addListener(function (id, info, tab) {
+        if (appEnabled) {
+            var i;    
+            for (i = 0; i < blacklist.length; i++) {
+                if (blacklist[i].enabled && (tab.url.toLowerCase().indexOf(blacklist[i].site) != -1)) {
+                    chrome.tabs.remove(tab.id);
+                }
+            }
         }
-      }
-    }
-  })
+    });
 }
 
 /**
@@ -97,10 +97,10 @@ function updateListener() {
  * @author Paul Larsen 
  */
 function updateLists() {
-  if (debug)
-    alert("Updating lists");
-  blacklist = localList[listIndex].blacklist;
-  openlist = localList[listIndex].openlist;
+    if (debug)
+        alert('Updating lists');
+    blacklist = localList[listIndex].blacklist;
+    openlist = localList[listIndex].openlist;
 } 
 
 /**
@@ -111,11 +111,11 @@ function updateLists() {
  * @author Paul Larsen 
  */
 function openTabs() {
-  var i;
-  for (i = 0; i < openlist.length; i++) {
-    if (openlist[i].enabled) {
-      //The string concatenation below was added to make auto-open and blacklisted inputs similar
-      chrome.tabs.create({ url: 'http://' + openlist[i].site })
-    }  
-  }
+    var i;
+    for (i = 0; i < openlist.length; i++) {
+        if (openlist[i].enabled) {
+            //The string concatenation below was added to make auto-open and blacklisted inputs similar
+            chrome.tabs.create({ url: 'http://' + openlist[i].site });
+        }  
+    }
 }

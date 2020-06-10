@@ -390,7 +390,7 @@ var b = false;
 var c = 0;
 //looping var
 var i;
-const browser = require("webextension-polyfill");
+const browser = require('webextension-polyfill');
 
 export default {
   components: {
@@ -606,101 +606,140 @@ export default {
         if (
           preset.strings.blockInput.valueOf() ==
           preset.blacklist[i].site.valueOf()
-        ) {
-          return;
-        }
-      }
-      this.website.site = preset.strings.blockInput;
-      this.website.enabled = true;
-      preset.blacklist[preset.blacklist.length] = {
-        ...this.website
-      };
-      preset.strings.blockInput = "";
-      this.storeLocalList();
-      // reset input field
-      //preset.strings.blockInput.refresh(); // update changes
-      this.refresh();
-      //alert("Website added to blacklist");
-    },
+                ) {
+                    return;
+                }
+            }
+            this.website.site = preset.strings.blockInput;
+            this.website.enabled = true;
+            preset.blacklist[preset.blacklist.length] = {
+                ...this.website
+            };
+            preset.strings.blockInput = '';
+            this.storeLocalList();
+            // reset input field
+            //preset.strings.blockInput.refresh(); // update changes
+            this.refresh();
+            //alert("Website added to blacklist");
+        },
 
-    //Function used to remove sites from the given input1(array) at input2(index)
-    //It's basically a splice call with extra steps, those being updating our data
-    removeSite: function(array, index) {
-      array.splice(index, 1);
-      this.storeLocalList();
-      this.refresh();
-    },
+        //Function used to remove sites from the given input1(array) at input2(index)
+        //It's basically a splice call with extra steps, those being updating our data
+        removeSite: function(array, index) {
+            array.splice(index, 1);
+            this.storeLocalList();
+            this.refresh();
+        },
 
-    //Uses chrome storage api to retrieve data from local storage.
-    //Storage retrieval is asynchronous and the vue data fields aren't accessible within
-    //  the storage function's scope, so we use var a,b,c which are still accessible to store the data
-    //  and call trackChange to update the vue data fields.
-    getData: function() {
-      a = this.list;
-      b = this.appOn;
-      c = this.index;
+        //Uses chrome storage api to retrieve data from local storage.
+        //Storage retrieval is asynchronous and the vue data fields aren't accessible within
+        //  the storage function's scope, so we use var a,b,c which are still accessible to store the data
+        //  and call trackChange to update the vue data fields.
+        getData: function() {
+            a = this.list;
+            b = this.appOn;
+            c = this.index;
 
-      chrome.storage.local.get({ appEnabled: this.appOn }, function(result) {
-        b = result.appEnabled; //Using var b because our data parameters are not in this scope
-      });
+            chrome.storage.local.get({ appEnabled: this.appOn }, function(result) {
+                b = result.appEnabled; //Using var b because our data parameters are not in this scope
+            });
 
-      chrome.storage.local.get({ index: this.index }, function(result) {
-        c = result.index; //Using var c because our data parameters are not in this scope
-      });
+            chrome.storage.local.get({ index: this.index }, function(result) {
+                c = result.index; //Using var c because our data parameters are not in this scope
+            });
 
-      chrome.storage.local.get({ list: this.list }, function(result) {
-        a = result.list; //Using var a because our data parameters are not in this scope
-      });
+            chrome.storage.local.get({ list: this.list }, function(result) {
+                a = result.list; //Using var a because our data parameters are not in this scope
+            });
 
-      this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update
-    },
+            this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update
+        },
 
-    //Function used to update the extension's important data when storage data is retrieved
-    //by calling setTimeout, we create a delay between updates, allowing for the async storage
-    //api to finish retrieving the necessary data.
-    trackChange: function(num) {
-      if (this.list != a && a != undefined) {
-        this.list = a;
-      }
-      if (this.appOn != b && b != undefined) {
-        this.appOn = b;
-      }
-      if (this.index != c && c != undefined) {
-        this.index = c;
-      }
-      if (num < 10) {
-        setTimeout(this.trackChange, 100, num + 1);
-      } else {
-        //https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component
-        this.$refs.calComp.getData();
-      }
-    },
+        //Function used to update the extension's important data when storage data is retrieved
+        //by calling setTimeout, we create a delay between updates, allowing for the async storage
+        //api to finish retrieving the necessary data.
+        trackChange: function(num) {
+            if (this.list != a && a != undefined) {
+                this.list = a;
+            }
+            if (this.appOn != b && b != undefined) {
+                this.appOn = b;
+            }
+            if (this.index != c && c != undefined) {
+                this.index = c;
+            }
+            if (num < 10) {
+                setTimeout(this.trackChange, 100, num + 1);
+            } else {
+                //https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component
+                this.$refs.calComp.getData();
+            }
+        },
 
-    //These three functions all do the same thing with different pieces of data
-    //They store data to trigger the storage listeners in background.js and update the
-    //  website listeners
-    //The index function takes a parameter in anticipation of it needing to store an index
-    //  that wasn't this.index, but this might not even happen. Might change in future
-    storeLocalList: function() {
-      chrome.storage.local.set({ list: this.list }, function() {});
-    },
-    storeLocalIndex: function(num) {
-      chrome.storage.local.set({ index: num }, function() {});
-    },
-    storeLocalEnabled: function() {
-      chrome.storage.local.set({ appEnabled: this.appOn }, function() {});
-    },
+        //These three functions all do the same thing with different pieces of data
+        //They store data to trigger the storage listeners in background.js and update the
+        //  website listeners
+        //The index function takes a parameter in anticipation of it needing to store an index
+        //  that wasn't this.index, but this might not even happen. Might change in future
+        storeLocalList: function() {
+            chrome.storage.local.set({ list: this.list }, function() {});
+        },
+        storeLocalIndex: function(num) {
+            chrome.storage.local.set({ index: num }, function() {});
+        },
+        storeLocalEnabled: function() {
+            chrome.storage.local.set({ appEnabled: this.appOn }, function() {});
+        },
 
-    //Function hooked up to the power button
-    //Toggles the extension state between on and off
-    appEnable: function() {
-      //added for loop to return on no active presets found
-      for (var i = 0; i < this.list.length; i++) {
-        if (this.list[i].value) {
-          break;
-        }
-        if (i == this.list.length - 1) {
-          return;
+        //Function hooked up to the power button
+        //Toggles the extension state between on and off
+        appEnable: function() {
+            //added for loop to return on no active presets found
+            for (var i = 0; i < this.list.length; i++) {
+                if (this.list[i].value) {
+                    break;
+                }
+                if (i == this.list.length - 1) {
+                    return;
+                }
+            }
+            this.appOn = !this.appOn;
+            this.storeLocalEnabled();
+        },
+
+        //Function called when a website's toggle button is clicked
+        //Turns it off or on.
+        //deprecated
+        toggleSite: function(site) {
+            site.enabled = !site.enabled;
+            this.storeLocalList();
+        },
+
+        //Band-aid fix for toggle buttons not working when dynamically created.
+        //Reloading the paramaters generating the buttons seemed to fix it.
+        //Doesn't seem to cause issues so far
+        refresh: function() {
+            this.list = -1;
+            this.index = 1000;
+            this.appOn = false;
+            //https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component
+            this.$refs.calComp.getData();
+            this.getData();
+        },
+
+        //Function used to resolve issues with html formatting of input strings
+        //Takes an input(baseString) and creates an output(encodedString)
+        //For every char in baseString, we take the ascii code, place x's before and after,
+        //and concat it to the output string.
+        encode: function(baseString) {
+            var code;
+            var encodedString = '';
+            for (var i = 0; i < baseString.length; i++) {
+                code = baseString.charCodeAt(i);
+                //deliberately left one lowercase in case debugging was needed
+                encodedString += 'X' + code + 'x';
+            }
+            return encodedString;
         }
       }
       this.appOn = !this.appOn;

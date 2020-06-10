@@ -152,18 +152,18 @@ export default {
         chrome.storage.local.set({cal: sch}, function() {});
       }
 
-      else {
-        alert('Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected.')
-        return;
-      }
-    },
+            else {
+                alert('Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected.');
+                return;
+            }
+        },
 
-    //Clears all scheduled alarms
-    clearSched: function() {
-      chrome.alarms.clearAll(function() {
-        alert('Cleared preset schedule!')
-      })
-    },
+        //Clears all scheduled alarms
+        clearSched: function() {
+            chrome.alarms.clearAll(function() {
+                alert('Cleared preset schedule!');
+            });
+        },
 
     //Used to grab the value from the select and store it in eventData
     updateSel() {
@@ -181,32 +181,32 @@ export default {
       calCompList = this.list;
       schList = this.scheduleList;
 
-      chrome.storage.local.get({ list: this.list }, function(result) {
-        calCompList = result.list; //Using var a because our data parameters are not in this scope
-      });
+            chrome.storage.local.get({ list: this.list }, function(result) {
+                calCompList = result.list; //Using var a because our data parameters are not in this scope
+            });
 
-      chrome.storage.local.get({ cal: this.scheduleList}, function(result) {
-        schList = result.cal;
-      });
+            chrome.storage.local.get({ cal: this.scheduleList}, function(result) {
+                schList = result.cal;
+            });
 
-      this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update
-    },
+            this.trackChange(0); //because the get call is asynchronous, using a looping delay function to track the update
+        },
 
-    //Function used to update the extension's important data when storage data is retrieved
-    //by calling setTimeout, we create a delay between updates, allowing for the async storage
-    //api to finish retrieving the necessary data.
-    trackChange: function(num) {
-      if (this.list != calCompList && calCompList != undefined) {
-        this.list = calCompList;
-        this.updateSelect();
-      }
-      if (this.scheduleList != schList && schList != undefined) {
-        this.scheduleList = schList;
-      }
-      if (num < 10) {
-        setTimeout(this.trackChange, 100, num + 1);
-      }
-    },
+        //Function used to update the extension's important data when storage data is retrieved
+        //by calling setTimeout, we create a delay between updates, allowing for the async storage
+        //api to finish retrieving the necessary data.
+        trackChange: function(num) {
+            if (this.list != calCompList && calCompList != undefined) {
+                this.list = calCompList;
+                this.updateSelect();
+            }
+            if (this.scheduleList != schList && schList != undefined) {
+                this.scheduleList = schList;
+            }
+            if (num < 10) {
+                setTimeout(this.trackChange, 100, num + 1);
+            }
+        },
 
     //Function used to generate the preset selector dropdown
     updateSelect: function() {
@@ -218,11 +218,10 @@ export default {
       this.names = temp;
       this.eventData.preset = this.currSel;
     },
-  },
 
-  mounted() {
-    this.getData();
-  }
+    mounted() {
+        this.getData();
+    }
 };
 </script>
 
