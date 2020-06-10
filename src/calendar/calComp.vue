@@ -300,6 +300,6 @@ p {
   color: red;
 }
 .sched-but{
-  margin-bottom: 1em;
+  margin-bottom: .8em;
 }
 </style>
