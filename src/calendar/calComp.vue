@@ -80,17 +80,16 @@ import VSelect from "@alfsnd/vue-bootstrap-select";
  * @author Paul Larsen & Daryl Nakamoto
  *
  * @vue-data {ScheduledEvent} eventData - Object simulating a scheduled preset event. Holds a startTime, the time a preset will turn on; endTime, the time a preset is scheduled to turn off (not yet implemented); calDate, the calendar date for when a preset is supposed to turn on; preset, the preset that is being scheduled to turn on.
- * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets.
- * @vue-data {Array} scheduleList - An array for storing the eventData objects.
- * @vue-data {Bool} [recur=false] - Holds the on/off state of the extension as a boolean
+ * @vue-data {Array} [list=[]] list - An array which is the highest level data storage within the vue. Holds all the presets.
+ * @vue-data {Array} [scheduleList=[]] scheduleList - An array for storing the eventData objects.
+ * @vue-data {String} [currSel=null] - Hold the current preset selected in the Mode dropdown
+ * @vue-data {Array} [names=[]] - Hold all the names of every preset
  * @vue-event storeSched - Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.
  * @vue-event clearSched - Clears all scheduled alarms
  * @vue-event updateSel - Used to grab the value from the select and store it in eventData
- * @vue-event toggleRecur - Function passed into the recurrence toggle
  * @vue-event getData - Updates current fields with those in chrome storage
  * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage
- * @vue-event updateSelect - Function used to generate the preset selector dropdown
- * @vue-event test - Function used to generate the preset selector dropdown
+ * @vue-event updateSelect - Generate the preset selector dropdown
  */
 
 
@@ -123,7 +122,6 @@ export default {
       scheduleList: List for storing eventData objects. Is stored in local storage under the key 'cal'
       */
       currSel: null,
-      recurring: ["Never", "Daily", "Weekly", "Monthy"],
       names: [],
       list: [], 
       recur: false,
@@ -175,14 +173,7 @@ export default {
       else{
         this.eventData.preset = this.currSel;
       }
-      //this.eventData.preset = document.getElementById('presetSelect').textProp;
     },
-
-    //Function passed into the recurrence toggle
-    toggleRecur: function() {
-      this.recur = !this.recur;
-    },
-
     //Uses chrome storage api to retrieve data from local storage.
     //We are retrieving the preset list(list) and calendar schedule(cal) here.
     //Calls trackchange to update the local values
@@ -222,22 +213,10 @@ export default {
       var temp = [];
       for (var i = 0; i < this.list.length; i++) {
           temp.push(this.list[i].strings.name);
-          // document.getElementById("presetSelect")[i] = new Option(
-          //   this.list[i].strings.name
-          // );
       }
-
-      // if (this.list.length < document.getElementById("presetSelect").length) {
-
-      //   for (var i = this.list.length; i < document.getElementById("presetSelect").length; i++) {
-      //     document.getElementById("presetSelect")[i] = null;
-      //   }
-
-      // }
 
       this.names = temp;
       this.eventData.preset = this.currSel;
-      //this.eventData.preset = document.getElementById("presetSelect").textProp;
     },
   },
 
