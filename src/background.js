@@ -13,6 +13,7 @@ var listIndex = 0;
 var debug = false;
 
 
+
 chrome.storage.local.get({ appEnabled: appEnabled }, function(result) {
     appEnabled = result.appEnabled; //Using var b because our data parameters are not in this scope
 });
