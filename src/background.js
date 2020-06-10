@@ -5,19 +5,12 @@
  * @author Paul Larsen 
  */
 
-
-
-global.browser = require('webextension-polyfill');
-
-
-
 var appEnabled = false;
 var localList = [ ];
 var blacklist = [ ];
 var openlist = [ ];
 var listIndex = 0;
 var debug = false;
-
 
 
 chrome.storage.local.get({ appEnabled: appEnabled }, function(result) {

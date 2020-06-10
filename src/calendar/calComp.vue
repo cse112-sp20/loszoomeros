@@ -1,85 +1,95 @@
 <template>
   <div class="container">
-    <b-row>
-      <b-col>
-        <p>Mode:</p>
-      </b-col>
-      <b-col>
-        <select @change="updateSel()" name="Presets" id="presetSelect"></select>
-      </b-col>
-    </b-row>
-    <hr class="solid" />
-    <b-row>
-      <b-col>
-        <p>Recurring:</p>
-      </b-col>
-      <b-col>
-        <toggle-button
-        class="my-auto"
-        :value="recur"
-        :sync="true"
-        :labels="true"
-        :key="'recur'"
-        @change="toggleRecur"
+    <div class="row my-auto">
+      <div class="col-3 my-auto">
+        <p class="my-auto category text-left">Mode:</p>
+      </div>
+      <div class="col">
+        <!-- <select @change="updateSel()" name="Presets" id="presetSelect"></select> -->
+        <VSelect
+          v-model="currSel"
+          :labelTitle="title"
+          :options="names"
+          :searchable="true"
+          v-mode.lazy="updateSel()" 
+          name="Presets" 
+          id="presetSelect"
         />
-      </b-col>
-    </b-row>
+      </div>
+    </div>
+    <!-- We decided to remove the users ability to repeat calendar events -->
+    <!-- <hr class="solid" />
+    <div class="row my-auto">
+      <div class="col-3 my-auto">
+        <p class="my-auto category text-left">Repeat:</p>
+      </div>
+      <div class="col">
+        <VSelect
+          v-model="currRep"
+          labelTitle="Never"
+          textProp="Never"
+          :options="recurring"
+          v-mode.lazy="updateSel()" 
+        />
+      </div>
+    </div> -->
     <hr class="solid" />
     
-    <b-row>
-      <b-col cols="3">
-        <p>Start</p>
+    <b-row class="my-auto">
+      <b-col cols="3" class="my-auto">
+        <p class="category text-left my-auto">Start:</p>
       </b-col>
       <b-col>
-        <b-form-timepicker v-model="eventData.startTime" locale="en"></b-form-timepicker>
+        <b-form-timepicker size="sm" v-model="eventData.startTime" locale="en"></b-form-timepicker>
       </b-col>
     </b-row>
 
-    <b-row>
-      <b-col cols="3">
-        <p>End</p>
+    <b-row class="my-auto">
+      <b-col cols="3" class="my-auto">
+        <p class="my-auto category text-left">End:</p>
       </b-col>
       <b-col>
-        <b-form-timepicker v-model="eventData.endTime" locale="en"></b-form-timepicker>
+        <b-form-timepicker size="sm" v-model="eventData.endTime" locale="en"></b-form-timepicker>
       </b-col>
     </b-row>
-
+    <hr class="solid" />
     <b-row>
       <b-col md="auto">
-        <b-calendar v-model="eventData.calDate" @context="onContext" locale="en-US"></b-calendar>
+        <b-calendar :hide-header="true" v-model="eventData.calDate" @context="onContext" locale="en-US"></b-calendar>
       </b-col>
       <b-col>
         <pre class="small">{{ context }}</pre>
       </b-col>
     </b-row>
     <div>
-      <button @click="storeSched">Schedule</button>
+      <b-button style="font-weight: 600;" class="sched-but" pill variant="outline-primary" size="sm" @click="storeSched">Schedule</b-button>
     </div>
-    <div>
+    <!-- <div>
       <button @click="clearSched">Clear Schedule Data</button>
-    </div>
+    </div> -->
     
 
-    <hr class="solid" />
+    <!-- <hr class="solid" /> -->
   </div>
 </template>
 
 <script>
+import VSelect from "@alfsnd/vue-bootstrap-select";
 /**
  * @module calComp
  * @author Paul Larsen & Daryl Nakamoto
  *
  * @vue-data {ScheduledEvent} eventData - Object simulating a scheduled preset event. Holds a startTime, the time a preset will turn on; endTime, the time a preset is scheduled to turn off (not yet implemented); calDate, the calendar date for when a preset is supposed to turn on; preset, the preset that is being scheduled to turn on.
- * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets.
- * @vue-data {Array} scheduleList - An array for storing the eventData objects.
- * @vue-data {Bool} [recur=false] - Holds the on/off state of the extension as a boolean
- * @vue-event storeSched - Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.
- * @vue-event clearSched - Clears all scheduled alarms
- * @vue-event updateSel - Used to grab the value from the select and store it in eventData
- * @vue-event toggleRecur - Function passed into the recurrence toggle
- * @vue-event getData - Updates current fields with those in chrome storage
- * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage
- * @vue-event updateSelect - Function used to generate the preset selector dropdown
+ * @vue-data {Array} [list=[]] list - An array which is the highest level data storage within the vue. Holds all the presets.
+ * @vue-data {Array} [scheduleList=[]] scheduleList - An array for storing the eventData objects.
+ * @vue-data {String} [currSel=null] - Hold the current preset selected in the Mode dropdown
+ * @vue-data {Array} [names=[]] - Hold all the names of every preset
+ * @vue-event storeSched {None} - Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.
+ * @vue-event clearSched {None} - Clears all scheduled alarms
+ * @vue-event updateSel {None} - Used to grab the value from the select and store it in eventData
+ * @vue-event getData {None} - Updates current fields with those in chrome storage
+ * @vue-event trackChange {Int} - Delay-based recursive function to deal with asynchronous storage
+ * @vue-event updateSelect {None} - Generate the preset selector dropdown
  */
 
 
@@ -89,11 +99,19 @@ var calCompList = [];
 var schList = [];
 
 export default {
-    name: 'calComp',
-
-    data() {
-        return {
-            /*Data variables
+  name: "calComp",
+  props: {
+    title: {
+      type: String,
+      default: "Select a preset"
+    }
+  },
+  components: {
+    VSelect
+  },
+  data() {
+    return {
+      /*Data variables
       list: The preset list. Used to generate the options in the preset selector. 
       recur: Synced to the recurring event toggle, used for creating multiple events(not yet implemented)
       eventData: Object used to store: 
@@ -103,36 +121,36 @@ export default {
           preset, the preset that is being scheduled to turn on
       scheduleList: List for storing eventData objects. Is stored in local storage under the key 'cal'
       */
-
-
-            list: [], 
-            recur: false,
-            eventData: {startTime: '', endTime: '', calDate: '', preset: ''},
-            scheduleList: []
+      currSel: null,
+      names: [],
+      list: [], 
+      recur: false,
+      eventData: {startTime: "", endTime: "", calDate: "", preset: ""},
+      scheduleList: []
       
+    };
+  },
+  methods: {
+
+    //Function for storing the input fields as a scheduled event. Filters out duplicated start times/dates.
+    storeSched: function() {
+      alert(this.eventData.preset)
+      if (this.eventData.startTime != "" && this.eventData.endTime != "" && this.eventData.calDate != "" && this.currSel != null) {
+        let ev = this.eventData;
+        let sch = this.scheduleList
+        //Filtering
+        for (var i = 0; i < sch.length; i++) {
+          if (sch[i].calDate == ev.calDate && sch[i].startTime == ev.startTime) {
+            alert('You already have a mode scheduled at that exact time. Please try a different start time or date.')
+            return;
+          }
+        }
+        sch[sch.length] = {
+        ...ev
         };
-    },
-
-    methods: {
-
-        //Function for storing the input fields as a scheduled event. Filters out duplicated start times/dates.
-        storeSched: function() {
-            if (this.eventData.startTime != '' && this.eventData.endTime != '' && this.eventData.calDate != '' && document.getElementById('presetSelect').value != '') {
-                let ev = this.eventData;
-                let sch = this.scheduleList;
-                //Filtering
-                for (var i = 0; i < sch.length; i++) {
-                    if (sch[i].calDate == ev.calDate && sch[i].startTime == ev.startTime) {
-                        alert('You already have a mode scheduled at that exact time. Please try a different start time or date.');
-                        return;
-                    }
-                }
-                sch[sch.length] = {
-                    ...ev
-                };
-                alert('Scheduled!');
-                chrome.storage.local.set({cal: sch}, function() {});
-            }
+        alert('Scheduled!')
+        chrome.storage.local.set({cal: sch}, function() {});
+      }
 
             else {
                 alert('Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected.');
@@ -147,22 +165,21 @@ export default {
             });
         },
 
-        //Used to grab the value from the select and store it in eventData
-        updateSel() {
-            this.eventData.preset = document.getElementById('presetSelect').value;
-        },
-
-        //Function passed into the recurrence toggle
-        toggleRecur: function() {
-            this.recur = !this.recur;
-        },
-
-        //Uses chrome storage api to retrieve data from local storage.
-        //We are retrieving the preset list(list) and calendar schedule(cal) here.
-        //Calls trackchange to update the local values
-        getData: function() {
-            calCompList = this.list;
-            schList = this.scheduleList;
+    //Used to grab the value from the select and store it in eventData
+    updateSel() {
+      if(this.currSel == null){
+        this.eventData.preset = "";
+      }
+      else{
+        this.eventData.preset = this.currSel;
+      }
+    },
+    //Uses chrome storage api to retrieve data from local storage.
+    //We are retrieving the preset list(list) and calendar schedule(cal) here.
+    //Calls trackchange to update the local values
+    getData: function() {
+      calCompList = this.list;
+      schList = this.scheduleList;
 
             chrome.storage.local.get({ list: this.list }, function(result) {
                 calCompList = result.list; //Using var a because our data parameters are not in this scope
@@ -191,20 +208,15 @@ export default {
             }
         },
 
-        //Function used to generate the preset selector dropdown
-        updateSelect: function() {
-            for (var i = 0; i < this.list.length; i++) {
-                document.getElementById('presetSelect')[i] = new Option(
-                    this.list[i].strings.name
-                );
-            }
-            if (this.list.length < document.getElementById('presetSelect').length) {
-                for (var j = this.list.length; j < document.getElementById('presetSelect').length; j++) {
-                    document.getElementById('presetSelect')[j] = null;
-                }
-            }
-            this.eventData.preset = document.getElementById('presetSelect').value;
-        },
+    //Function used to generate the preset selector dropdown
+    updateSelect: function() {
+      var temp = [];
+      for (var i = 0; i < this.list.length; i++) {
+          temp.push(this.list[i].strings.name);
+      }
+
+      this.names = temp;
+      this.eventData.preset = this.currSel;
     },
 
     mounted() {
@@ -220,6 +232,9 @@ p {
 .extension {
   width: 300px;
   text-align: center;
+}
+.category{
+  font-weight: 600;
 }
 .bot-buffer {
   margin-bottom: 4% !important;
@@ -261,5 +276,8 @@ p {
 }
 .my-button span.text {
   color: red;
+}
+.sched-but{
+  margin-bottom: .8em;
 }
 </style>
