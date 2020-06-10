@@ -175,6 +175,27 @@ describe("App Method Unit Test", () => {
         expect(vm.list).toEqual(newList);
     });
 
+    it ('renamePreset', () => {
+        //Removing a preset from a list of inactivated presets
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var preset4 = {strings: {name: "preset4", blockInput: ""}, blacklist: [], openlist: [{site: "basecamp.com"}], value: false};
+        var presetList = [preset1, preset2, preset3, preset4];
+        vm.list = presetList;
+        vm.rename(0, "rename1");
+        vm.rename(1, "rename2");
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
+
+       // expect(vm.list.length).toBe(3);
+        expect(vm.list[0]).toEqual({strings: {name: "rename1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false});
+        expect(vm.list[1]).toEqual({strings: {name: "rename2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false});
+        
+    });
+
     it ('setExistingPreset', () => {
         //Setting an existing preset that is also currently activated
         var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: true};
