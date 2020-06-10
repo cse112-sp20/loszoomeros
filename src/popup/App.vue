@@ -75,12 +75,12 @@
 
       <!-- START Modal for deleting -->
       <div>
-        <b-modal ref="delModal" hide-footer title="Confirm Removal">
+        <b-modal ref="delModal" hide-footer title="Confirm Removal" no-close-on-backdrop="true" hide-header-close="false">
           <div class="d-block text-center">
-            <h3>You sure there, bud?</h3>
+            <h5>You sure there, bud?</h5>
           </div>
-          <b-button class="mt-3" pill variant="primary" @click="hideDelMod">Cancel</b-button>
-          <b-button :href="'#'+curRow" data-toggle="collapse" class="mt-3" pill variant="danger" @click="removePreset(curPreset)">Delete</b-button>
+          <b-button class="mt-3" pill size="sm" variant="primary" @click="hideDelMod">Cancel</b-button>
+          <b-button :href="'#'+curRow" size="sm" data-toggle="collapse" class="mt-3" pill variant="danger" @click="removePreset(curPreset)">Delete</b-button>
         </b-modal>
       </div>
       <!-- END Modal for deleting -->
@@ -94,6 +94,8 @@
           @show="resetModal"
           @hidden="resetModal"
           @ok="handleOk"
+          no-close-on-backdrop="true" 
+          hide-header-close="false"
         >
           <form ref="form" @submit.stop.prevent="handleSubmit">
             <b-form-group
