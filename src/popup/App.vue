@@ -337,8 +337,8 @@
 </template>
 
 <script>
-import calComp from "./../calendar/calComp.vue"; // import calendar component
-import chevron from "./../chevron/Chevron.vue";  // import animated chevron for menu
+import calComp from './../calendar/calComp.vue'; // import calendar component
+import chevron from './../chevron/Chevron.vue';  // import animated chevron for menu
 
 /**
  * @module popup
@@ -393,218 +393,218 @@ var i;
 const browser = require('webextension-polyfill');
 
 export default {
-  components: {
-    calComp,
-    chevron,
-  },
+    components: {
+        calComp,
+        chevron,
+    },
 
-  data() {
-    return {
-      name: "",
-      nameState: null,
-      curRow: "",
-      curPreset: -1,
-      componentKey: 0,
-      selName: "Select a mode",
-      newPreset: "",
-      preset: {
-        strings: { name: "name", openInput: "", blockInput: "" },
-        color: "#00a800",
-        value: true,
-        openlist: [],
-        blacklist: []
-      },
-      website: { site: "stackoverflow.com", enabled: true },
-      list: [],
-      index: 0,
-      appOn: false,
-      calMode: false
-    };
-  },
-  methods: {
-    checkFormValidity() {
-      const valid = this.$refs.form.checkValidity()
-      this.nameState = valid
-      return valid
+    data() {
+        return {
+            name: '',
+            nameState: null,
+            curRow: '',
+            curPreset: -1,
+            componentKey: 0,
+            selName: 'Select a mode',
+            newPreset: '',
+            preset: {
+                strings: { name: 'name', openInput: '', blockInput: '' },
+                color: '#00a800',
+                value: true,
+                openlist: [],
+                blacklist: []
+            },
+            website: { site: 'stackoverflow.com', enabled: true },
+            list: [],
+            index: 0,
+            appOn: false,
+            calMode: false
+        };
     },
-    resetModal() {
-      this.name = ''
-      this.nameState = null
-    },
-    handleOk(bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault()
-      // Trigger submit handler
-      this.handleSubmit()
-    },
-    handleSubmit() {
-      // Exit when the form isn't valid
-      if (!this.checkFormValidity()) {
-        return
-      }
-      // Push the name to submitted names
-      this.rename(this.curPreset, this.name)
-      // Hide the modal manually
-      this.$nextTick(() => {
-        this.$bvModal.hide('modal-prevent-closing')
-      })
-    },
-    showNameMod(preset){
-      this.curPreset = preset;
-      this.$refs['nameMod'].show();
-    },
-    hideNameMod(){
-      this.$refs['nameMod'].hide();
-    },
-    showDelMod(preset, row){
-      this.curPreset = preset;
-      this.curRow = row;
-      this.$refs['delModal'].show();
-    },
-    hideDelMod(){
-      this.$refs['delModal'].hide();
-    },
-    rename(i, name){
-      this.list[i].strings.name = name;
-      this.storeLocalList();
-      this.storeLocalEnabled();
-      this.storeLocalIndex(this.index);
-      this.refresh();
-    },
-    /*
+    methods: {
+        checkFormValidity() {
+            const valid = this.$refs.form.checkValidity();
+            this.nameState = valid;
+            return valid;
+        },
+        resetModal() {
+            this.name = '';
+            this.nameState = null;
+        },
+        handleOk(bvModalEvt) {
+            // Prevent modal from closing
+            bvModalEvt.preventDefault();
+            // Trigger submit handler
+            this.handleSubmit();
+        },
+        handleSubmit() {
+            // Exit when the form isn't valid
+            if (!this.checkFormValidity()) {
+                return;
+            }
+            // Push the name to submitted names
+            this.rename(this.curPreset, this.name);
+            // Hide the modal manually
+            this.$nextTick(() => {
+                this.$bvModal.hide('modal-prevent-closing');
+            });
+        },
+        showNameMod(preset){
+            this.curPreset = preset;
+            this.$refs['nameMod'].show();
+        },
+        hideNameMod(){
+            this.$refs['nameMod'].hide();
+        },
+        showDelMod(preset, row){
+            this.curPreset = preset;
+            this.curRow = row;
+            this.$refs['delModal'].show();
+        },
+        hideDelMod(){
+            this.$refs['delModal'].hide();
+        },
+        rename(i, name){
+            this.list[i].strings.name = name;
+            this.storeLocalList();
+            this.storeLocalEnabled();
+            this.storeLocalIndex(this.index);
+            this.refresh();
+        },
+        /*
      * forceUpdate
      * Called when switching back from calendar mode (User clicked on left chevron)
      * Used to update the bool value of the current mode and reset the selection field.
      */
-    forceUpdate() {
-      this.calMode = !this.calMode;
-      if(this.componentKey == 0){
-        this.componentKey += 1;
-      }
-      else{
-        this.componentKey = 0;
-      }
-    },
-    /*
+        forceUpdate() {
+            this.calMode = !this.calMode;
+            if(this.componentKey == 0){
+                this.componentKey += 1;
+            }
+            else{
+                this.componentKey = 0;
+            }
+        },
+        /*
      * togglePreset
      * Called when a storage change is detected.
      * Updates the chrome.tabs listener that checks for blacklisted websites and removes them.
      * item: list preset to be toggled
      * index: list index of the passed in preset, updates this.index
      */
-    togglePreset(item, index) {
-      if (!item.value) {
-        for (i = 0; i < this.list.length; i++) {
-          this.list[i].value = false;
-        }
-      }
-      //toggling preset on/off
-      item.value = !item.value;
-      this.index = index;
-      this.appOn = false;
-      this.storeLocalEnabled();
-      this.storeLocalList();
-      this.storeLocalIndex(this.index);
-      this.refresh();
-    },
+        togglePreset(item, index) {
+            if (!item.value) {
+                for (i = 0; i < this.list.length; i++) {
+                    this.list[i].value = false;
+                }
+            }
+            //toggling preset on/off
+            item.value = !item.value;
+            this.index = index;
+            this.appOn = false;
+            this.storeLocalEnabled();
+            this.storeLocalList();
+            this.storeLocalIndex(this.index);
+            this.refresh();
+        },
 
-    // This function is synced with the add button for adding presets
-    // It disables all active presets(should only be one), and then checks if the preset exists
-    // If so, it makes that the active preset
-    // Otherwise, create a new preset and make that the active preset.
-    setPreset: function() {
-      //Checking if the preset exists
-      for (var i = 0; i < this.list.length; i++) {
-        this.list[i].value = false;
-      }
+        // This function is synced with the add button for adding presets
+        // It disables all active presets(should only be one), and then checks if the preset exists
+        // If so, it makes that the active preset
+        // Otherwise, create a new preset and make that the active preset.
+        setPreset: function() {
+            //Checking if the preset exists
+            for (var j = 0; j < this.list.length; j++) {
+                this.list[j].value = false;
+            }
 
-      for (var i = 0; i < this.list.length; i++) {
-        if (this.list[i].strings.name.valueOf() == this.newPreset.valueOf()) {
-          this.list[i].value = true;
-          this.index = i;
-          this.appOn = false;
-          this.storeLocalList();
-          this.storeLocalEnabled();
-          this.storeLocalIndex(this.index);
-          this.refresh();
-          //this.newPreset = "";
-          //alert("Found Preset");
-          return;
-        }
-      }
+            for (var i = 0; i < this.list.length; i++) {
+                if (this.list[i].strings.name.valueOf() == this.newPreset.valueOf()) {
+                    this.list[i].value = true;
+                    this.index = i;
+                    this.appOn = false;
+                    this.storeLocalList();
+                    this.storeLocalEnabled();
+                    this.storeLocalIndex(this.index);
+                    this.refresh();
+                    //this.newPreset = "";
+                    //alert("Found Preset");
+                    return;
+                }
+            }
 
-      //Creating new preset
-      //this.preset.strings.name = this.newPreset;
-      this.preset.strings = {
-        name: this.newPreset,
-        openInput: "",
-        blockInput: ""
-      };
-      this.preset.openlist = [];
-      this.preset.blacklist = [];
-      this.preset.value = true;
-      //This is the format for copying an object in js. Using just an "=" passes by reference normally.
-      //  ie this.list[index] = dontdothis;
-      this.list[this.list.length] = {
-        ...this.preset
-      };
-      this.index = this.list.length - 1;
-      this.appOn = false;
-      this.storeLocalEnabled();
-      this.storeLocalList();
-      this.storeLocalIndex(this.index);
-      this.newPreset = "";
-      this.refresh();
-      //alert("New Preset");
-      //this.newPreset = "";
-    },
+            //Creating new preset
+            //this.preset.strings.name = this.newPreset;
+            this.preset.strings = {
+                name: this.newPreset,
+                openInput: '',
+                blockInput: ''
+            };
+            this.preset.openlist = [];
+            this.preset.blacklist = [];
+            this.preset.value = true;
+            //This is the format for copying an object in js. Using just an "=" passes by reference normally.
+            //  ie this.list[index] = dontdothis;
+            this.list[this.list.length] = {
+                ...this.preset
+            };
+            this.index = this.list.length - 1;
+            this.appOn = false;
+            this.storeLocalEnabled();
+            this.storeLocalList();
+            this.storeLocalIndex(this.index);
+            this.newPreset = '';
+            this.refresh();
+            //alert("New Preset");
+            //this.newPreset = "";
+        },
 
-    /* Function for removing a preset
+        /* Function for removing a preset
     Takes an input(index) directing which member of the list to delete
     Turns the app off, and updates this.index to the currently active preset(the active preset's index might change after a removal)
     */
-    removePreset(index) {
-      // Close modal
-      this.hideDelMod();
+        removePreset(index) {
+            // Close modal
+            this.hideDelMod();
 
-      this.list.splice(index, 1);
-      this.index = 0;
-      this.appOn = false;
-      for (var i = 0; i < this.list.length; i++) {
-        if (this.list[i].value) {
-          this.index = i;
-        }
-      }
-      this.storeLocalEnabled();
-      this.storeLocalList();
-      this.storeLocalIndex(this.index);
-      this.refresh();
-    },
+            this.list.splice(index, 1);
+            this.index = 0;
+            this.appOn = false;
+            for (var i = 0; i < this.list.length; i++) {
+                if (this.list[i].value) {
+                    this.index = i;
+                }
+            }
+            this.storeLocalEnabled();
+            this.storeLocalList();
+            this.storeLocalIndex(this.index);
+            this.refresh();
+        },
 
-    //Function synced to the presets' add button for auto-open sites
-    //Does not check for duplicates to allow the user to open duplicate tabs if they wish
-    //Adds the input website from the openInput form of the input(preset) to the preset's openlist
-    addOpenlistSite: function(preset) {
-      this.website.site = preset.strings.openInput;
-      this.website.enabled = true;
-      //currently allowing duplicate tabs opening
-      preset.openlist[preset.openlist.length] = {
-        ...this.website
-      };
-      preset.strings.openInput = "";
-      this.storeLocalList();
-      // reset input field
-      //preset.strings.openInput.refresh(); // update changes
-      this.refresh();
-    },
+        //Function synced to the presets' add button for auto-open sites
+        //Does not check for duplicates to allow the user to open duplicate tabs if they wish
+        //Adds the input website from the openInput form of the input(preset) to the preset's openlist
+        addOpenlistSite: function(preset) {
+            this.website.site = preset.strings.openInput;
+            this.website.enabled = true;
+            //currently allowing duplicate tabs opening
+            preset.openlist[preset.openlist.length] = {
+                ...this.website
+            };
+            preset.strings.openInput = '';
+            this.storeLocalList();
+            // reset input field
+            //preset.strings.openInput.refresh(); // update changes
+            this.refresh();
+        },
 
-    //Function synced to the presets' add button for blocked sites
-    //Checks if the input from the blockInput form of the input(preset) is already blacklisted, and if not, proceeds to add it to the
-    //  preset's blacklist.
-    addBlacklistSite: function(preset) {
-      for (i = 0; i < preset.blacklist.length; i++) {
-        if (
-          preset.strings.blockInput.valueOf() ==
+        //Function synced to the presets' add button for blocked sites
+        //Checks if the input from the blockInput form of the input(preset) is already blacklisted, and if not, proceeds to add it to the
+        //  preset's blacklist.
+        addBlacklistSite: function(preset) {
+            for (i = 0; i < preset.blacklist.length; i++) {
+                if (
+                    preset.strings.blockInput.valueOf() ==
           preset.blacklist[i].site.valueOf()
                 ) {
                     return;
@@ -727,6 +727,7 @@ export default {
             this.getData();
         },
 
+
         //Function used to resolve issues with html formatting of input strings
         //Takes an input(baseString) and creates an output(encodedString)
         //For every char in baseString, we take the ascii code, place x's before and after,
@@ -741,49 +742,19 @@ export default {
             }
             return encodedString;
         }
-      }
-      this.appOn = !this.appOn;
-      this.storeLocalEnabled();
-    },
-    //Band-aid fix for toggle buttons not working when dynamically created.
-    //Reloading the paramaters generating the buttons seemed to fix it.
-    //Doesn't seem to cause issues so far
-    refresh: function() {
-      this.list = -1;
-      this.index = 1000;
-      this.appOn = false;
-      //https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component
-      this.$refs.calComp.getData();
-      this.getData();
     },
 
-    //Function used to resolve issues with html formatting of input strings
-    //Takes an input(baseString) and creates an output(encodedString)
-    //For every char in baseString, we take the ascii code, place x's before and after,
-    //and concat it to the output string.
-    encode: function(baseString) {
-      var code;
-      var encodedString = "";
-      for (var i = 0; i < baseString.length; i++) {
-        code = baseString.charCodeAt(i);
-        //deliberately left one lowercase in case debugging was needed
-        encodedString += "X" + code + "x";
-      }
-      return encodedString;
+    mounted() {
+        let vm = this;
+        chrome.storage.onChanged.addListener(function(changes, namespace) {
+            for (var key in changes) {
+                if (key == 'update') {
+                    vm.refresh();
+                }
+            }
+        });
+        this.getData();
     }
-  },
-
-  mounted() {
-    let vm = this;
-    chrome.storage.onChanged.addListener(function(changes, namespace) {
-      for (var key in changes) {
-        if (key == "update") {
-          vm.refresh();
-        }
-      }
-    });
-    this.getData();
-  }
 };
 </script>
 

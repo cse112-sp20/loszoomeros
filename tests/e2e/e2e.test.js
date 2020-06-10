@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const extensionPath = '../../../../../dist';
 
-jest.setTimeout(30000);
+jest.setTimeout(35000);
 
 describe('UI test', () => {
 
@@ -17,7 +17,7 @@ describe('UI test', () => {
       slowMo: 100
     });
     page = await browser.newPage();
-    await page.goto('chrome-extension://acdcddifhaiiiagbodmcnebcgdmlgdkl/popup/popup.html');
+    await page.goto('chrome-extension://fobcbgbgmbpjhhdagnhhpcmdlmplnhnj/popup/popup.html');
   });
 
   afterEach (async () => {
