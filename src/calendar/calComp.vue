@@ -84,12 +84,12 @@ import VSelect from "@alfsnd/vue-bootstrap-select";
  * @vue-data {Array} [scheduleList=[]] scheduleList - An array for storing the eventData objects.
  * @vue-data {String} [currSel=null] - Hold the current preset selected in the Mode dropdown
  * @vue-data {Array} [names=[]] - Hold all the names of every preset
- * @vue-event storeSched - Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.
- * @vue-event clearSched - Clears all scheduled alarms
- * @vue-event updateSel - Used to grab the value from the select and store it in eventData
- * @vue-event getData - Updates current fields with those in chrome storage
- * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage
- * @vue-event updateSelect - Generate the preset selector dropdown
+ * @vue-event storeSched {None} - Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.
+ * @vue-event clearSched {None} - Clears all scheduled alarms
+ * @vue-event updateSel {None} - Used to grab the value from the select and store it in eventData
+ * @vue-event getData {None} - Updates current fields with those in chrome storage
+ * @vue-event trackChange {Int} - Delay-based recursive function to deal with asynchronous storage
+ * @vue-event updateSelect {None} - Generate the preset selector dropdown
  */
 
 

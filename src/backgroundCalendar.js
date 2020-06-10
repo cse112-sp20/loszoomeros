@@ -78,8 +78,6 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 
 })
 
-
-
 /**
  * @function calendarTrigger
  * @description 
@@ -171,15 +169,5 @@ function triggerApp(index) {
                 });
             })
         })
-        // chrome.storage.local.set({ index: index }, function () {
-        //     chrome.storage.local.set({ appEnabled: false }, function () {
-        //         chrome.storage.local.set({ appEnabled: true }, function () { });
-        //     });
-        // });
     })
 }
-
-
-
-//global.browser = require('webextension-polyfill')
-

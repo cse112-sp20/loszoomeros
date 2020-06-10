@@ -57,72 +57,72 @@
         <td><code>newPreset</code></td>
         <td>String</td>
         <td><code>""</code></td>
-        <td>Stores input value for creating preset</td>
+        <td>Stores input value for creating preset.</td>
     </tr><tr>
         <td><code>preset</code></td>
         <td>Preset</td>
         <td>-</td>
-        <td>Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist)</td>
+        <td>Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist).</td>
     </tr><tr>
         <td><code>website</code></td>
         <td>Website</td>
         <td>-</td>
-        <td>Object that holds a website url(site) and a boolean for on/off toggle(enabled)</td>
+        <td>Object that holds a website url(site) and a boolean for on/off toggle(enabled).</td>
     </tr><tr>
         <td><code>list</code></td>
         <td>Array</td>
-        <td>-</td>
-        <td>An array which is the highest level data storage within the vue. Holds all the presets</td>
+        <td><code>[]</code></td>
+        <td>An array which is the highest level data storage within the vue. Holds all the presets.</td>
     </tr><tr>
         <td><code>index</code></td>
         <td>Int</td>
         <td><code>0</code></td>
-        <td>Tracks the currently active preset within the list</td>
+        <td>Tracks the currently active preset within the list.</td>
     </tr><tr>
         <td><code>appOn</code></td>
         <td>Bool</td>
         <td><code>false</code></td>
-        <td>Holds the on/off state of the extension as a boolean</td>
+        <td>Holds the on/off state of the extension as a boolean.</td>
     </tr><tr>
         <td><code>calMode</code></td>
         <td>Bool</td>
         <td><code>false</code></td>
-        <td>Indicates if the calendar shall be shown or hidden</td>
+        <td>Indicates if the calendar shall be shown or hidden.</td>
     </tr><tr>
         <td><code>name</code></td>
         <td>String</td>
         <td><code>""</code></td>
-        <td>Input from the modal that renames a preset</td>
+        <td>Input from the modal that renames a preset.</td>
     </tr><tr>
         <td><code>nameState</code></td>
         <td>Bool</td>
         <td><code>null</code></td>
-        <td>State to indicate if user input into rename modal is valid</td>
+        <td>State to indicate if user input into rename modal is valid.</td>
     </tr><tr>
         <td><code>curRow</code></td>
         <td>String</td>
         <td><code>""</code></td>
-        <td># concatenated with the HTML ID of the preset/row from which the user invoked a request to delete a preset</td>
+        <td># concatenated with the HTML ID of the preset/row from which the user invoked a request to delete a preset.</td>
     </tr><tr>
         <td><code>curPreset</code></td>
         <td>Int</td>
         <td><code>-1</code></td>
-        <td>Key of the preset/row from which the user invoked a request to delete or rename a preset</td>
+        <td>Key of the preset/row from which the user invoked a request to delete or rename a preset.</td>
     </tr><tr>
         <td><code>componentKey</code></td>
         <td>Int</td>
         <td><code>0</code></td>
-        <td>Key used to force update the calendar component when changes are made to presets</td>
+        <td>Key used to force update the calendar component when changes are made to presets.</td>
     </tr><tr>
         <td><code>selName</code></td>
         <td>String</td>
         <td><code>"Select a mode"</code></td>
-        <td>Default text displayed in calendar component's Mode selection dropdown</td>
+        <td>Default text displayed in calendar component's Mode selection dropdown.</td>
     </tr><tr>
         <td><code>newPreset</code></td>
         <td>string</td>
         <td><code>""</code></td>
-        <td>Synced to the input form for adding a preset</td>
+        <td>Synced to the input form for adding a preset.</td>
     </tr></tbody>
 </table>
 
@@ -142,100 +142,100 @@
     </thead>
     <tbody><tr>
         <td><code>setPreset</code></td>
-        <td></td>
-        <td>Creates a new preset from the newPreset input string, or turns that preset on if it exists already</td>
+        <td>None</td>
+        <td>Creates a new preset from the newPreset input string, or turns that preset on if it exists already.</td>
     </tr><tr>
         <td><code>togglePreset</code></td>
-        <td></td>
-        <td>Toggles a preset on/off</td>
+        <td>Preset|Int</td>
+        <td>Toggles a preset on/off.</td>
     </tr><tr>
         <td><code>removePreset</code></td>
-        <td></td>
-        <td>Removes a preset from the list</td>
+        <td>Int</td>
+        <td>Removes a preset from the list.</td>
     </tr><tr>
         <td><code>addOpenlistSite</code></td>
-        <td></td>
-        <td>Adds a website from the openInput string to a preset's openlist</td>
+        <td>Preset</td>
+        <td>Adds a website from the openInput string to a preset's openlist.</td>
     </tr><tr>
         <td><code>addBlacklistSite</code></td>
-        <td></td>
-        <td>Adds a website from the blockInput string to a preset's openlist</td>
+        <td>Preset</td>
+        <td>Adds a website from the blockInput string to a preset's openlist.</td>
     </tr><tr>
         <td><code>removeSite</code></td>
-        <td></td>
-        <td>Removes a website from a preset's openlist/blacklist</td>
+        <td>Array|Int</td>
+        <td>Removes a website from a preset's openlist/blacklist.</td>
     </tr><tr>
         <td><code>getData</code></td>
-        <td></td>
-        <td>Updates current fields with those in chrome storage</td>
+        <td>None</td>
+        <td>Updates current fields with those in chrome storage.</td>
     </tr><tr>
         <td><code>trackChange</code></td>
-        <td></td>
-        <td>Delay-based recursive function to deal with asynchronous storage</td>
+        <td>Int</td>
+        <td>Delay-based recursive function to deal with asynchronous storage.</td>
     </tr><tr>
         <td><code>storeLocalList</code></td>
-        <td></td>
-        <td>Updates chrome storage with current list</td>
+        <td>None</td>
+        <td>Updates chrome storage with current list.</td>
     </tr><tr>
         <td><code>storeLocalIndex</code></td>
-        <td></td>
-        <td>Updates chrome storage with current index</td>
+        <td>None</td>
+        <td>Updates chrome storage with current index.</td>
     </tr><tr>
         <td><code>storeLocalEnabled</code></td>
-        <td></td>
-        <td>Updates chrome storage with current appOn value</td>
+        <td>None</td>
+        <td>Updates chrome storage with current appOn value.</td>
     </tr><tr>
         <td><code>appEnable</code></td>
-        <td></td>
-        <td>Toggles appOn, turns the app on or off</td>
+        <td>None</td>
+        <td>Toggles appOn, turns the app on or off.</td>
     </tr><tr>
         <td><code>refresh</code></td>
-        <td></td>
-        <td>Refreshes data, called after data is stored</td>
+        <td>None</td>
+        <td>Refreshes data, called after data is stored.</td>
     </tr><tr>
         <td><code>encode</code></td>
-        <td></td>
-        <td>Encodes preset names for html id parsing, allows for any ascii preset name</td>
+        <td>String</td>
+        <td>Encodes preset names for html id parsing, allows for any ascii preset name.</td>
     </tr><tr>
         <td><code>checkFormValidity</code></td>
         <td>None</td>
-        <td>Checks if the user entered a valid string when renaming a preset</td>
+        <td>Checks if the user entered a valid string when renaming a preset.</td>
     </tr><tr>
         <td><code>resetModal</code></td>
         <td>None</td>
-        <td>Reset the rename modal after user submits a valid string</td>
+        <td>Reset the rename modal after user submits a valid string.</td>
     </tr><tr>
         <td><code>handleOk</code></td>
         <td>BvModalEvent</td>
-        <td>Handle user clicking on OK button within rename modal</td>
+        <td>Handle user clicking on OK button within rename modal.</td>
     </tr><tr>
         <td><code>handleSubmit</code></td>
         <td>None</td>
-        <td>Renames a specified preset if the user submitted a valid string</td>
+        <td>Renames a specified preset if the user submitted a valid string.</td>
     </tr><tr>
         <td><code>showNameMod</code></td>
         <td>Int</td>
-        <td>Displays the rename modal</td>
+        <td>Displays the rename modal.</td>
     </tr><tr>
         <td><code>hideNameMod</code></td>
         <td>None</td>
-        <td>Hides the rename modal</td>
+        <td>Hides the rename modal.</td>
     </tr><tr>
         <td><code>showDelMod</code></td>
         <td>Int|String</td>
-        <td>Displays delete modal (delete confirmation window)</td>
+        <td>Displays delete modal (delete confirmation window).</td>
     </tr><tr>
         <td><code>hideDelMod</code></td>
         <td>None</td>
-        <td>Hides delete modal (delete confirmation window)</td>
+        <td>Hides delete modal (delete confirmation window).</td>
     </tr><tr>
         <td><code>rename</code></td>
         <td>Int|String</td>
-        <td>Rename the preset at index 'i' with string 'name'</td>
+        <td>Rename the preset at index 'i' with string 'name'.</td>
     </tr><tr>
         <td><code>forceUpdate</code></td>
         <td>None</td>
-        <td>Update the key of calComp to force an update on the component</td>
+        <td>Update the key of calComp to force an update on the component.</td>
     </tr></tbody>
 </table>
 
@@ -361,7 +361,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 09 2020 18:34:03 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 09 2020 18:48:39 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

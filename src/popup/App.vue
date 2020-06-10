@@ -333,44 +333,44 @@ import chevron from "./../chevron/Chevron.vue";  // import animated chevron for 
  * @module popup
  * @author Paul Larsen & Daryl Nakamoto
  *
- * @vue-data {String} [newPreset=""] - Stores input value for creating preset
- * @vue-data {Preset} preset - Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist)
- * @vue-data {Website} website - Object that holds a website url(site) and a boolean for on/off toggle(enabled)
- * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets
- * @vue-data {Int} [index=0] - Tracks the currently active preset within the list
- * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean
- * @vue-data {Bool} [calMode=false] - Indicates if the calendar shall be shown or hidden
- * @vue-data {String} [name=""] - Input from the modal that renames a preset
- * @vue-data {Bool} [nameState=null] - State to indicate if user input into rename modal is valid 
- * @vue-data {String} [curRow=""] - # concatenated with the HTML ID of the preset/row from which the user invoked a request to delete a preset
- * @vue-data {Int} [curPreset=-1] - Key of the preset/row from which the user invoked a request to delete or rename a preset
- * @vue-data {Int} [componentKey=0] - Key used to force update the calendar component when changes are made to presets
- * @vue-data {String} [selName="Select a mode"] - Default text displayed in calendar component's Mode selection dropdown
- * @vue-data {string } [newPreset=""] - Synced to the input form for adding a preset
- * @vue-event setPreset - Creates a new preset from the newPreset input string, or turns that preset on if it exists already
- * @vue-event togglePreset - Toggles a preset on/off
- * @vue-event removePreset - Removes a preset from the list
- * @vue-event addOpenlistSite - Adds a website from the openInput string to a preset's openlist
- * @vue-event addBlacklistSite - Adds a website from the blockInput string to a preset's openlist
- * @vue-event removeSite - Removes a website from a preset's openlist/blacklist
- * @vue-event getData - Updates current fields with those in chrome storage
- * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage
- * @vue-event storeLocalList - Updates chrome storage with current list
- * @vue-event storeLocalIndex - Updates chrome storage with current index
- * @vue-event storeLocalEnabled - Updates chrome storage with current appOn value
- * @vue-event appEnable - Toggles appOn, turns the app on or off
- * @vue-event refresh - Refreshes data, called after data is stored
- * @vue-event encode - Encodes preset names for html id parsing, allows for any ascii preset name
- * @vue-event checkFormValidity {None} - Checks if the user entered a valid string when renaming a preset
- * @vue-event resetModal {None} - Reset the rename modal after user submits a valid string
- * @vue-event handleOk {BvModalEvent} - Handle user clicking on OK button within rename modal
- * @vue-event handleSubmit {None} - Renames a specified preset if the user submitted a valid string
- * @vue-event showNameMod {Int} - Displays the rename modal
- * @vue-event hideNameMod {None} - Hides the rename modal
- * @vue-event showDelMod {Int | String} - Displays delete modal (delete confirmation window)
- * @vue-event hideDelMod {None} - Hides delete modal (delete confirmation window)
- * @vue-event rename {Int | String} - Rename the preset at index 'i' with string 'name'
- * @vue-event forceUpdate {None} - Update the key of calComp to force an update on the component
+ * @vue-data {String} [newPreset=""] - Stores input value for creating preset.
+ * @vue-data {Preset} preset - Object that holds a name(Strings.name), openlist input(Strings.openInput), blacklist input(Strings.blockInput), color of its button(color), boolean for its on/off state(value), list of websites to open(openlist), and list of tabs to block(blacklist).
+ * @vue-data {Website} website - Object that holds a website url(site) and a boolean for on/off toggle(enabled).
+ * @vue-data {Array} [list=[]] - An array which is the highest level data storage within the vue. Holds all the presets.
+ * @vue-data {Int} [index=0] - Tracks the currently active preset within the list.
+ * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean.
+ * @vue-data {Bool} [calMode=false] - Indicates if the calendar shall be shown or hidden.
+ * @vue-data {String} [name=""] - Input from the modal that renames a preset.
+ * @vue-data {Bool} [nameState=null] - State to indicate if user input into rename modal is valid.
+ * @vue-data {String} [curRow=""] - # concatenated with the HTML ID of the preset/row from which the user invoked a request to delete a preset.
+ * @vue-data {Int} [curPreset=-1] - Key of the preset/row from which the user invoked a request to delete or rename a preset.
+ * @vue-data {Int} [componentKey=0] - Key used to force update the calendar component when changes are made to presets.
+ * @vue-data {String} [selName="Select a mode"] - Default text displayed in calendar component's Mode selection dropdown.
+ * @vue-data {string } [newPreset=""] - Synced to the input form for adding a preset.
+ * @vue-event setPreset {None} - Creates a new preset from the newPreset input string, or turns that preset on if it exists already.
+ * @vue-event togglePreset {Preset | Int} - Toggles a preset on/off.
+ * @vue-event removePreset {Int} - Removes a preset from the list.
+ * @vue-event addOpenlistSite {Preset} - Adds a website from the openInput string to a preset's openlist.
+ * @vue-event addBlacklistSite {Preset} - Adds a website from the blockInput string to a preset's openlist.
+ * @vue-event removeSite {Array | Int} - Removes a website from a preset's openlist/blacklist.
+ * @vue-event getData {None} - Updates current fields with those in chrome storage.
+ * @vue-event trackChange {Int} - Delay-based recursive function to deal with asynchronous storage.
+ * @vue-event storeLocalList {None} - Updates chrome storage with current list.
+ * @vue-event storeLocalIndex {None} - Updates chrome storage with current index.
+ * @vue-event storeLocalEnabled {None} - Updates chrome storage with current appOn value.
+ * @vue-event appEnable {None} - Toggles appOn, turns the app on or off.
+ * @vue-event refresh {None} - Refreshes data, called after data is stored.
+ * @vue-event encode {String} - Encodes preset names for html id parsing, allows for any ascii preset name.
+ * @vue-event checkFormValidity {None} - Checks if the user entered a valid string when renaming a preset.
+ * @vue-event resetModal {None} - Reset the rename modal after user submits a valid string.
+ * @vue-event handleOk {BvModalEvent} - Handle user clicking on OK button within rename modal.
+ * @vue-event handleSubmit {None} - Renames a specified preset if the user submitted a valid string.
+ * @vue-event showNameMod {Int} - Displays the rename modal.
+ * @vue-event hideNameMod {None} - Hides the rename modal.
+ * @vue-event showDelMod {Int | String} - Displays delete modal (delete confirmation window).
+ * @vue-event hideDelMod {None} - Hides delete modal (delete confirmation window).
+ * @vue-event rename {Int | String} - Rename the preset at index 'i' with string 'name'.
+ * @vue-event forceUpdate {None} - Update the key of calComp to force an update on the component.
  */
 
 //vars with the intent of being accessible in the scope of chrome storage
