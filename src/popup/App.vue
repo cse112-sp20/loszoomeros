@@ -565,7 +565,7 @@ export default {
     */
         removePreset(index) {
             // Close modal
-           //this.hideDelMod();
+            //this.hideDelMod();
 
             this.list.splice(index, 1);
             this.index = 0;
