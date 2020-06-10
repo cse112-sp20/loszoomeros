@@ -115,9 +115,7 @@
       <div class="container" v-for="(item, i) in list" :key="i">
         <div class="row my-auto">
           <div class="col-1 my-auto">
-            <!-- v-b-modal.:id="encode(item.strings.name)+'elipse'" -->
-            <a :href="'#'+encode(item.strings.name)+'opts'" data-toggle="collapse" class="nav-link drop-down" @click="modalShow = true">
-              <!-- <b-modal :id="encode(item.strings.name)+'elipse'" size="sm" title="Small Modal">Hello Small Modal!</b-modal> -->
+            <a :href="'#'+encode(item.strings.name)+'opts'" data-toggle="collapse" class="nav-link drop-down">
               <icon name="ellipsis-v"></icon>
             </a>
           </div>
@@ -227,6 +225,7 @@
               </div>
             </div>
 
+            <!-- START Main UI container to black list a website  -->
             <div class="container">
               <hr class="solid" />
               <div class="row top-buffer bot-buffer">
@@ -246,6 +245,7 @@
                 </div>
               </div>
 
+              <!-- START Input field to blacklist a website -->
               <div :id="encode(item.strings.name)+'block'" class="row collapse">
                 <div class="col-1">
                   <!-- Leave this empty -->
@@ -269,10 +269,12 @@
                   </div>
                 </div>
                 <div class="col-1">
-                  <!-- Leave this empty -->
+                  <!-- Leave this empty for spacing -->
                 </div>
               </div>
+              <!-- END Input field to blacklist a website -->
 
+              <!-- START Programatically add blacklisted site to menu -->
               <div class="row" v-for="(website, k) in item.blacklist" :key="k">
                 <div class="col-1"></div>
                 <div class="col my-auto text-left">{{website.site}}</div>
@@ -282,7 +284,11 @@
                   </a>
                 </div>
               </div>
+              <!-- END Programatically add blacklisted site to menu -->
+
             </div>
+            <!-- END Main UI container to black list a website  -->
+
           </div>
         </div>
         <hr class="solid" />
@@ -319,8 +325,8 @@
 </template>
 
 <script>
-import calComp from "./../calendar/calComp.vue";
-import chevron from "./../chevron/Chevron.vue";
+import calComp from "./../calendar/calComp.vue"; // import calendar component
+import chevron from "./../chevron/Chevron.vue";  // import animated chevron for menu
 
 
 /**
@@ -333,6 +339,13 @@ import chevron from "./../chevron/Chevron.vue";
  * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets
  * @vue-data {Int} [index=0] - Tracks the currently active preset within the list
  * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean
+ * @vue-data {String} [name=""] - Input from the modal that renames a preset
+ * @vue-data {Bool} [nameState=null] - State to indicate if user input into rename modal is valid 
+ * @vue-data {String} [curRow=""] - # concatenated with the HTML ID of the preset/row from which the user invoked a request to delete a preset
+ * @vue-data {Int} [curPreset=-1] - Key of the preset/row from which the user invoked a request to delete or rename a preset
+ * @vue-data {Int} [componentKey=0] - Key used to force update the calendar component when changes are made to presets
+ * @vue-data {String} [selName="Select a mode"] - Default text displayed in calendar component's Mode selection dropdown
+ * @vue-data {string } [newPreset=""] - Synced to the input form for adding a preset
  * @vue-event setPreset - Creates a new preset from the newPreset input string, or turns that preset on if it exists already
  * @vue-event togglePreset - Toggles a preset on/off
  * @vue-event removePreset - Removes a preset from the list
@@ -374,11 +387,10 @@ export default {
       index: Tracks the currently active preset within the list
       appOn: Holds the on/off state of the extension as a boolean
       */
-      name: '',
+      name: "",
       nameState: null,
-      curRow: "", // to hold the current row that activated menu
-      curPreset: -1, // to hold current preset id
-      modalShow: true,
+      curRow: "",
+      curPreset: -1,
       componentKey: 0,
       selName: "Select a mode",
       newPreset: "",
@@ -774,11 +786,9 @@ p {
   display: inline-block;
   transition: all 2s linear;
 }
-
 .rotate.down {
   transform: rotate(180deg);
 }
-
 .modal {
   background-color: rgba(0, 0, 0, 0.7);
 }
