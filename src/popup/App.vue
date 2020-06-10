@@ -489,11 +489,8 @@ export default {
      * Updates the chrome.tabs listener that checks for blacklisted websites and removes them.
      * item: list preset to be toggled
      * index: list index of the passed in preset, updates this.index
-     *
      */
     togglePreset(item, index) {
-      //alert(item.name);
-      //alert(index);
       if (!item.value) {
         for (i = 0; i < this.list.length; i++) {
           this.list[i].value = false;
@@ -509,10 +506,10 @@ export default {
       this.refresh();
     },
 
-    //This function is synced with the add button for adding presets
-    //It disables all active presets(should only be one), and then checks if the preset exists
-    //If so, it makes that the active preset
-    //Otherwise, create a new preset and make that the active preset.
+    // This function is synced with the add button for adding presets
+    // It disables all active presets(should only be one), and then checks if the preset exists
+    // If so, it makes that the active preset
+    // Otherwise, create a new preset and make that the active preset.
     setPreset: function() {
       //Checking if the preset exists
       for (var i = 0; i < this.list.length; i++) {
@@ -563,7 +560,6 @@ export default {
     /* Function for removing a preset
     Takes an input(index) directing which member of the list to delete
     Turns the app off, and updates this.index to the currently active preset(the active preset's index might change after a removal)
-
     */
     removePreset(index) {
       // Close modal
@@ -581,8 +577,6 @@ export default {
       this.storeLocalList();
       this.storeLocalIndex(this.index);
       this.refresh();
-
-      
     },
 
     //Function synced to the presets' add button for auto-open sites
@@ -739,7 +733,6 @@ export default {
   },
 
   mounted() {
-    //alert("Mounted");
     let vm = this;
     chrome.storage.onChanged.addListener(function(changes, namespace) {
       for (var key in changes) {
