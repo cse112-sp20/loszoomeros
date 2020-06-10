@@ -1,7 +1,8 @@
 <template>
   <div>
+    <!-- START Main site blocking UI -->
     <div class="extension" v-show="!calMode">
-      <!-- Top Banner Area-->
+      <!-- START Top Banner Area-->
       <div class="sticky-top banner" style="padding-top:4%; padding-bottom:-20%">
         <div class="container">
           <!-- Banner Icons and Name -->
@@ -44,7 +45,7 @@
             </div>
             <!-- Blank Space For Even Spacing -->
             <div class="col-1 text-left"></div>
-
+            <!-- Input field to add a new preset -->
             <div id="mode-input" class="collapse">
               <div class="input-group mb-3">
                 <input
@@ -70,6 +71,7 @@
           </div>
         </div>
       </div>
+      <!-- START Top Banner Area-->
 
       <!-- START Modal for deleting -->
       <div>
@@ -112,14 +114,16 @@
       </div>
       <!-- END Modal to rename presets -->
 
+      <!-- START Main container for each preset in the UI (row) -->
       <div class="container" v-for="(item, i) in list" :key="i">
         <div class="row my-auto">
+          <!-- Options menu button -->
           <div class="col-1 my-auto">
             <a :href="'#'+encode(item.strings.name)+'opts'" data-toggle="collapse" class="nav-link drop-down">
               <icon name="ellipsis-v"></icon>
             </a>
           </div>
-          <!-- Coloumn for the main toggle for a mode -->
+          <!-- Coloumn for the main toggle of a mode -->
           <div class="col-3 my-auto text-left">
             <toggle-button
               class="my-auto"
@@ -143,9 +147,8 @@
             >
               <chevron class="text-right"></chevron>
             </a>
-            
           </div>
-
+          <!-- START The options menu -->
           <div class="collapse container" :id="encode(item.strings.name)+'opts'">
             <div><hr class="solid" /></div>
             <div class="row bot-buffer">
@@ -163,12 +166,14 @@
                 <b-button pill size="sm" variant="outline-primary" @click="showNameMod(i)">Rename</b-button>
               </div>
             </div>
-          </div>  
-          
+          </div>
+          <!-- END The options menu -->
 
-          <!-- A collapsable container for the drop down menu (the menu that shows sites in a mode) -->
+          <!-- Collapsable container for the drop down menu (the menu that shows sites in a mode) -->
           <div class="row collapse" :id="encode(item.strings.name)">
+            <!-- START Main UI container to auto-open a list of websites -->
             <div class="container">
+              <!-- Divider -->
               <div>
                 <hr class="solid" />
               </div>
@@ -179,6 +184,7 @@
 
                 <div class="col-6 text-center">Auto-open</div>
 
+                <!-- Button to add a site to Auto-open -->
                 <div class="col-3 text-center">
                   <a
                     :href="'#'+encode(item.strings.name)+'auto'"
@@ -190,10 +196,11 @@
                   </a>
                 </div>
               </div>
-
+              <!-- START Input field to add websites to be auto-opened -->
               <div :id="encode(item.strings.name)+'auto'" class="row collapse">
                 <div class="col-1"></div>
                 <div class="col input-group mb-3">
+                  <!-- Input field -->
                   <input
                     :id="encode(item.strings.name)+'auto-op'"
                     v-model="item.strings.openInput"
@@ -202,6 +209,7 @@
                     placeholder="Enter url..."
                     aria-describedby="basic-addon2"
                   />
+                  <!-- Button to add -->
                   <div class="input-group-append">
                     <button
                       :href="'#'+encode(item.strings.name)+'auto'"
@@ -211,11 +219,13 @@
                     >Add</button>
                   </div>
                 </div>
-                <div class="col-1"></div>
+                <div class="col-1"> <!-- Leave this blank for spacing --> </div>
               </div>
+              <!-- END Input field to add websites to be auto-opened -->
 
+              <!-- START Programatically a row for each website in auto-open -->
               <div class="row" v-for="(website, j) in item.openlist" :key="j">
-                <div class="col-1"></div>
+                <div class="col-1"> <!-- Leave this blank for spacing --> </div>
                 <div class="col my-auto text-left">{{website.site}}</div>
                 <div class="col-3 my-auto text-center">
                   <a class="del-site" href="#" @click="removeSite(item.openlist, j)">
@@ -223,9 +233,11 @@
                   </a>
                 </div>
               </div>
+              <!-- END Programatically a row for each website in auto-open -->
             </div>
+            <!-- END Main UI container to auto-open a list of websites -->
 
-            <!-- START Main UI container to black list a website  -->
+            <!-- START Main UI container to black list a website -->
             <div class="container">
               <hr class="solid" />
               <div class="row top-buffer bot-buffer">
@@ -285,7 +297,6 @@
                 </div>
               </div>
               <!-- END Programatically add blacklisted site to menu -->
-
             </div>
             <!-- END Main UI container to black list a website  -->
 
@@ -293,9 +304,11 @@
         </div>
         <hr class="solid" />
       </div>
+      <!-- END Main container for each preset in the UI (row) -->
     </div>
+    <!-- END Main site blocking UI -->
 
-    <!-- Calendar Mode -->
+    <!-- START Calendar Mode UI -->
     <div class="extension" v-show="calMode">
       <div class="sticky-top banner" style="padding-top:4%;padding-bottom:10%">
         <div class="container">
@@ -310,24 +323,20 @@
             <div class="col text-center my-auto">
               <h3 class="my-auto">Calendar</h3>
             </div>
-
-            <!-- Leave Blank -->
-            <div class="col-1 text-right">
-              
-            </div>
+            <div class="col-1 text-right"> <!-- Leave blank for spacing --> </div>
           </div>
         </div>
       </div>
       <!-- calendar component -->
       <calComp :key="componentKey" :title="selName" ref="calComp"></calComp>
     </div>
+    <!-- END Calendar Mode UI -->
   </div>
 </template>
 
 <script>
 import calComp from "./../calendar/calComp.vue"; // import calendar component
 import chevron from "./../chevron/Chevron.vue";  // import animated chevron for menu
-
 
 /**
  * @module popup

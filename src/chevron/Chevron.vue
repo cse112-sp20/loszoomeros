@@ -1,6 +1,6 @@
 <template>
     <div @click="toggle">
-    
+        <!-- Main component to animate chevron -->
         <vue-chevron
         :point-down="pointDown"
         :duration="duration"
@@ -11,9 +11,7 @@
         :width="23"
         :name="'sd'"
         />
-    
     </div>
-
 </template>
 
 
