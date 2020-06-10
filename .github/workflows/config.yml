@@ -39,6 +39,14 @@ jobs:
     # Run our tests
     - name: Run Jest
       run: npm run test:unit
+    
+    # Generate Docs
+    - name: Build
+      uses: andstor/jsdoc-action@v1
+      with:
+        source_dir: ./src
+        recurse: true
+        output_dir: ./docs
       
   coverage:
     # This workflow contains a single job called "build"
