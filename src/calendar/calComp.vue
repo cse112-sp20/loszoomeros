@@ -11,8 +11,8 @@
           :labelTitle="title"
           :options="names"
           :searchable="true"
-          v-mode.lazy="updateSel()" 
-          name="Presets" 
+          v-mode.lazy="updateSel()"
+          name="Presets"
           id="presetSelect"
         />
       </div>
@@ -32,9 +32,9 @@
           v-mode.lazy="updateSel()" 
         />
       </div>
-    </div> -->
+    </div>-->
     <hr class="solid" />
-    
+
     <b-row class="my-auto">
       <b-col cols="3" class="my-auto">
         <p class="category text-left my-auto">Start:</p>
@@ -55,19 +55,30 @@
     <hr class="solid" />
     <b-row>
       <b-col md="auto">
-        <b-calendar :hide-header="true" v-model="eventData.calDate" @context="onContext" locale="en-US"></b-calendar>
+        <b-calendar
+          :hide-header="true"
+          v-model="eventData.calDate"
+          @context="onContext"
+          locale="en-US"
+        ></b-calendar>
       </b-col>
       <b-col>
         <pre class="small">{{ context }}</pre>
       </b-col>
     </b-row>
     <div>
-      <b-button style="font-weight: 600;" class="sched-but" pill variant="outline-primary" size="sm" @click="storeSched">Schedule</b-button>
+      <b-button
+        style="font-weight: 600;"
+        class="sched-but"
+        pill
+        variant="outline-primary"
+        size="sm"
+        @click="storeSched"
+      >Schedule</b-button>
     </div>
     <!-- <div>
       <button @click="clearSched">Clear Schedule Data</button>
-    </div> -->
-    
+    </div>-->
 
     <!-- <hr class="solid" /> -->
   </div>
@@ -91,8 +102,6 @@ import VSelect from "@alfsnd/vue-bootstrap-select";
  * @vue-event trackChange {Int} - Delay-based recursive function to deal with asynchronous storage
  * @vue-event updateSelect {None} - Generate the preset selector dropdown
  */
-
-
 
 //vars with the intent of being accessible in the scope of chrome storage
 var calCompList = [];
@@ -123,37 +132,45 @@ export default {
       */
       currSel: null,
       names: [],
-      list: [], 
+      list: [],
       recur: false,
-      eventData: {startTime: "", endTime: "", calDate: "", preset: ""},
+      eventData: { startTime: "", endTime: "", calDate: "", preset: "" },
       scheduleList: []
-      
     };
   },
   methods: {
-
     //Function for storing the input fields as a scheduled event. Filters out duplicated start times/dates.
     storeSched: function() {
-      alert(this.eventData.preset)
-      if (this.eventData.startTime != "" && this.eventData.endTime != "" && this.eventData.calDate != "" && this.currSel != null) {
+      alert(this.eventData.preset);
+      if (
+        this.eventData.startTime != "" &&
+        this.eventData.endTime != "" &&
+        this.eventData.calDate != "" &&
+        this.currSel != null
+      ) {
         let ev = this.eventData;
-        let sch = this.scheduleList
+        let sch = this.scheduleList;
         //Filtering
         for (var i = 0; i < sch.length; i++) {
-          if (sch[i].calDate == ev.calDate && sch[i].startTime == ev.startTime) {
-            alert('You already have a mode scheduled at that exact time. Please try a different start time or date.')
+          if (
+            sch[i].calDate == ev.calDate &&
+            sch[i].startTime == ev.startTime
+          ) {
+            alert(
+              "You already have a mode scheduled at that exact time. Please try a different start time or date."
+            );
             return;
           }
         }
         sch[sch.length] = {
-        ...ev
+          ...ev
         };
-        alert('Scheduled!')
-        chrome.storage.local.set({cal: sch}, function() {});
-      }
-
-      else {
-        alert('Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected.')
+        alert("Scheduled!");
+        chrome.storage.local.set({ cal: sch }, function() {});
+      } else {
+        alert(
+          "Inputs are not finished. Please make sure you have a mode, start time, end time, and date selected."
+        );
         return;
       }
     },
@@ -161,16 +178,15 @@ export default {
     //Clears all scheduled alarms
     clearSched: function() {
       chrome.alarms.clearAll(function() {
-        alert('Cleared preset schedule!')
-      })
+        alert("Cleared preset schedule!");
+      });
     },
 
     //Used to grab the value from the select and store it in eventData
     updateSel() {
-      if(this.currSel == null){
+      if (this.currSel == null) {
         this.eventData.preset = "";
-      }
-      else{
+      } else {
         this.eventData.preset = this.currSel;
       }
     },
@@ -185,7 +201,7 @@ export default {
         calCompList = result.list; //Using var a because our data parameters are not in this scope
       });
 
-      chrome.storage.local.get({ cal: this.scheduleList}, function(result) {
+      chrome.storage.local.get({ cal: this.scheduleList }, function(result) {
         schList = result.cal;
       });
 
@@ -212,16 +228,16 @@ export default {
     updateSelect: function() {
       var temp = [];
       for (var i = 0; i < this.list.length; i++) {
-          temp.push(this.list[i].strings.name);
+        temp.push(this.list[i].strings.name);
       }
 
       this.names = temp;
       this.eventData.preset = this.currSel;
     },
-  },
 
-  mounted() {
-    this.getData();
+    mounted() {
+      this.getData();
+    }
   }
 };
 </script>
@@ -234,7 +250,7 @@ p {
   width: 300px;
   text-align: center;
 }
-.category{
+.category {
   font-weight: 600;
 }
 .bot-buffer {
@@ -278,7 +294,7 @@ p {
 .my-button span.text {
   color: red;
 }
-.sched-but{
-  margin-bottom: .8em;
+.sched-but {
+  margin-bottom: 0.8em;
 }
 </style>

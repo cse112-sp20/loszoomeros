@@ -75,12 +75,26 @@
 
       <!-- START Modal for deleting -->
       <div>
-        <b-modal ref="delModal" hide-footer title="Confirm Removal" no-close-on-backdrop="true" hide-header-close="false">
+        <b-modal
+          ref="delModal"
+          hide-footer
+          title="Confirm Removal"
+          no-close-on-backdrop="true"
+          hide-header-close="false"
+        >
           <div class="d-block text-center">
             <h5>You sure there, bud?</h5>
           </div>
           <b-button class="mt-3" pill size="sm" variant="primary" @click="hideDelMod">Cancel</b-button>
-          <b-button :href="'#'+curRow" size="sm" data-toggle="collapse" class="mt-3" pill variant="danger" @click="removePreset(curPreset)">Delete</b-button>
+          <b-button
+            :href="'#'+curRow"
+            size="sm"
+            data-toggle="collapse"
+            class="mt-3"
+            pill
+            variant="danger"
+            @click="removePreset(curPreset)"
+          >Delete</b-button>
         </b-modal>
       </div>
       <!-- END Modal for deleting -->
@@ -94,7 +108,7 @@
           @show="resetModal"
           @hidden="resetModal"
           @ok="handleOk"
-          no-close-on-backdrop="true" 
+          no-close-on-backdrop="true"
           hide-header-close="false"
         >
           <form ref="form" @submit.stop.prevent="handleSubmit">
@@ -104,12 +118,7 @@
               label-for="name-input"
               invalid-feedback="A name is required"
             >
-              <b-form-input
-                id="name-input"
-                v-model="name"
-                :state="nameState"
-                required
-              ></b-form-input>
+              <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
             </b-form-group>
           </form>
         </b-modal>
@@ -121,7 +130,11 @@
         <div class="row my-auto">
           <!-- Options menu button -->
           <div class="col-1 my-auto">
-            <a :href="'#'+encode(item.strings.name)+'opts'" data-toggle="collapse" class="nav-link drop-down">
+            <a
+              :href="'#'+encode(item.strings.name)+'opts'"
+              data-toggle="collapse"
+              class="nav-link drop-down"
+            >
               <icon name="ellipsis-v"></icon>
             </a>
           </div>
@@ -145,23 +158,29 @@
               class="nav-link drop-down"
               data-toggle="collapse"
               :href="'#'+encode(item.strings.name)"
-              aria-expanded="false" 
+              aria-expanded="false"
             >
               <chevron class="text-right"></chevron>
             </a>
           </div>
           <!-- START The options menu -->
           <div class="collapse container" :id="encode(item.strings.name)+'opts'">
-            <div><hr class="solid" /></div>
+            <div>
+              <hr class="solid" />
+            </div>
             <div class="row bot-buffer">
               <div class="col"></div>
               <div class="col">Options</div>
               <div class="col"></div>
             </div>
             <div class="row">
-
               <div class="col">
-                <b-button pill size="sm" variant="danger" @click="showDelMod(i, encode(item.strings.name)+'opts')">Delete</b-button>
+                <b-button
+                  pill
+                  size="sm"
+                  variant="danger"
+                  @click="showDelMod(i, encode(item.strings.name)+'opts')"
+                >Delete</b-button>
               </div>
 
               <div class="col">
@@ -221,13 +240,17 @@
                     >Add</button>
                   </div>
                 </div>
-                <div class="col-1"> <!-- Leave this blank for spacing --> </div>
+                <div class="col-1">
+                  <!-- Leave this blank for spacing -->
+                </div>
               </div>
               <!-- END Input field to add websites to be auto-opened -->
 
               <!-- START Programatically a row for each website in auto-open -->
               <div class="row" v-for="(website, j) in item.openlist" :key="j">
-                <div class="col-1"> <!-- Leave this blank for spacing --> </div>
+                <div class="col-1">
+                  <!-- Leave this blank for spacing -->
+                </div>
                 <div class="col my-auto text-left">{{website.site}}</div>
                 <div class="col-3 my-auto text-center">
                   <a class="del-site" href="#" @click="removeSite(item.openlist, j)">
@@ -301,7 +324,6 @@
               <!-- END Programatically add blacklisted site to menu -->
             </div>
             <!-- END Main UI container to black list a website  -->
-
           </div>
         </div>
         <hr class="solid" />
@@ -325,7 +347,9 @@
             <div class="col text-center my-auto">
               <h3 class="my-auto">Calendar</h3>
             </div>
-            <div class="col-1 text-right"> <!-- Leave blank for spacing --> </div>
+            <div class="col-1 text-right">
+              <!-- Leave blank for spacing -->
+            </div>
           </div>
         </div>
       </div>
@@ -338,7 +362,7 @@
 
 <script>
 import calComp from "./../calendar/calComp.vue"; // import calendar component
-import chevron from "./../chevron/Chevron.vue";  // import animated chevron for menu
+import chevron from "./../chevron/Chevron.vue"; // import animated chevron for menu
 
 /**
  * @module popup
@@ -395,7 +419,7 @@ const browser = require("webextension-polyfill");
 export default {
   components: {
     calComp,
-    chevron,
+    chevron
   },
 
   data() {
@@ -423,48 +447,48 @@ export default {
   },
   methods: {
     checkFormValidity() {
-      const valid = this.$refs.form.checkValidity()
-      this.nameState = valid
-      return valid
+      const valid = this.$refs.form.checkValidity();
+      this.nameState = valid;
+      return valid;
     },
     resetModal() {
-      this.name = ''
-      this.nameState = null
+      this.name = "";
+      this.nameState = null;
     },
     handleOk(bvModalEvt) {
       // Prevent modal from closing
-      bvModalEvt.preventDefault()
+      bvModalEvt.preventDefault();
       // Trigger submit handler
-      this.handleSubmit()
+      this.handleSubmit();
     },
     handleSubmit() {
       // Exit when the form isn't valid
       if (!this.checkFormValidity()) {
-        return
+        return;
       }
       // Push the name to submitted names
-      this.rename(this.curPreset, this.name)
+      this.rename(this.curPreset, this.name);
       // Hide the modal manually
       this.$nextTick(() => {
-        this.$bvModal.hide('modal-prevent-closing')
-      })
+        this.$bvModal.hide("modal-prevent-closing");
+      });
     },
-    showNameMod(preset){
+    showNameMod(preset) {
       this.curPreset = preset;
-      this.$refs['nameMod'].show();
+      this.$refs["nameMod"].show();
     },
-    hideNameMod(){
-      this.$refs['nameMod'].hide();
+    hideNameMod() {
+      this.$refs["nameMod"].hide();
     },
-    showDelMod(preset, row){
+    showDelMod(preset, row) {
       this.curPreset = preset;
       this.curRow = row;
-      this.$refs['delModal'].show();
+      this.$refs["delModal"].show();
     },
-    hideDelMod(){
-      this.$refs['delModal'].hide();
+    hideDelMod() {
+      this.$refs["delModal"].hide();
     },
-    rename(i, name){
+    rename(i, name) {
       this.list[i].strings.name = name;
       this.storeLocalList();
       this.storeLocalEnabled();
@@ -478,10 +502,9 @@ export default {
      */
     forceUpdate() {
       this.calMode = !this.calMode;
-      if(this.componentKey == 0){
+      if (this.componentKey == 0) {
         this.componentKey += 1;
-      }
-      else{
+      } else {
         this.componentKey = 0;
       }
     },
@@ -706,6 +729,52 @@ export default {
       this.appOn = !this.appOn;
       this.storeLocalEnabled();
     },
+
+    //Function called when a website's toggle button is clicked
+    //Turns it off or on.
+    //deprecated
+    toggleSite: function(site) {
+      site.enabled = !site.enabled;
+      this.storeLocalList();
+    },
+
+    //Band-aid fix for toggle buttons not working when dynamically created.
+    //Reloading the paramaters generating the buttons seemed to fix it.
+    //Doesn't seem to cause issues so far
+    refresh: function() {
+      this.list = -1;
+      this.index = 1000;
+      this.appOn = false;
+      //https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component
+      this.$refs.calComp.getData();
+      this.getData();
+    },
+
+    //Function used to resolve issues with html formatting of input strings
+    //Takes an input(baseString) and creates an output(encodedString)
+    //For every char in baseString, we take the ascii code, place x's before and after,
+    //and concat it to the output string.
+    encode: function(baseString) {
+      var code;
+      var encodedString = "";
+      for (var i = 0; i < baseString.length; i++) {
+        code = baseString.charCodeAt(i);
+        //deliberately left one lowercase in case debugging was needed
+        encodedString += "X" + code + "x";
+      }
+      return encodedString;
+    },
+
+    
+    //-----
+    //Result of a bad merge, leaving here just incase
+    //   }
+    //   this.appOn = !this.appOn;
+    //   this.storeLocalEnabled();
+    // },
+    //-----
+
+
     //Band-aid fix for toggle buttons not working when dynamically created.
     //Reloading the paramaters generating the buttons seemed to fix it.
     //Doesn't seem to cause issues so far
@@ -789,7 +858,7 @@ p {
 .modal {
   background-color: rgba(0, 0, 0, 0.7);
 }
-.chev{
+.chev {
   font-size: 1px;
 }
 .powerStatus {
