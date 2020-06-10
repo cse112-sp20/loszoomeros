@@ -339,6 +339,7 @@ import chevron from "./../chevron/Chevron.vue";  // import animated chevron for 
  * @vue-data {Array} list - An array which is the highest level data storage within the vue. Holds all the presets
  * @vue-data {Int} [index=0] - Tracks the currently active preset within the list
  * @vue-data {Bool} [appOn=false] - Holds the on/off state of the extension as a boolean
+ * @vue-data {Bool} [calMode=false] - Indicates if the calendar shall be shown or hidden
  * @vue-data {String} [name=""] - Input from the modal that renames a preset
  * @vue-data {Bool} [nameState=null] - State to indicate if user input into rename modal is valid 
  * @vue-data {String} [curRow=""] - # concatenated with the HTML ID of the preset/row from which the user invoked a request to delete a preset
@@ -354,12 +355,20 @@ import chevron from "./../chevron/Chevron.vue";  // import animated chevron for 
  * @vue-event removeSite - Removes a website from a preset's openlist/blacklist
  * @vue-event getData - Updates current fields with those in chrome storage
  * @vue-event trackChange - Delay-based recursive function to deal with asynchronous storage
- * @vue-event storeLocalList - updates chrome storage with current list
- * @vue-event storeLocalIndex - updates chrome storage with current index
- * @vue-event storeLocalEnabled - updates chrome storage with current appOn value
- * @vue-event appEnable - toggles appOn, turns the app on or off
- * @vue-event refresh - refreshes data, called after data is stored
- * @vue-event encode - encodes preset names for html id parsing, allows for any ascii preset name
+ * @vue-event storeLocalList - Updates chrome storage with current list
+ * @vue-event storeLocalIndex - Updates chrome storage with current index
+ * @vue-event storeLocalEnabled - Updates chrome storage with current appOn value
+ * @vue-event appEnable - Toggles appOn, turns the app on or off
+ * @vue-event refresh - Refreshes data, called after data is stored
+ * @vue-event encode - Encodes preset names for html id parsing, allows for any ascii preset name
+ * @vue-event checkFormValidity {None} - Checks if the user entered a valid string when renaming a preset
+ * @vue-event resetModal {None} - Reset the rename modal after user submits a valid string
+ * @vue-event handleOk {BvModalEvent} - Handle user clicking on OK button within rename modal
+ * @vue-event handleSubmit {None} - Renames a specified preset if the user submitted a valid string
+ * @vue-event showNameMod {Int} - Displays the rename modal
+ * @vue-event hideNameMod {None} - Hides the rename modal
+ * @vue-event showDelMod {Int | String} - Displays delete modal (delete confirmation window)
+ * @vue-event hideDelMod {None} - Hides delete modal (delete confirmation window)
  */
 
 //vars with the intent of being accessible in the scope of chrome storage
@@ -378,15 +387,6 @@ export default {
 
   data() {
     return {
-      /*Data variables
-      newPreset: synced to the input form for adding a preset
-      preset: object that holds a name(name), color of its button(color), boolean for its on/off state(value), 
-              list of websites to open(openlist), and list of tabs to block(blacklist)
-      website: Object that holds a website url(site) and a boolean for on/off toggle(enabled)
-      list: An array which is the highest level data storage within the vue. holds all the presets
-      index: Tracks the currently active preset within the list
-      appOn: Holds the on/off state of the extension as a boolean
-      */
       name: "",
       nameState: null,
       curRow: "",
