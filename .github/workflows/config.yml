@@ -30,7 +30,7 @@ jobs:
     
     # Run linter
     - name: Run linter
-      run: npm run lint -- --fix
+      run: npm run lint 
     
     # Run our extension and make sure it launches
     - name: Build Extension
