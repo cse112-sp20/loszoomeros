@@ -1,49 +1,59 @@
-## UI Fixes
-Current work on the UI can be found here. I do not garauntee that proper logic has been implemented for the totality of the project.
+# Zoomero
+Due to the Covid-19 pandemic, everyone is forced to stay home. As a result, the line between work and life is getting blurry. While working we often find ourselves tempted by the siren calls of numerous entertainment resources available on the internet with no supervision. 
+To help people tackle this problem, we created Zoomero, a productivity tool that denies access to certain websites and helps people easily enter work mode. It empowers the user to balance work and life.
 
-## Installation instructions
-To install this Google Chrome extension, download and install Node.js [here](https://nodejs.org/en/). Once installed, open a termnial (PowerShell for Windows) and `cd` into the project directory. Run `npm install` and then `npm run build` to install all dependencies and build the extension, respectively. You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder.
+<!-- ## Installation instructions
+To install this Google Chrome extension, download and install Node.js [here](https://nodejs.org/en/). Once installed, open a termnial (PowerShell for Windows) and `cd` into the project directory. Run `npm install` and then `npm run build` to install all dependencies and build the extension, respectively. You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder. -->
 
-## Testing instruction
-To test this Google Chrome extension, 
-  * `npm run test`: Run all tests
-  * `npm run test:unit`: Run unit tests
-  * `npm run test:e2e`: Run end-to-end tests
-Currently there are two test sets under `test` directory: `unit` and `e2e`. 
+## Developer Installation & Testing
 
-## Status
-##### *5/24/20 - 04:55pm*
-Hunting bugs.
+##### How to Install
+Download and install Node.js [here](https://nodejs.org/en/). Then, download the repository and install all the dependencies as instructed below 
+```
+git clone https://github.com/cse112-sp20/loszoomeros.git
+cd loszoomeros
+npm install
+npm run build
+```
+If you decide to start fresh again,
+```
+rm -rf ./node_modules
+git checkout -- .
+git clean -dfx
+```
+You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder.
+##### How to Test
+```
+npm run test
+```
 
-## TO-DO
-  * Implement UI to delete modes
-  * Implement UI to delete sites from a mode
-  * Implement UI to collapse all dropdowns 
-  * And so much more...
+##### How to Run Linting Test
+```
+npm run eslint
+```
 
-  * ~~Integrate UI and site blocking logic~~
-  * ~~Implement UI to add more modes~~
-  * ~~Implement UI to add more sites to a mode~~
+## Documentation
+| Component | Documentation | Examples |
+|:--------------|:------------------|:----------------|
+
+## Credit
+
+Acknowledgement to all of our team members who have contributed to this project.
+
+## The Team
+1. Ryan Jackson - **Lead**
+2. Neel Chowdri - **Co-lead**
+3. Daryl Nakamoto - **Coder**
+4. Paul Larsen - **Coder**
+5. Erik Follette - **Build**
+6. Yan Sun - **Build**
+7. Saikrishna Chandhrasekhar - **Build**
+8. Hansae Lee - **Quality Assurance**
+9. Elizabeth Cho - **Quality Assurance**
+10. Yuchen Zhang - **User Interface**
+11. Edvard Mattias Boe - **User Interface**
+12. Tim Ferido - **User Interface**
 
 
-## Status
-##### *5/27/20 - 6:00am*
-Paul- Worked on the bugs listed in the bug google doc. Here's a list of what was accomplished:
-## Additions/Changes
-  * Rudamentary delete buttons for presets and websites were added.
-    * Did some very minor testing. Didn't notice any major indexing errors because of this, yet (fingers crossed).
-    * They work during runtime, meaning if the app is on and a blacklisted website is deleted, you can immediately access it.
-    * Deleting a preset turns the app off.
-  * Changed the preset object skeleton:
-    * preset.strings has been added to organize all of the major strings of a preset that aren't in openlist/blacklist.
-    * preset.names was moved into preset.strings, aka preset.strings.name (watch out for merge conflicts).
-    * preset.strings.openInput and preset.strings.blockInput were added.
-      * openInput is synced to the openlist add button, blockInput is synced to the blacklist add button.
-  * Added 'http://' concatenation for opening URL's in background.js
 
-## Bug fixes
-  * Implemented encoding method for preset names internally. Dropdowns should function with names containing any ascii characters in any order.
-    * This was the result of href and URL formatting being strict on special characters.
-  * The openlist and blacklist forms for each preset are now unique. Typing in the forms of one preset won't affect the other presets' forms.
-  * The presets' add buttons for openlists and blacklists are now synced to their preset rather than the active preset.
-  * The app will not turn on if there is no preset is active.
+> Names are sorted in alphabetic order within each category of team roles.
