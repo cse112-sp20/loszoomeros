@@ -80,7 +80,7 @@
             <h5>You sure there, bud?</h5>
           </div>
           <b-button class="mt-3" pill size="sm" variant="primary" @click="hideDelMod">Cancel</b-button>
-          <b-button :href="'#'+curRow" size="sm" data-toggle="collapse" class="mt-3" pill variant="danger" @click="removePreset(curPreset)">Delete</b-button>
+          <b-button :href="'#'+curRow" size="sm" data-toggle="collapse" class="mt-3" pill variant="danger" @click="removePreset(curPreset); hideDelMod()">Delete</b-button>
         </b-modal>
       </div>
       <!-- END Modal for deleting -->
@@ -565,7 +565,7 @@ export default {
     */
         removePreset(index) {
             // Close modal
-            this.hideDelMod();
+           //this.hideDelMod();
 
             this.list.splice(index, 1);
             this.index = 0;

@@ -119,61 +119,61 @@ describe("App Method Unit Test", () => {
         expect(vm.list).toEqual(newList);
     });
 
-    // it ('removePreset', () => {
-    //     //Removing a preset from a list of inactivated presets
-    //     var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false};
-    //     var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
-    //     var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
-    //     var preset4 = {strings: {name: "preset4", blockInput: ""}, blacklist: [], openlist: [{site: "basecamp.com"}], value: false};
-    //     var presetList = [preset1, preset2, preset3, preset4];
-    //     vm.list = presetList;
-    //     vm.removePreset(3);
+    it ('removePreset', () => {
+        //Removing a preset from a list of inactivated presets
+        var preset1 = {strings: {name: "preset1", blockInput: ""}, blacklist: [{site: "bing.com"}, {site: "google.com"}], openlist: [], value: false};
+        var preset2 = {strings: {name: "preset2", blockInput: ""}, blacklist: [], openlist: [{site: "slack.com"}, {site: "github.com"}], value: false};
+        var preset3 = {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: false};
+        var preset4 = {strings: {name: "preset4", blockInput: ""}, blacklist: [], openlist: [{site: "basecamp.com"}], value: false};
+        var presetList = [preset1, preset2, preset3, preset4];
+        vm.list = presetList;
+        vm.removePreset(3);
 
-    //     var newList;
-    //     chrome.storage.local.get(['list'], function(result) {
-    //         newList = result.list;
-    //     });
+        var newList;
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
 
-    //     expect(vm.list.length).toBe(3);
-    //     expect(vm.list).toEqual([preset1, preset2, preset3]);
-    //     //expect(vm.index).toBe(0); //Or whatever is the default index for when there are no active presets
-    //     expect(vm.list).toEqual(newList);
+        expect(vm.list.length).toBe(3);
+        expect(vm.list).toEqual([preset1, preset2, preset3]);
+        //expect(vm.index).toBe(0); //Or whatever is the default index for when there are no active presets
+        expect(vm.list).toEqual(newList);
 
-    //     //Removing an inactive preset from a list of presets when another preset is active
-    //     vm.togglePreset(vm.list[2], 2);
-    //     vm.removePreset(1);
+        //Removing an inactive preset from a list of presets when another preset is active
+        vm.togglePreset(vm.list[2], 2);
+        vm.removePreset(1);
         
-    //     chrome.storage.local.get(['list'], function(result) {
-    //         newList = result.list;
-    //     });
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
 
-    //     expect(vm.list).toEqual([preset1, {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: true}]);
-    //     expect(vm.index).toBe(1);
-    //     expect(vm.list).toEqual(newList);
+        expect(vm.list).toEqual([preset1, {strings: {name: "preset3", blockInput: ""}, blacklist: [{site: "spotify.com"}, {site: "youtube.com"}], openlist: [], value: true}]);
+        expect(vm.index).toBe(1);
+        expect(vm.list).toEqual(newList);
 
-    //     //Removing an active preset
-    //     vm.togglePreset(vm.list[1], 1);
-    //     vm.removePreset(1);
+        //Removing an active preset
+        vm.togglePreset(vm.list[1], 1);
+        vm.removePreset(1);
         
-    //     chrome.storage.local.get(['list'], function(result) {
-    //         newList = result.list;
-    //     });
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
 
-    //     expect(vm.list).toEqual([preset1]);
-    //     //expect(vm.index).toBe(0);
-    //     expect(vm.list).toEqual(newList);
+        expect(vm.list).toEqual([preset1]);
+        //expect(vm.index).toBe(0);
+        expect(vm.list).toEqual(newList);
 
-    //     //Removing all presets
-    //     vm.removePreset(0);
+        //Removing all presets
+        vm.removePreset(0);
 
-    //     chrome.storage.local.get(['list'], function(result) {
-    //         newList = result.list;
-    //     });
+        chrome.storage.local.get(['list'], function(result) {
+            newList = result.list;
+        });
 
-    //     expect(vm.list.length).toBe(0);
-    //     //expect(vm.index).toBe(0);
-    //     expect(vm.list).toEqual(newList);
-    // });
+        expect(vm.list.length).toBe(0);
+        //expect(vm.index).toBe(0);
+        expect(vm.list).toEqual(newList);
+    });
 
     it ('setExistingPreset', () => {
         //Setting an existing preset that is also currently activated
