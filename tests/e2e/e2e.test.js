@@ -82,20 +82,6 @@ describe('UI test', () => {
     expect(site_name).toBe('facebook.com');
   })
 
-  it ('Removing a mode', async () => {
-
-    // create a mode
-    await page.click('a[href="#mode-input"]');
-    await page.type('input[id="mode-in-field"]', 'test');
-    await page.click('button[href="#mode-input"]');
-
-    // delete the mode
-    await page.click('div[class="col-1 my-auto"]');
-
-    // validation
-    expect(await page.$('div[class="col my-auto text-left mode-title"]')).toBeNull();
-  });
-
   it ('Removing a site from openlist', async () => {
 
     // create a mode
