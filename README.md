@@ -31,18 +31,33 @@ You can now load the extension into Chrome by navigating to Settings > Extension
 npm run test
 ```
 
+##### How to Generate Documentation
+```
+jsdoc -c conf.json -d ./docs
+```
+To view the generated documentation, go to your browser search bar and run
+
+```
+pathtorepo/docs/index.html
+```
+Then you can navigate through the JSDocs
+
 ##### How to Run Linting Test
 ```
 npm run lint
 ```
-
 ##### If Linting Fails
 ```
 npm run lint -- --fix
 ```
-## Documentation
-| Component | Documentation | Examples |
-|:--------------|:------------------|:----------------|
+## Before Adding to the Code Base
+Please check out our Onboarding Document here https://docs.google.com/document/d/1-PSiYhWP0Uz_Ak9F2LCTVf9Y82Gx_e08Ako-RwMxUXk/edit
+
+## Our Next Steps
+https://docs.google.com/document/d/198OG2bzGY726-vLCi73P_fl3VgDZcOpSaaGg9Dfi2mY/edit
+
+## Our Team Website With Contact Info
+https://r6jackso.wixsite.com/website-1
 
 ## Credit
 
