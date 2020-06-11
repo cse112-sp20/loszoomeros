@@ -33,9 +33,13 @@ npm run test
 
 ##### How to Run Linting Test
 ```
-npm run eslint
+npm run lint
 ```
 
+##### If Linting Fails
+```
+npm run lint -- --fix
+```
 ## Documentation
 | Component | Documentation | Examples |
 |:--------------|:------------------|:----------------|
