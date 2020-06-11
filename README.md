@@ -50,6 +50,12 @@ npm run lint
 npm run lint -- --fix
 ```
 
+## Our Next Steps
+https://docs.google.com/document/d/198OG2bzGY726-vLCi73P_fl3VgDZcOpSaaGg9Dfi2mY/edit
+
+## Our Team Website With Contact Info
+https://r6jackso.wixsite.com/website-1
+
 ## Credit
 
 Acknowledgement to all of our team members who have contributed to this project.
