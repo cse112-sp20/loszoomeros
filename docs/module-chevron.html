@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: calComp</title>
+    <title>JSDoc: Module: chevron</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: calComp</h1>
+    <h1 class="page-title">Module: chevron</h1>
 
     
 
@@ -54,30 +54,30 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>eventData</code></td>
-        <td>ScheduledEvent</td>
-        <td>-</td>
-        <td>Object simulating a scheduled preset event. Holds a startTime, the time a preset will turn on; endTime, the time a preset is scheduled to turn off (not yet implemented); calDate, the calendar date for when a preset is supposed to turn on; preset, the preset that is being scheduled to turn on.</td>
+        <td><code>pointDown</code></td>
+        <td>Bool</td>
+        <td><code>true</code></td>
+        <td>Indicates if the dropdown chevron of a preset should be pointing down</td>
     </tr><tr>
-        <td><code>list</code></td>
-        <td>Array</td>
-        <td><code>[]</code></td>
-        <td>list - An array which is the highest level data storage within the vue. Holds all the presets.</td>
+        <td><code>thickness</code></td>
+        <td>Int</td>
+        <td><code>8</code></td>
+        <td>Thickness of the chevron</td>
     </tr><tr>
-        <td><code>scheduleList</code></td>
-        <td>Array</td>
-        <td><code>[]</code></td>
-        <td>scheduleList - An array for storing the eventData objects.</td>
+        <td><code>duration</code></td>
+        <td>Int</td>
+        <td><code>200</code></td>
+        <td>Duration of the chevron animation in miliseconds</td>
     </tr><tr>
-        <td><code>currSel</code></td>
-        <td>String</td>
-        <td><code>null</code></td>
-        <td>Hold the current preset selected in the Mode dropdown</td>
+        <td><code>angle</code></td>
+        <td>Int</td>
+        <td><code>45</code></td>
+        <td>Angle between the edges of the chevron</td>
     </tr><tr>
-        <td><code>names</code></td>
-        <td>Array</td>
-        <td><code>[]</code></td>
-        <td>Hold all the names of every preset</td>
+        <td><code>roundEdges</code></td>
+        <td>Bool</td>
+        <td><code>true</code></td>
+        <td>Indicates if the edges of the chevron should be rounded</td>
     </tr></tbody>
 </table>
 
@@ -96,29 +96,9 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>storeSched</code></td>
+        <td><code>toggle</code></td>
         <td>None</td>
-        <td>Stores the vue input fields as a scheduled event. Filters out duplicated start times/dates.</td>
-    </tr><tr>
-        <td><code>clearSched</code></td>
-        <td>None</td>
-        <td>Clears all scheduled alarms</td>
-    </tr><tr>
-        <td><code>updateSel</code></td>
-        <td>None</td>
-        <td>Used to grab the value from the select and store it in eventData</td>
-    </tr><tr>
-        <td><code>getData</code></td>
-        <td>None</td>
-        <td>Updates current fields with those in chrome storage</td>
-    </tr><tr>
-        <td><code>trackChange</code></td>
-        <td>Int</td>
-        <td>Delay-based recursive function to deal with asynchronous storage</td>
-    </tr><tr>
-        <td><code>updateSelect</code></td>
-        <td>None</td>
-        <td>Generate the preset selector dropdown</td>
+        <td>Toggle the direction of the chevron</td>
     </tr></tbody>
 </table>
 
@@ -166,7 +146,7 @@
     <dt class="tag-author">Author:</dt>
     <dd class="tag-author">
         <ul>
-            <li>Paul Larsen &amp; Daryl Nakamoto</li>
+            <li>Daryl Nakamoto</li>
         </ul>
     </dd>
     

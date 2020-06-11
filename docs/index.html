@@ -43,81 +43,67 @@
 
 
     <section>
-        <article><h2>UI Fixes</h2>
-<p>Current work on the UI can be found here. I do not garauntee that proper logic has been implemented for the totality of the project.</p>
-<h2>Installation instructions</h2>
-<p>To install this Google Chrome extension, download and install Node.js <a href="https://nodejs.org/en/">here</a>. Once installed, open a termnial (PowerShell for Windows) and <code>cd</code> into the project directory. Run <code>npm install</code> and then <code>npm run build</code> to install all dependencies and build the extension, respectively. You can now load the extension into Chrome by navigating to Settings &gt; Extensions &gt; Load Unpacked, then selecting the <code>dist</code> folder.</p>
-<h2>Testing instruction</h2>
-<p>To test this Google Chrome extension,</p>
-<ul>
-<li><code>npm run test</code>: Run all tests</li>
-<li><code>npm run test:unit</code>: Run unit tests</li>
-<li><code>npm run test:e2e</code>: Run end-to-end tests
-Currently there are two test sets under <code>test</code> directory: <code>unit</code> and <code>e2e</code>.</li>
-</ul>
-<h2>Status</h2>
-<h5><em>5/24/20 - 04:55pm</em></h5>
-<p>Hunting bugs.</p>
-<h2>TO-DO</h2>
-<ul>
-<li>
-<p>Implement UI to delete modes</p>
-</li>
-<li>
-<p>Implement UI to delete sites from a mode</p>
-</li>
-<li>
-<p>Implement UI to collapse all dropdowns</p>
-</li>
-<li>
-<p>And so much more...</p>
-</li>
-<li>
-<p><s>Integrate UI and site blocking logic</s></p>
-</li>
-<li>
-<p><s>Implement UI to add more modes</s></p>
-</li>
-<li>
-<p><s>Implement UI to add more sites to a mode</s></p>
-</li>
-</ul>
-<h2>Status</h2>
-<h5><em>5/27/20 - 6:00am</em></h5>
-<p>Paul- Worked on the bugs listed in the bug google doc. Here's a list of what was accomplished:</p>
-<h2>Additions/Changes</h2>
-<ul>
-<li>Rudamentary delete buttons for presets and websites were added.
-<ul>
-<li>Did some very minor testing. Didn't notice any major indexing errors because of this, yet (fingers crossed).</li>
-<li>They work during runtime, meaning if the app is on and a blacklisted website is deleted, you can immediately access it.</li>
-<li>Deleting a preset turns the app off.</li>
-</ul>
-</li>
-<li>Changed the preset object skeleton:
-<ul>
-<li>preset.strings has been added to organize all of the major strings of a preset that aren't in openlist/blacklist.</li>
-<li>preset.names was moved into preset.strings, aka preset.strings.name (watch out for merge conflicts).</li>
-<li>preset.strings.openInput and preset.strings.blockInput were added.
-<ul>
-<li>openInput is synced to the openlist add button, blockInput is synced to the blacklist add button.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Added 'http://' concatenation for opening URL's in background.js</li>
-</ul>
-<h2>Bug fixes</h2>
-<ul>
-<li>Implemented encoding method for preset names internally. Dropdowns should function with names containing any ascii characters in any order.
-<ul>
-<li>This was the result of href and URL formatting being strict on special characters.</li>
-</ul>
-</li>
-<li>The openlist and blacklist forms for each preset are now unique. Typing in the forms of one preset won't affect the other presets' forms.</li>
-<li>The presets' add buttons for openlists and blacklists are now synced to their preset rather than the active preset.</li>
-<li>The app will not turn on if there is no preset is active.</li>
-</ul></article>
+        <article><p><a href="https://codeclimate.com/github/codeclimate/codeclimate/maintainability"><img src="https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability" alt="Maintainability"></a></p>
+<p><a href="https://codeclimate.com/github/codeclimate/codeclimate/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage" alt="Test Coverage"></a></p>
+<h1>Zoomero</h1>
+<p>Due to the Covid-19 pandemic, everyone is forced to stay home. As a result, the line between work and life is getting blurry. While working we often find ourselves tempted by the siren calls of numerous entertainment resources available on the internet with no supervision.
+To help people tackle this problem, we created Zoomero, a productivity tool that denies access to certain websites and helps people easily enter work mode. It empowers the user to balance work and life.</p>
+<!-- ## Installation instructions
+To install this Google Chrome extension, download and install Node.js [here](https://nodejs.org/en/). Once installed, open a termnial (PowerShell for Windows) and `cd` into the project directory. Run `npm install` and then `npm run build` to install all dependencies and build the extension, respectively. You can now load the extension into Chrome by navigating to Settings > Extensions > Load Unpacked, then selecting the `dist` folder. -->
+<h2>Developer Installation &amp; Testing</h2>
+<h5>How to Install</h5>
+<p>Download and install Node.js <a href="https://nodejs.org/en/">here</a>. Then, download the repository and install all the dependencies as instructed below</p>
+<pre class="prettyprint source"><code>git clone https://github.com/cse112-sp20/loszoomeros.git
+cd loszoomeros
+npm install
+npm run build
+</code></pre>
+<p>If you decide to start fresh again,</p>
+<pre class="prettyprint source"><code>rm -rf ./node_modules
+git checkout -- .
+git clean -dfx
+</code></pre>
+<p>You can now load the extension into Chrome by navigating to Settings &gt; Extensions &gt; Load Unpacked, then selecting the <code>dist</code> folder.</p>
+<h5>How to Test</h5>
+<pre class="prettyprint source"><code>npm run test
+</code></pre>
+<h5>How to Run Linting Test</h5>
+<pre class="prettyprint source"><code>npm run lint
+</code></pre>
+<h5>If Linting Fails</h5>
+<pre class="prettyprint source"><code>npm run lint -- --fix
+</code></pre>
+<h2>Documentation</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Component</th>
+<th style="text-align:left">Documentation</th>
+<th style="text-align:left">Examples</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<h2>Credit</h2>
+<p>Acknowledgement to all of our team members who have contributed to this project.</p>
+<h2>The Team</h2>
+<ol>
+<li>Ryan Jackson - <strong>Lead</strong></li>
+<li>Neel Chowdri - <strong>Co-lead</strong></li>
+<li>Daryl Nakamoto - <strong>Coder</strong></li>
+<li>Paul Larsen - <strong>Coder</strong></li>
+<li>Erik Follette - <strong>Build</strong></li>
+<li>Yan Sun - <strong>Build</strong></li>
+<li>Saikrishna Chandhrasekhar - <strong>Build</strong></li>
+<li>Hansae Lee - <strong>Quality Assurance</strong></li>
+<li>Elizabeth Cho - <strong>Quality Assurance</strong></li>
+<li>Yuchen Zhang - <strong>User Interface</strong></li>
+<li>Edvard Mattias Boe - <strong>User Interface</strong></li>
+<li>Tim Ferido - <strong>User Interface</strong></li>
+</ol>
+<blockquote>
+<p>Names are sorted in alphabetic order within each category of team roles.</p>
+</blockquote></article>
     </section>
 
 
@@ -134,7 +120,7 @@ Currently there are two test sets under <code>test</code> directory: <code>unit<
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 09 2020 18:48:39 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jun 11 2020 09:52:00 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
