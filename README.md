@@ -1,3 +1,6 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
 # Zoomero
 Due to the Covid-19 pandemic, everyone is forced to stay home. As a result, the line between work and life is getting blurry. While working we often find ourselves tempted by the siren calls of numerous entertainment resources available on the internet with no supervision. 
 To help people tackle this problem, we created Zoomero, a productivity tool that denies access to certain websites and helps people easily enter work mode. It empowers the user to balance work and life.
@@ -31,15 +34,21 @@ npm run test
 ```
 jsdoc -c conf.json -d ./docs
 ```
+To view the generated documentation, go to your browser search bar and run
+
+```
+pathtorepo/docs/index.html
+```
+Then you can navigate through the JSDocs
 
 ##### How to Run Linting Test
 ```
-npm run eslint
+npm run lint
 ```
-
-## Documentation
-| Component | Documentation | Examples |
-|:--------------|:------------------|:----------------|
+##### If Linting Fails
+```
+npm run lint -- --fix
+```
 
 ## Credit
 
