@@ -1,3 +1,7 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
+
 # Zoomero
 Due to the Covid-19 pandemic, everyone is forced to stay home. As a result, the line between work and life is getting blurry. While working we often find ourselves tempted by the siren calls of numerous entertainment resources available on the internet with no supervision. 
 To help people tackle this problem, we created Zoomero, a productivity tool that denies access to certain websites and helps people easily enter work mode. It empowers the user to balance work and life.
