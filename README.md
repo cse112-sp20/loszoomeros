@@ -27,6 +27,11 @@ You can now load the extension into Chrome by navigating to Settings > Extension
 npm run test
 ```
 
+##### How to Generate Documentation
+```
+jsdoc -c conf.json -d ./docs
+```
+
 ##### How to Run Linting Test
 ```
 npm run eslint
