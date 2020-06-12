@@ -51,7 +51,7 @@ npm run lint
 npm run lint -- --fix
 ```
 ## Before Adding to the Code Base
-Please check out our Onboarding Document here https://docs.google.com/document/d/1-PSiYhWP0Uz_Ak9F2LCTVf9Y82Gx_e08Ako-RwMxUXk/edit
+Please check out our Onboarding Document here https://docs.google.com/document/d/1ejrxXAPRM8GmDH-PS7C9CJKj55RdBghmUgR5awscgrg/edit
 
 ## Our Next Steps
 https://docs.google.com/document/d/198OG2bzGY726-vLCi73P_fl3VgDZcOpSaaGg9Dfi2mY/edit
